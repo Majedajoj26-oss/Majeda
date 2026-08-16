@@ -311,6 +311,14 @@
     transition:transform .15s ease;
   }
   .play-btn:hover{transform:translateY(-2px) scale(1.02);}
+  #playBtn{display:none !important;}
+
+  .sg-wheel-trigger-btn{
+    display:block; width:100%; max-width:300px; margin:0 auto 14px; padding:10px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:700; font-size:13px;
+    color:#1a1140; background:linear-gradient(90deg,var(--purple),var(--teal));
+  }
+  .sg-wheel-trigger-btn:hover{transform:translateY(-1px) scale(1.02);}
 
   .celebrate-inline-btn{
     display:block; width:100%; max-width:280px; margin:14px auto 0; padding:9px 18px;
@@ -454,6 +462,42 @@
     background:transparent; color:var(--ink); font-family:'Tajawal',sans-serif; cursor:pointer;
   }
   .sg-next-btn.show{display:block;}
+
+  /* --- Wheel of games (random activity picker) --- */
+  .sg-wheel-wrap{
+    position:relative; width:290px; height:290px; margin:10px auto 20px;
+  }
+  .sg-wheel{
+    width:100%; height:100%; border-radius:50%; position:relative;
+    border:4px solid var(--gold); box-shadow:0 0 30px rgba(255,201,76,.4);
+    transition:transform 3.5s cubic-bezier(.17,.67,.12,1);
+  }
+  .sg-wheel-seg{
+    position:absolute; top:50%; left:50%; width:48%; height:2px;
+    transform-origin:0 0; text-align:right; padding-right:10px;
+  }
+  .sg-wheel-seg span{
+    display:inline-block; transform:translateY(-50%); font-size:11px; font-weight:700;
+    color:#1a1140; white-space:nowrap; letter-spacing:-.2px;
+  }
+  .sg-wheel-pointer{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    font-size:26px; z-index:5; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));
+  }
+  .sg-wheel-center{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:44px; height:44px; border-radius:50%; background:#1a1140;
+    border:3px solid var(--gold); z-index:4;
+  }
+  .sg-spin-btn{
+    display:block; margin:0 auto; padding:10px 26px; border:none; border-radius:999px;
+    background:linear-gradient(90deg,var(--gold),var(--pink)); color:#1a1140; font-weight:700;
+    font-family:'Tajawal',sans-serif; cursor:pointer; font-size:14px;
+  }
+  .sg-spin-btn:disabled{opacity:.6;}
+  .sg-wheel-result{
+    text-align:center; margin-top:14px; font-family:'Lalezar',sans-serif; font-size:18px; color:var(--gold); min-height:26px;
+  }
 
   .tafsir-panel{display:none; margin-top:16px;}
   .tafsir-panel.open{display:block; animation:pop .3s ease;}
@@ -791,12 +835,13 @@
     </div>
 
     <div class="surahgames-panel" id="surahGamesPanel">
+      <button class="sg-wheel-trigger-btn" id="sgWheelTriggerBtn">🎡 دوّري العجلة لاختيار عشوائي</button>
       <div class="surahgames-menu" id="surahGamesMenu">
+        <button class="sg-choice" data-game="quiz">🎮<span>ابدأ اللعبة واجمع النجوم</span></button>
         <button class="sg-choice" data-game="match">🧩<span>صل الرمز بمحوره</span></button>
         <button class="sg-choice" data-game="truefalse">💡<span>صح أم خطأ</span></button>
         <button class="sg-choice" data-game="arrange">🔤<span>رتب كلمات الآية</span></button>
         <button class="sg-choice" data-game="complete">🧠<span>أكمل الآية</span></button>
-        <button class="sg-choice" data-game="emoji">🎯<span>اختر الرمز المناسب</span></button>
       </div>
       <div class="surahgames-play" id="surahGamesPlay"></div>
     </div>
@@ -1558,18 +1603,83 @@ document.querySelectorAll('.sg-choice').forEach(btn=>{
     document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     playClickTileSound();
-    startSurahGame(btn.dataset.game);
+    if(btn.dataset.game === 'quiz'){
+      document.getElementById('surahGamesPlay').innerHTML = '';
+      document.getElementById('surahGamesPanel').classList.remove('open');
+      document.getElementById('playBtn').click();
+    } else {
+      startSurahGame(btn.dataset.game);
+    }
   });
+});
+document.getElementById('sgWheelTriggerBtn').addEventListener('click', ()=>{
+  playClickTileSound();
+  document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+  startSurahGame('wheel');
 });
 
 function startSurahGame(type){
   const area = document.getElementById('surahGamesPlay');
   area.innerHTML = '<p class="sg-instructions">⏳ جاري التحضير...</p>';
+  if(type === 'wheel'){ renderSgWheel(area); return; }
+  if(type === 'match' || type === 'truefalse' || type === 'arrange' || type === 'complete'){
+    sgStartSession(type);
+  }
   if(type === 'match') renderSgMatch(area);
   else if(type === 'truefalse') renderSgTrueFalse(area);
   else if(type === 'arrange') renderSgArrange(area);
   else if(type === 'complete') renderSgComplete(area);
-  else if(type === 'emoji') renderSgEmoji(area);
+}
+
+/* ---------------- Shared 5-round session tracking for the per-surah mini games ---------------- */
+let sgSession = null;
+const SG_ROUNDS_TOTAL = 5;
+const SG_TITLES = {
+  match:'صل الرمز بمحوره', truefalse:'صح أم خطأ', arrange:'رتب كلمات الآية',
+  complete:'أكمل الآية'
+};
+function sgStartSession(type){
+  sgSession = { type, round:0, score:0, total:SG_ROUNDS_TOTAL };
+}
+function sgRecordAnswer(correct){
+  if(!sgSession) return;
+  sgSession.round++;
+  if(correct) sgSession.score++;
+}
+function sgIsSessionDone(){
+  return !!sgSession && sgSession.round >= sgSession.total;
+}
+function sgRoundLabel(){
+  if(!sgSession) return '';
+  return `الجولة ${Math.min(sgSession.round+1, sgSession.total)} من ${sgSession.total}`;
+}
+function sgShowSessionComplete(area){
+  const s = currentSurah;
+  const pct = sgSession.score / sgSession.total;
+  const earnedCert = pct >= 0.6;
+  if(earnedCert){
+    certificates[s.n] = { name: greetName(), date: new Date().toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'}) };
+    renderCertGallery();
+  }
+  area.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:48px;">🏆</div>
+      <div style="font-family:'Lalezar',sans-serif; font-size:22px; color:var(--gold); margin:6px 0 4px;">أحسنت يا ${greetName()}!</div>
+      <div style="color:var(--dim); font-size:13px; margin-bottom:16px;">أنهيت لعبة "${SG_TITLES[sgSession.type]}" — النتيجة: ${sgSession.score} من ${sgSession.total}</div>
+      <div class="result-btns" style="justify-content:center; flex-wrap:wrap;">
+        ${earnedCert ? '<button class="ghost-btn cert-btn" id="sgCertBtn">🎓 شهادتي</button>' : ''}
+        <button class="ghost-btn" id="sgReplayBtn">🔁 العب مرة أخرى</button>
+      </div>
+    </div>
+  `;
+  celebrate();
+  if(earnedCert){
+    document.getElementById('sgCertBtn').addEventListener('click', ()=>showCertificate(s.n));
+  }
+  document.getElementById('sgReplayBtn').addEventListener('click', ()=>{
+    playClickTileSound();
+    startSurahGame(sgSession.type);
+  });
 }
 
 /* 1) صل الرمز بمحوره — match each branch's emoji to its topic text */
@@ -1579,16 +1689,16 @@ function renderSgMatch(area){
   const picks = shuffle(s.branches.map((b,i)=>({ text:b, icon: emojis[(idx+i+1)%emojis.length] }))).slice(0,4);
   const leftOrder = shuffle(picks.map(p=>p.icon));
   const rightOrder = shuffle(picks.map(p=>p.text));
-  let selectedIcon = null, selectedText = null, matchedCount = 0;
+  let selectedIcon = null, selectedText = null, matchedCount = 0, hadMistake = false;
 
   area.innerHTML = `
-    <p class="sg-instructions">اضغط على رمز ثم على النص الذي يطابقه</p>
+    <p class="sg-instructions">${sgRoundLabel()} — اضغط على رمز ثم على النص الذي يطابقه</p>
     <div class="sg-match-cols">
       <div class="sg-match-col" id="sgLeftCol"></div>
       <div class="sg-match-col" id="sgRightCol"></div>
     </div>
     <div class="sg-feedback" id="sgFeedback"></div>
-    <button class="sg-next-btn" id="sgNextBtn">🔁 مجموعة جديدة</button>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ التالي</button>
   `;
   const leftCol = document.getElementById('sgLeftCol');
   const rightCol = document.getElementById('sgRightCol');
@@ -1636,6 +1746,7 @@ function renderSgMatch(area){
         document.getElementById('sgNextBtn').classList.add('show');
       }
     } else {
+      hadMistake = true;
       playWrongSound();
       selectedIcon.el.classList.add('wrong');
       selectedText.el.classList.add('wrong');
@@ -1648,7 +1759,11 @@ function renderSgMatch(area){
     }
     selectedIcon = null; selectedText = null;
   }
-  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgMatch(area));
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>{
+    sgRecordAnswer(!hadMistake);
+    if(sgIsSessionDone()) sgShowSessionComplete(area);
+    else renderSgMatch(area);
+  });
 }
 
 /* 2) صح أم خطأ — true/false statements about this surah */
@@ -1664,17 +1779,19 @@ function renderSgTrueFalse(area){
   ];
   const chosen = pick(statements);
   area.innerHTML = `
-    <p class="sg-instructions">هل هذه العبارة صحيحة أم خاطئة؟</p>
+    <p class="sg-instructions">${sgRoundLabel()} — هل هذه العبارة صحيحة أم خاطئة؟</p>
     <div class="sg-ayah-display" style="font-family:'Tajawal',sans-serif; font-size:15px; color:var(--ink);">${chosen.text}</div>
     <div class="sg-emoji-options">
       <button class="ghost-btn" id="sgTrueBtn" style="border-color:#6ee7b7;">✅ صح</button>
       <button class="ghost-btn" id="sgFalseBtn" style="border-color:#ff6fa5;">❌ خطأ</button>
     </div>
     <div class="sg-feedback" id="sgFeedback"></div>
-    <button class="sg-next-btn" id="sgNextBtn">➡️ عبارة جديدة</button>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ التالي</button>
   `;
+  let wasCorrect = false;
   function answer(userSaysTrue){
     const ok = userSaysTrue === chosen.correct;
+    wasCorrect = ok;
     document.getElementById('sgFeedback').textContent = ok ? 'إجابة صحيحة! ⭐' : `غير صحيح، العبارة كانت ${chosen.correct?'صحيحة':'خاطئة'}`;
     document.getElementById('sgFeedback').style.color = ok ? '#6ee7b7' : '#ff6fa5';
     if(ok) playCorrectSound(); else playWrongSound();
@@ -1684,7 +1801,11 @@ function renderSgTrueFalse(area){
   }
   document.getElementById('sgTrueBtn').addEventListener('click', ()=>answer(true));
   document.getElementById('sgFalseBtn').addEventListener('click', ()=>answer(false));
-  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgTrueFalse(area));
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>{
+    sgRecordAnswer(wasCorrect);
+    if(sgIsSessionDone()) sgShowSessionComplete(area);
+    else renderSgTrueFalse(area);
+  });
 }
 
 /* 3) رتب كلمات الآية — arrange the words of a real ayah of this surah */
@@ -1702,13 +1823,14 @@ async function renderSgArrange(area){
   if(words.length < 2 || words.length > 8){ return renderSgArrange(area); } // pick a reasonably-sized ayah
   const shuffled = shuffle(words.map((w,i)=>({id:i, w, used:false})));
   const slots = new Array(words.length).fill(null);
+  let hadMistake = false;
 
   area.innerHTML = `
-    <p class="sg-instructions">رتّب كلمات الآية رقم ${verseIdx+1} من سورة ${s.name}</p>
+    <p class="sg-instructions">${sgRoundLabel()} — رتّب كلمات الآية رقم ${verseIdx+1} من سورة ${s.name}</p>
     <div class="sg-answer-line" id="sgSlots"></div>
     <div class="sg-word-bank" id="sgWords"></div>
     <div class="sg-feedback" id="sgFeedback"></div>
-    <button class="sg-next-btn" id="sgNextBtn">➡️ آية جديدة</button>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ التالي</button>
   `;
   function render(){
     const slotsDiv = document.getElementById('sgSlots');
@@ -1756,6 +1878,7 @@ async function renderSgArrange(area){
       celebrate();
       document.getElementById('sgNextBtn').classList.add('show');
     } else {
+      hadMistake = true;
       fb.textContent = 'ليس بعد، حاول ترتيباً آخر 💫';
       fb.style.color = '#ff6fa5';
       playWrongSound();
@@ -1768,7 +1891,11 @@ async function renderSgArrange(area){
     }
   }
   render();
-  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgArrange(area));
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>{
+    sgRecordAnswer(!hadMistake);
+    if(sgIsSessionDone()) sgShowSessionComplete(area);
+    else renderSgArrange(area);
+  });
 }
 
 /* 4) أكمل الآية — pick the missing word of a real ayah (also covers "discover the correct word") */
@@ -1794,12 +1921,13 @@ async function renderSgComplete(area){
   const options = shuffle([correctWord, ...distractors]);
 
   area.innerHTML = `
-    <p class="sg-instructions">أكمل الآية رقم ${chosen.i+1} من سورة ${s.name}</p>
+    <p class="sg-instructions">${sgRoundLabel()} — أكمل الآية رقم ${chosen.i+1} من سورة ${s.name}</p>
     <div class="sg-ayah-display">${displayWords}</div>
     <div class="sg-emoji-options" id="sgOptions"></div>
     <div class="sg-feedback" id="sgFeedback"></div>
-    <button class="sg-next-btn" id="sgNextBtn">➡️ آية جديدة</button>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ التالي</button>
   `;
+  let wasCorrect = false;
   const optsDiv = document.getElementById('sgOptions');
   options.forEach(w=>{
     const btn = document.createElement('button');
@@ -1808,6 +1936,7 @@ async function renderSgComplete(area){
     btn.addEventListener('click', ()=>{
       const fb = document.getElementById('sgFeedback');
       if(w === correctWord){
+        wasCorrect = true;
         fb.textContent = 'أحسنت! ⭐';
         fb.style.color = '#6ee7b7';
         playCorrectSound();
@@ -1821,48 +1950,80 @@ async function renderSgComplete(area){
     });
     optsDiv.appendChild(btn);
   });
-  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgComplete(area));
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>{
+    sgRecordAnswer(wasCorrect);
+    if(sgIsSessionDone()) sgShowSessionComplete(area);
+    else renderSgComplete(area);
+  });
 }
 
-/* 5) اختر الرمز المناسب — choose the emoji that best matches a topic of this surah (substitute for illustrated images) */
-function renderSgEmoji(area){
-  const s = currentSurah;
-  const idx = surahs.indexOf(s);
-  const branchIdx = Math.floor(Math.random()*s.branches.length);
-  const branchText = s.branches[branchIdx];
-  const correctIcon = emojis[(idx+branchIdx+1)%emojis.length];
-  const wrongIcons = shuffle(emojis.filter(e=>e!==correctIcon)).slice(0,2);
-  const options = shuffle([correctIcon, ...wrongIcons]);
-
+/* 5) عجلة الحظ — random-pick one of the surah activities (great for teacher-led play) */
+const WHEEL_ITEMS = [
+  { type:'quiz', icon:'🎮', label:'اختبار السورة', wheelLabel:'اختبار السورة' },
+  { type:'match', icon:'🧩', label:'صل الرمز', wheelLabel:'صل الرمز' },
+  { type:'truefalse', icon:'💡', label:'صح أم خطأ', wheelLabel:'صح أم خطأ' },
+  { type:'arrange', icon:'🔤', label:'رتب الكلمات', wheelLabel:'رتب الكلمات' },
+  { type:'complete', icon:'🧠', label:'أكمل الآية', wheelLabel:'أكمل الآية' },
+];
+function renderSgWheel(area){
   area.innerHTML = `
-    <p class="sg-instructions">أي رمز يعبّر أكثر عن هذا المحور من سورة ${s.name}؟</p>
-    <div class="sg-ayah-display" style="font-family:'Tajawal',sans-serif; font-size:15px; color:var(--ink);">${branchText}</div>
-    <div class="sg-emoji-options" id="sgOptions"></div>
-    <div class="sg-feedback" id="sgFeedback"></div>
-    <button class="sg-next-btn" id="sgNextBtn">➡️ محور جديد</button>
+    <p class="sg-instructions">دوّري العجلة ليختار البرنامج نشاطاً عشوائياً!</p>
+    <div class="sg-wheel-wrap">
+      <span class="sg-wheel-pointer">🔻</span>
+      <div class="sg-wheel" id="sgWheelEl"></div>
+      <div class="sg-wheel-center"></div>
+    </div>
+    <button class="sg-spin-btn" id="sgSpinBtn">🎡 دوّري العجلة</button>
+    <div class="sg-wheel-result" id="sgWheelResult"></div>
   `;
-  const optsDiv = document.getElementById('sgOptions');
-  options.forEach(icon=>{
-    const btn = document.createElement('button');
-    btn.className = 'sg-emoji-opt';
-    btn.textContent = icon;
-    btn.addEventListener('click', ()=>{
-      const fb = document.getElementById('sgFeedback');
-      if(icon === correctIcon){
-        fb.textContent = 'اختيار رائع! ⭐';
-        fb.style.color = '#6ee7b7';
-        playCorrectSound();
-      } else {
-        fb.textContent = 'حاول التفكير مرة أخرى في المرة القادمة';
-        fb.style.color = '#ff6fa5';
-        playWrongSound();
-      }
-      optsDiv.querySelectorAll('button').forEach(b=>b.disabled=true);
-      document.getElementById('sgNextBtn').classList.add('show');
-    });
-    optsDiv.appendChild(btn);
+  const wheelEl = document.getElementById('sgWheelEl');
+  const segAngle = 360 / WHEEL_ITEMS.length;
+  const wheelColors = ['#ffc94c','#ff6fa5','#48d8c8','#9b7bff','#ff9f5a','#6ee7b7'];
+  const gradientStops = WHEEL_ITEMS.map((item,i)=>
+    `${wheelColors[i % wheelColors.length]} ${segAngle*i}deg ${segAngle*(i+1)}deg`
+  ).join(', ');
+  wheelEl.style.background = `conic-gradient(${gradientStops})`;
+  WHEEL_ITEMS.forEach((item,i)=>{
+    const seg = document.createElement('div');
+    seg.className = 'sg-wheel-seg';
+    const angle = segAngle*i + segAngle/2;
+    seg.style.transform = `rotate(${angle}deg)`;
+    const flip = (angle > 90 && angle < 270) ? 180 : 0;
+    seg.innerHTML = `<span style="transform:translateY(-50%) rotate(${90+flip}deg); display:inline-block;">${item.wheelLabel}</span>`;
+    wheelEl.appendChild(seg);
   });
-  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgEmoji(area));
+
+  let currentRotation = 0;
+  document.getElementById('sgSpinBtn').addEventListener('click', function spinHandler(){
+    const btn = this;
+    btn.disabled = true;
+    document.getElementById('sgWheelResult').textContent = '';
+    const targetIdx = Math.floor(Math.random()*WHEEL_ITEMS.length);
+    // land the chosen segment's center under the top pointer (0deg)
+    const targetAngle = 360 - (segAngle*targetIdx + segAngle/2);
+    const extraSpins = 5*360;
+    currentRotation += extraSpins + targetAngle - (currentRotation % 360);
+    wheelEl.style.transform = `rotate(${currentRotation}deg)`;
+    playClickTileSound();
+    setTimeout(()=>{
+      const chosen = WHEEL_ITEMS[targetIdx];
+      document.getElementById('sgWheelResult').textContent = `🎉 وقعت على: ${chosen.icon} ${chosen.label}`;
+      celebrate();
+      btn.disabled = false;
+      btn.textContent = '🎡 دوّري مرة أخرى';
+      setTimeout(()=>{
+        if(chosen.type === 'quiz'){
+          document.getElementById('surahGamesPanel').classList.remove('open');
+          document.getElementById('playBtn').click();
+        } else {
+          startSurahGame(chosen.type);
+          document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+          const matchBtn = document.querySelector(`.sg-choice[data-game="${chosen.type}"]`);
+          if(matchBtn) matchBtn.classList.add('active');
+        }
+      }, 1400);
+    }, 3600);
+  });
 }
 
 /* ---------------- Teacher Mode: clean presentation for Zoom / in-class ---------------- */

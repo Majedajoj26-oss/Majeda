@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جزء عمّ - رحلة بين النجوم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0a0e3d; --bg2:#171b6e; --bg3:#241a7a;
+    --gold:#ffc94c; --pink:#ff6fa5; --teal:#48d8c8; --purple:#9b7bff;
+    --orange:#ff9f5a; --mint:#6ee7b7; --ink:#f5f6ff; --dim:#b9bdf0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Tajawal',sans-serif;
+    background:radial-gradient(ellipse at 20% 0%, var(--bg3), var(--bg1) 60%);
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+  /* starfield */
+  #stars, #stars2, #stars3{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+  .twinkle{
+    position:absolute; border-radius:50%; background:#fff;
+    animation:tw 3s ease-in-out infinite;
+  }
+  @keyframes tw{0%,100%{opacity:.15;}50%{opacity:1;}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  @keyframes spin-slow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  @keyframes spin-slow-rev{from{transform:rotate(360deg);}to{transform:rotate(0deg);}}
+  @keyframes pop{0%{transform:scale(.6);opacity:0;}70%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+  @keyframes burst{0%{transform:scale(0) translateY(0);opacity:1;}100%{transform:scale(1.6) translateY(-40px);opacity:0;}}
+  @keyframes confetti-fall{
+    0%{ transform:translateY(0) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(110vh) rotate(540deg); opacity:0.2; }
+  }
+  @keyframes firework-particle{
+    0%{ transform:translate(0,0) scale(1); opacity:1; }
+    100%{ transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0; }
+  }
+  .firework-particle{
+    position:fixed; width:8px; height:8px; border-radius:50%; pointer-events:none; z-index:9998;
+  }
+
+  header{
+    position:relative; z-index:2; text-align:center; padding:38px 16px 20px;
+  }
+  .designer-top-credit{
+    font-size:13px; color:var(--gold); opacity:.9; margin:0 auto 12px; letter-spacing:.5px;
+  }
+  header .badge{
+    display:inline-block; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
+    padding:6px 18px; border-radius:999px; font-size:13px; color:var(--gold); letter-spacing:1px;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Lalezar',sans-serif; font-size:clamp(32px,6vw,58px); font-weight:400;
+    background:linear-gradient(90deg,var(--gold),var(--pink),var(--teal));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1.3;
+  }
+  header p.sub{color:var(--dim); font-size:15px; margin-top:8px; max-width:520px; margin-inline:auto;}
+
+  .name-row{
+    display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px; flex-wrap:wrap;
+  }
+  .name-row label{font-size:14px; color:var(--dim);}
+  .name-row input{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:999px;
+    padding:8px 16px; color:var(--ink); font-family:'Tajawal',sans-serif; font-size:14px;
+    text-align:center; width:180px; outline:none;
+  }
+  .name-row input:focus{border-color:var(--gold);}
+  .name-row input::placeholder{color:var(--dim);}
+
+  .sound-toggle{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:var(--ink);
+    width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .sound-toggle:hover{background:rgba(255,255,255,.2);}
+
+  .fireworks-fab{
+    position:fixed; bottom:22px; left:22px; z-index:200;
+    border:none; border-radius:999px; padding:12px 20px; cursor:pointer;
+    font-family:'Tajawal',sans-serif; font-weight:700; font-size:14px; color:#1a1140;
+    background:linear-gradient(90deg,var(--gold),var(--pink));
+    box-shadow:0 8px 22px rgba(255,111,165,.4);
+    display:flex; align-items:center; gap:6px;
+    animation:float 3.5s ease-in-out infinite;
+  }
+  .fireworks-fab:hover{transform:scale(1.05);}
+  @media(max-width:480px){
+    .fireworks-fab{ bottom:14px; left:14px; padding:10px 16px; font-size:13px; }
+  }
+  .mascot{
+    font-size:44px; animation:float 3s ease-in-out infinite;
+  }
+  .speech{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+    border-radius:16px; padding:10px 18px; font-size:14px; color:var(--ink);
+    max-width:340px; backdrop-filter:blur(6px);
+  }
+
+  .progress-wrap{
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+    background:rgba(10,14,61,.75); border-bottom:1px solid rgba(255,255,255,.1);
+    padding:10px 18px; display:flex; align-items:center; gap:14px; justify-content:center; flex-wrap:wrap;
+  }
+  .progress-wrap .stars-count{font-weight:700; color:var(--gold); font-size:15px; white-space:nowrap;}
+  .progress-bar{
+    flex:1; max-width:420px; height:12px; border-radius:999px; background:rgba(255,255,255,.12);
+    overflow:hidden; border:1px solid rgba(255,255,255,.15);
+  }
+  .progress-fill{
+    height:100%; width:0%; background:linear-gradient(90deg,var(--pink),var(--gold));
+    transition:width .5s ease;
+  }
+
+  main{position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:26px 18px 70px;}
+
+  .section-title{
+    font-family:'Lalezar',sans-serif; font-weight:400; font-size:26px; text-align:center;
+    margin:44px 0 18px; color:var(--gold);
+  }
+  .games-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; max-width:640px; margin:0 auto;
+  }
+  .game-card{
+    position:relative; border-radius:22px; padding:26px 18px; cursor:pointer; text-align:center;
+    background:linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,.03));
+    border:1px solid rgba(255,255,255,.16); transition:transform .2s ease;
+    overflow:hidden;
+  }
+  .game-card:hover{transform:translateY(-6px) scale(1.02);}
+  .game-card .icon{font-size:44px; display:block; margin-bottom:10px;}
+  .game-card h3{font-family:'Lalezar',sans-serif; font-weight:400; font-size:22px; margin-bottom:6px;}
+  .game-card p{font-size:12.5px; color:var(--dim);}
+
+  .cert-gallery-wrap{max-width:900px; margin:0 auto;}
+  .leaderboard-wrap{max-width:600px; margin:0 auto;}
+  .leaderboard-note{
+    font-size:11.5px; color:var(--dim); text-align:center; margin-bottom:12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+    border-radius:10px; padding:8px 12px;
+  }
+  .leaderboard-list{display:flex; flex-direction:column; gap:8px;}
+  .leaderboard-row{
+    display:flex; align-items:center; gap:12px; padding:10px 16px; border-radius:12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+  }
+  .leaderboard-row.me{border-color:var(--gold); background:rgba(255,201,76,.1);}
+  .lb-rank{font-size:16px; width:28px; text-align:center; flex-shrink:0;}
+  .lb-name{flex:1; font-family:'Lalezar',sans-serif; font-size:15px; color:var(--ink);}
+  .lb-stars{font-weight:700; color:var(--gold); font-size:13px;}
+  .report-btn{
+    display:block; width:100%; max-width:280px; margin:16px auto 0; padding:10px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:700; font-size:13px;
+    color:#1a1140; background:linear-gradient(90deg,var(--teal),var(--gold));
+  }
+  .report-btn:hover{transform:translateY(-1px) scale(1.02);}
+
+  /* --- Printable progress report --- */
+  .report-panel{max-width:600px;}
+  .progress-report{
+    background:linear-gradient(160deg,#fffaf0,#fff4dd); border-radius:14px; padding:6px; margin-top:10px;
+  }
+  .report-border{
+    border:2px solid #c9971f; border-radius:10px; padding:24px 20px; color:#3a2f10;
+  }
+  .report-title{font-family:'Lalezar',sans-serif; font-size:24px; color:#8a6a12; text-align:center; margin-bottom:4px;}
+  .report-sub{text-align:center; font-size:12px; color:#8a6a12; margin-bottom:18px;}
+  .report-stat-row{
+    display:flex; justify-content:space-around; text-align:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;
+  }
+  .report-stat{background:rgba(201,151,31,.08); border-radius:10px; padding:10px 16px; min-width:90px;}
+  .report-stat b{display:block; font-family:'Lalezar',sans-serif; font-size:22px; color:#8a6a12;}
+  .report-stat span{font-size:11px;}
+  .report-section-title{font-weight:700; font-size:14px; margin:14px 0 8px; color:#5a4a20; border-top:1px dashed #c9971f; padding-top:10px;}
+  .report-surah-grid{display:flex; flex-wrap:wrap; gap:6px;}
+  .report-surah-chip{
+    font-size:11.5px; padding:4px 10px; border-radius:999px; background:rgba(201,151,31,.12); color:#5a4a20;
+  }
+  .report-empty{font-size:12px; color:#8a6a12; text-align:center;}
+  .report-footer{text-align:center; font-size:11px; color:#8a6a12; margin-top:16px;}
+  .external-links-wrap{max-width:600px; margin:0 auto;}
+  .external-link-card{
+    display:flex; align-items:center; gap:14px; text-decoration:none; color:var(--ink);
+    background:linear-gradient(160deg, rgba(72,216,200,.12), rgba(255,255,255,.03));
+    border:1px solid rgba(72,216,200,.35); border-radius:16px; padding:16px 18px;
+    transition:transform .2s ease;
+  }
+  .external-link-card:hover{transform:translateY(-3px); border-color:var(--teal);}
+  .external-link-card .icon{font-size:30px; flex-shrink:0;}
+  .external-link-card h3{font-family:'Lalezar',sans-serif; font-size:18px; color:var(--teal); margin-bottom:2px;}
+  .external-link-card p{font-size:12px; color:var(--dim);}
+  .external-link-card .arrow{margin-inline-start:auto; font-size:18px; color:var(--teal); flex-shrink:0;}
+  .cert-empty{text-align:center; color:var(--dim); font-size:13px;}
+  .cert-gallery{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px;
+  }
+  .cert-mini{
+    cursor:pointer; border-radius:16px; padding:16px 10px; text-align:center;
+    background:linear-gradient(160deg, rgba(255,201,76,.12), rgba(255,255,255,.03));
+    border:1px solid rgba(255,201,76,.35); transition:transform .2s ease;
+  }
+  .cert-mini:hover{transform:translateY(-4px) scale(1.03);}
+  .cert-mini .medal{font-size:32px; display:block; margin-bottom:6px;}
+  .cert-mini .cname{font-family:'Lalezar',sans-serif; font-size:16px; color:var(--gold);}
+
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px;
+  }
+  .card{
+    position:relative; border-radius:20px; padding:16px 12px 14px; cursor:pointer;
+    background:linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.14);
+    text-align:center; transition:transform .2s ease, box-shadow .2s ease;
+    overflow:hidden;
+  }
+  .card:hover{transform:translateY(-6px) scale(1.03);}
+  .card::before{
+    content:''; position:absolute; inset:-40% -40% auto auto; width:80px; height:80px;
+    border-radius:50%; filter:blur(30px); opacity:.55; background:var(--c,var(--gold));
+  }
+  .card .num{
+    display:inline-block; font-size:11px; color:var(--dim); background:rgba(255,255,255,.08);
+    border-radius:999px; padding:2px 9px; margin-bottom:8px;
+  }
+  .card .star-icon{font-size:30px; display:block; margin-bottom:6px; filter:drop-shadow(0 0 8px var(--c,var(--gold)));}
+  .card h3{font-family:'Lalezar',sans-serif; font-weight:400; font-size:20px; color:var(--ink); margin-bottom:4px;}
+  .card .meta{font-size:11px; color:var(--dim);}
+  .card .done{
+    position:absolute; top:8px; left:8px; font-size:14px; background:rgba(0,0,0,.3);
+    border-radius:999px; padding:2px 6px; display:none;
+  }
+  .card.completed .done{display:inline-block;}
+  .card.completed{border-color:var(--gold);}
+
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(6,8,32,.88); backdrop-filter:blur(6px);
+    z-index:100; display:none; align-items:flex-start; justify-content:center;
+    overflow-y:auto; padding:30px 14px 60px;
+  }
+  .overlay.open{display:flex;}
+  .panel{
+    width:100%; max-width:680px; background:linear-gradient(170deg,#181c66,#0d1050);
+    border:1px solid rgba(255,255,255,.15); border-radius:26px; padding:26px 20px 30px;
+    position:relative; animation:pop .35s ease;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .panel .close{
+    position:absolute; top:14px; left:14px; background:rgba(255,255,255,.1);
+    border:none; color:var(--ink); width:34px; height:34px; border-radius:50%;
+    font-size:18px; cursor:pointer;
+  }
+  .panel .close:hover{background:rgba(255,255,255,.22);}
+  .panel-head{text-align:center; margin-bottom:8px;}
+  .panel-head .num{color:var(--dim); font-size:12px;}
+  .panel-head h2{font-family:'Lalezar',sans-serif; font-weight:400; font-size:36px; margin:4px 0;}
+  .panel-head .tags{display:flex; gap:8px; justify-content:center; margin-top:6px; flex-wrap:wrap;}
+  .panel-head .tag{
+    font-size:11px; padding:3px 10px; border-radius:999px; background:rgba(255,255,255,.1); color:var(--dim);
+  }
+
+  /* Orbit mind map */
+  .orbit-wrap{
+    position:relative; width:100%; max-width:560px; aspect-ratio:1/1; margin:26px auto 10px;
+  }
+  .orbit-ring{
+    position:absolute; inset:6%; border:1px dashed rgba(255,255,255,.18); border-radius:50%;
+    animation:spin-slow 40s linear infinite;
+  }
+  .orbit-ring.inner{inset:25%; animation:spin-slow-rev 30s linear infinite;}
+  .center-node{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:38%; aspect-ratio:1/1; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff8, var(--c,var(--gold)));
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    font-family:'Lalezar',sans-serif; font-size:18px; color:#1a1140; padding:10px;
+    box-shadow:0 0 34px var(--c,var(--gold)); z-index:3; font-weight:400; gap:4px;
+  }
+  .center-node .center-theme{
+    font-family:'Tajawal',sans-serif; font-size:10.5px; font-weight:700; opacity:.85; line-height:1.3;
+  }
+  .branch-node{
+    position:absolute; width:42%; max-width:190px; text-align:center;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.2);
+    border-radius:14px; padding:10px 9px; font-size:13.5px; line-height:1.4; backdrop-filter:blur(4px);
+    z-index:2;
+  }
+  .branch-node .em{font-size:24px; display:block; margin-bottom:4px;}
+  .branch-node.b0{top:0%; left:50%; transform:translateX(-50%);}
+  .branch-node.b1{top:50%; right:-4%; transform:translateY(-50%);}
+  .branch-node.b2{bottom:0%; left:50%; transform:translateX(-50%);}
+  .branch-node.b3{top:50%; left:-4%; transform:translateY(-50%);}
+  /* Note: for surahs with more than 4 branches, JS overrides top/left/transform inline for radial placement */
+
+    border:none; border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:16px; color:#1a1140;
+    background:linear-gradient(90deg,var(--gold),var(--pink));
+    box-shadow:0 8px 20px rgba(255,111,165,.3);
+    transition:transform .15s ease;
+  }
+  .play-btn:hover{transform:translateY(-2px) scale(1.02);}
+
+  .celebrate-inline-btn{
+    display:block; width:100%; max-width:280px; margin:14px auto 0; padding:9px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:13px; color:var(--ink);
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25);
+    transition:.15s;
+  }
+  .celebrate-inline-btn:hover{background:rgba(255,255,255,.16); transform:translateY(-1px);}
+
+  .tafsir-btn{
+    display:block; width:100%; max-width:280px; margin:10px auto 0; padding:9px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:13px; color:#1a1140;
+    background:linear-gradient(90deg,var(--teal),var(--mint));
+    transition:.15s;
+  }
+  .tafsir-btn:hover{transform:translateY(-1px) scale(1.02);}
+
+  .surahgames-btn{
+    display:block; width:100%; max-width:280px; margin:10px auto 0; padding:9px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:13px; color:#1a1140;
+    background:linear-gradient(90deg,var(--purple),var(--pink));
+    transition:.15s;
+  }
+  .surahgames-btn:hover{transform:translateY(-1px) scale(1.02);}
+
+  .teacher-mode-btn{
+    display:block; width:100%; max-width:280px; margin:10px auto 0; padding:9px 18px;
+    border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:13px; color:var(--ink);
+    background:rgba(255,255,255,.08); border:1px solid var(--gold);
+    transition:.15s;
+  }
+  .teacher-mode-btn:hover{background:rgba(255,201,76,.15);}
+
+  /* --- Teacher Mode presentation --- */
+  .teacher-panel{
+    width:100%; max-width:820px; min-height:520px; background:linear-gradient(170deg,#181c66,#0d1050);
+    border:1px solid rgba(255,255,255,.15); border-radius:22px; padding:26px 24px;
+    position:relative; animation:pop .3s ease; box-shadow:0 20px 60px rgba(0,0,0,.5);
+    display:flex; flex-direction:column;
+  }
+  .teacher-header{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+    font-size:13px; color:var(--dim);
+  }
+  .teacher-content{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:10px 6px; overflow-y:auto; max-height:65vh;
+  }
+  .teacher-content h2{
+    font-family:'Lalezar',sans-serif; font-size:clamp(28px,5vw,42px); color:var(--gold); margin-bottom:14px;
+  }
+  .teacher-content .t-sub{font-size:18px; color:var(--ink); margin-bottom:8px; line-height:1.8;}
+  .teacher-content .t-icon{font-size:56px; margin-bottom:10px;}
+  .teacher-list{list-style:none; text-align:right; width:100%; max-width:560px; margin:0 auto;}
+  .teacher-list li{
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:12px;
+    padding:12px 16px; margin-bottom:10px; font-size:15px; line-height:1.7;
+  }
+  .teacher-list li b{color:var(--gold);}
+  .teacher-q-block{
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:14px;
+    padding:14px 16px; margin-bottom:12px; width:100%; max-width:560px; text-align:right;
+  }
+  .teacher-q-block .qtxt{font-weight:700; margin-bottom:8px; font-size:15px;}
+  .teacher-q-block .qopt{
+    display:inline-block; margin:3px 6px; padding:4px 12px; border-radius:999px; font-size:12.5px;
+    background:rgba(255,255,255,.08);
+  }
+  .teacher-q-block .qopt.correct{background:rgba(110,231,183,.25); color:#6ee7b7; font-weight:700;}
+  .teacher-nav{
+    display:flex; align-items:center; justify-content:space-between; margin-top:16px; gap:10px;
+  }
+  .teacher-dots{display:flex; gap:6px;}
+  .teacher-dots span{
+    width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25);
+  }
+  .teacher-dots span.active{background:var(--gold);}
+  @media(max-width:500px){
+    .teacher-panel{padding:18px 14px; min-height:auto;}
+    .teacher-content .t-icon{font-size:40px;}
+  }
+
+  .surahgames-panel{display:none; margin-top:16px;}
+  .surahgames-panel.open{display:block; animation:pop .3s ease;}
+  .surahgames-menu{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:8px; margin-bottom:14px;
+  }
+  .sg-choice{
+    display:flex; flex-direction:column; align-items:center; gap:4px; padding:12px 6px;
+    border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
+    color:var(--ink); cursor:pointer; font-size:20px; font-family:'Tajawal',sans-serif;
+  }
+  .sg-choice span{font-size:11px; line-height:1.3;}
+  .sg-choice:hover{background:rgba(255,255,255,.14);}
+  .sg-choice.active{border-color:var(--gold); background:rgba(255,201,76,.14);}
+  .sg-play-area{min-height:60px;}
+  .sg-instructions{font-size:12px; color:var(--dim); text-align:center; margin-bottom:12px;}
+  .sg-match-cols{display:flex; gap:14px; justify-content:center;}
+  .sg-match-col{display:flex; flex-direction:column; gap:8px; width:45%;}
+  .sg-match-item{
+    padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.06); font-size:12.5px; text-align:center; cursor:pointer;
+  }
+  .sg-match-item.selected{border-color:var(--gold); background:rgba(255,201,76,.15);}
+  .sg-match-item.matched{border-color:var(--mint); background:rgba(110,231,183,.15); opacity:.6; cursor:default;}
+  .sg-word-bank{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; direction:rtl; margin-bottom:12px;}
+  .sg-word-tile{
+    padding:8px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.22);
+    background:linear-gradient(160deg,var(--purple),var(--pink)); color:#fff; cursor:pointer; font-size:14px;
+  }
+  .sg-word-tile.used{visibility:hidden;}
+  .sg-answer-line{
+    min-height:44px; border:2px dashed rgba(255,255,255,.3); border-radius:12px;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:8px; direction:rtl; margin-bottom:12px;
+  }
+  .sg-answer-line span{
+    padding:6px 12px; border-radius:8px; background:rgba(255,201,76,.15); color:var(--gold); font-size:13px; cursor:pointer;
+  }
+  .sg-check-btn{
+    display:block; margin:0 auto; padding:9px 22px; border:none; border-radius:999px;
+    background:linear-gradient(90deg,var(--gold),var(--pink)); color:#1a1140; font-weight:700;
+    font-family:'Tajawal',sans-serif; cursor:pointer;
+  }
+  .sg-ayah-display{
+    text-align:center; font-family:'Lalezar',sans-serif; font-size:17px; color:var(--gold);
+    line-height:2; margin-bottom:14px; background:rgba(255,255,255,.05); border-radius:12px; padding:12px;
+  }
+  .sg-feedback{text-align:center; font-size:13px; margin-top:10px; min-height:20px; font-weight:700;}
+  .sg-emoji-options{display:flex; justify-content:center; gap:12px; flex-wrap:wrap;}
+  .sg-emoji-opt{
+    font-size:32px; width:64px; height:64px; border-radius:14px; border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.06); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .sg-emoji-opt:hover{background:rgba(255,255,255,.14);}
+  .sg-next-btn{
+    display:none; margin:14px auto 0; padding:8px 20px; border-radius:999px; border:1px solid rgba(255,255,255,.25);
+    background:transparent; color:var(--ink); font-family:'Tajawal',sans-serif; cursor:pointer;
+  }
+  .sg-next-btn.show{display:block;}
+
+  .tafsir-panel{display:none; margin-top:16px;}
+  .tafsir-panel.open{display:block; animation:pop .3s ease;}
+  .tafsir-note{
+    font-size:11.5px; color:var(--dim); text-align:center; margin-bottom:10px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+    border-radius:10px; padding:8px 12px;
+  }
+  .mindmap-note{
+    font-size:11px; color:var(--dim); text-align:center; margin-top:12px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+    border-radius:10px; padding:7px 12px; line-height:1.5;
+  }
+  .tafsir-list{
+    max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;
+    padding-inline-end:4px;
+  }
+  .tafsir-item{
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+    border-radius:12px; padding:9px 12px; font-size:13px; line-height:1.6;
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .tafsir-item .vnum{
+    flex-shrink:0; width:24px; height:24px; border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),var(--pink)); color:#1a1140;
+    font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+  .ayah-text{
+    font-family:'Lalezar',sans-serif; font-size:16px; color:var(--gold);
+    line-height:2; margin-bottom:4px;
+  }
+  .ayah-explain{font-size:12.5px; color:var(--ink); opacity:.92;}
+  .tafsir-loading{text-align:center; font-size:12.5px; color:var(--dim); padding:10px;}
+
+
+  /* Quiz */
+  .quiz{display:none; margin-top:18px;}
+  .quiz.open{display:block;}
+  .quiz .qprog{text-align:center; font-size:12px; color:var(--dim); margin-bottom:10px;}
+  .quiz .qtext{
+    font-family:'Lalezar',sans-serif; font-weight:400; font-size:20px; text-align:center;
+    margin-bottom:16px; line-height:1.5;
+  }
+  .options{display:grid; gap:10px;}
+  .opt{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); color:var(--ink);
+    border-radius:14px; padding:12px 16px; font-size:15px; font-family:'Tajawal',sans-serif;
+    cursor:pointer; text-align:right; transition:.15s;
+  }
+  .opt:hover{background:rgba(255,255,255,.15);}
+  .opt.correct{background:rgba(110,231,183,.25); border-color:var(--mint); animation:pop .3s ease;}
+  .opt.wrong{background:rgba(255,111,165,.25); border-color:var(--pink); animation:shake .3s ease;}
+  .feedback{text-align:center; margin-top:14px; font-size:15px; min-height:22px; font-weight:700;}
+  .next-btn{
+    display:block; margin:16px auto 0; padding:10px 26px; border:none; border-radius:999px;
+    background:rgba(255,255,255,.12); color:var(--ink); font-family:'Tajawal',sans-serif;
+    font-weight:700; cursor:pointer; display:none;
+  }
+  .next-btn.show{display:block;}
+  .result{display:none; text-align:center; margin-top:10px;}
+  .result.show{display:block; animation:pop .4s ease;}
+  .result .big{font-size:44px; margin-bottom:6px;}
+  .result .msg{font-family:'Lalezar',sans-serif; font-size:22px; margin-bottom:4px;}
+  .result .sub{font-size:13px; color:var(--dim); margin-bottom:14px;}
+  .result-btns{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .ghost-btn{
+    padding:9px 18px; border-radius:999px; border:1px solid rgba(255,255,255,.25);
+    background:transparent; color:var(--ink); font-family:'Tajawal',sans-serif; cursor:pointer;
+  }
+  .cert-btn{border-color:var(--gold); color:var(--gold);}
+
+  /* --- Certificate of completion --- */
+  .cert-panel{max-width:560px;}
+  .certificate{
+    background:linear-gradient(160deg,#fffaf0,#fff4dd);
+    border-radius:14px; padding:6px; margin-top:10px;
+  }
+  .cert-border{
+    border:3px double #c9971f; border-radius:10px; padding:28px 22px; text-align:center;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(201,151,31,.12), transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(201,151,31,.12), transparent 40%);
+  }
+  .cert-logo{width:64px; height:auto; margin:0 auto 10px;}
+  .cert-title{
+    font-family:'Lalezar',sans-serif; font-size:28px; color:#8a6a12; letter-spacing:1px;
+  }
+  .cert-medal{font-size:34px; margin:6px 0;}
+  .cert-line{font-size:14px; color:#5a4a20; margin:6px 0;}
+  .cert-name{
+    font-family:'Lalezar',sans-serif; font-size:30px; color:#1B1464; margin:8px 0;
+  }
+  .cert-surah{
+    font-family:'Lalezar',sans-serif; font-size:24px; color:#c9971f; margin:8px 0;
+  }
+  .cert-footer{
+    display:flex; justify-content:space-between; align-items:center; margin-top:22px;
+    font-size:12px; color:#8a6a12; border-top:1px dashed #c9971f; padding-top:10px;
+  }
+  @media print{
+    body *{ visibility:hidden; }
+    #certificateBody, #certificateBody *{ visibility:visible; }
+    #certificateBody{ position:fixed; inset:0; margin:0; padding:20px; }
+    #progressReportBody, #progressReportBody *{ visibility:visible; }
+    #progressReportBody{ position:fixed; inset:0; margin:0; padding:20px; }
+    .no-print{ display:none !important; }
+  }
+
+  footer{position:relative; z-index:2; text-align:center; padding:30px 16px; color:var(--dim); font-size:13px;}
+  .designer-credit{display:inline-block; margin-top:6px; font-size:12px; color:var(--gold); opacity:.85;}
+
+  /* --- Spot the difference game --- */
+  .diff-status{display:flex; justify-content:space-between; align-items:center; margin:14px 0 6px; font-size:13px; color:var(--dim);}
+  .diff-boards{display:flex; flex-direction:column; gap:14px; align-items:center;}
+  .diff-board{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:5px; width:100%; max-width:340px;
+  }
+  .diff-cell{
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+    font-size:20px; border-radius:10px; background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.14); cursor:pointer; user-select:none; position:relative;
+  }
+  .diff-board.left .diff-cell{cursor:default;}
+  .diff-cell.found{background:rgba(110,231,183,.3); border-color:var(--mint);}
+  .diff-cell.wrong{animation:shake .3s ease;}
+  .diff-board-label{font-size:11px; color:var(--dim); text-align:center; margin-bottom:-8px;}
+  .diff-win{display:none; text-align:center; margin-top:14px;}
+  .diff-win.show{display:block; animation:pop .4s ease;}
+
+  /* --- Maze game --- */
+  .maze-status{display:flex; justify-content:space-between; align-items:center; margin:14px 0 10px; font-size:13px; color:var(--dim);}
+  .maze-grid{
+    display:grid; margin:0 auto; width:100%; max-width:340px; aspect-ratio:1/1;
+    background:rgba(255,255,255,.04); border-radius:12px; overflow:hidden;
+  }
+  .maze-cell{position:relative; box-sizing:border-box;}
+  .maze-cell .occ{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:14px; transition:transform .12s ease;
+  }
+  .dpad{display:grid; grid-template-columns:repeat(3,44px); grid-template-rows:repeat(3,44px); gap:4px; justify-content:center; margin:16px auto 4px;}
+  .dpad button{
+    border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:var(--ink);
+    border-radius:10px; font-size:18px; cursor:pointer;
+  }
+  .dpad button:hover{background:rgba(255,255,255,.18);}
+  .maze-win{display:none; text-align:center; margin-top:14px;}
+  .maze-win.show{display:block; animation:pop .4s ease;}
+
+  /* --- Unscramble the surah name game --- */
+  .unscramble-slots{
+    display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:20px 0 16px; direction:rtl;
+  }
+  .unscramble-slot{
+    width:42px; height:48px; border-radius:10px; border:2px dashed rgba(255,255,255,.3);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Lalezar',sans-serif; font-size:22px; color:var(--gold); cursor:pointer;
+    background:rgba(255,255,255,.04);
+  }
+  .unscramble-slot.filled{border-style:solid; border-color:var(--gold); background:rgba(255,201,76,.12);}
+  .unscramble-tiles{
+    display:flex; justify-content:center; gap:8px; flex-wrap:wrap; direction:rtl;
+  }
+  .unscramble-tile{
+    width:44px; height:50px; border-radius:10px; border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(160deg,var(--purple),var(--pink));
+    font-family:'Lalezar',sans-serif; font-size:22px; color:#fff; cursor:pointer;
+  }
+  .unscramble-tile.used{visibility:hidden;}
+  .unscramble-tile:hover{transform:translateY(-2px);}
+
+  /* --- Memory match game --- */
+  .memory-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:340px; margin:0 auto;
+  }
+  .memory-card{
+    aspect-ratio:1/1; border-radius:12px; cursor:pointer; position:relative;
+    background:linear-gradient(160deg,var(--purple),var(--pink));
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    transition:transform .25s ease; user-select:none;
+  }
+  .memory-card .face{display:none;}
+  .memory-card.flipped .face, .memory-card.matched .face{display:block;}
+  .memory-card.flipped, .memory-card.matched{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25);
+  }
+  .memory-card.matched{opacity:.55;}
+  .memory-card .back{font-size:18px; opacity:.8;}
+  .memory-card.flipped .back, .memory-card.matched .back{display:none;}
+
+  /* --- Catch the stars game --- */
+  .catch-field{
+    position:relative; width:100%; max-width:400px; height:320px; margin:14px auto 0;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.14); border-radius:16px;
+    overflow:hidden;
+  }
+  .catch-start-btn{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    border:none; border-radius:999px; padding:12px 26px; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:15px; color:#1a1140; cursor:pointer;
+    background:linear-gradient(90deg,var(--gold),var(--pink));
+  }
+  .falling-item{
+    position:absolute; font-size:26px; cursor:pointer; user-select:none; will-change:top;
+  }
+  .score-pop{
+    position:absolute; font-size:14px; font-weight:700; pointer-events:none;
+    animation:burst .6s ease forwards;
+  }
+
+  @media(max-width:420px){
+    .branch-node{font-size:11.5px; padding:8px 6px;}
+    .branch-node .em{font-size:20px;}
+    .center-node{font-size:14px;}
+    .center-node .center-theme{font-size:9px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<button class="fireworks-fab" id="fireworksBtn">🎆 احتفال!</button>
+
+<header>
+  <p class="designer-top-credit">تصميم: ماجدة علي 💫</p>
+  <span class="badge">✨ رحلة تعليمية للأطفال</span>
+  <h1>جزء عمّ<br>رحلة بين النجوم 🌌</h1>
+  <p class="sub">37 سورة... 37 نجمة في السماء! اضغط على أي نجمة لتكتشف خريطتها الذهنية، ثم العب لتجمع نجومك ⭐</p>
+  <div class="mascot-row">
+    <div class="mascot">⭐😊</div>
+    <div class="speech" id="mascotTip">أهلاً يا بطل! اكتب اسمك بالأسفل، ثم اختر أي سورة لنبدأ رحلتنا معاً 🚀</div>
+  </div>
+  <div class="name-row">
+    <label for="playerNameInput">👋 اسمي:</label>
+    <input type="text" id="playerNameInput" placeholder="اكتب اسمك هنا..." maxlength="20">
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <button class="sound-toggle" id="soundToggle" title="تشغيل/كتم المؤثرات الصوتية">🔊</button>
+  <span class="stars-count">⭐ <span id="starCount">0</span> / <span id="starTotal">0</span></span>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+
+  <h2 class="section-title">🎲 ألعاب إضافية</h2>
+  <div class="games-grid">
+    <div class="game-card" id="openDiffGame">
+      <span class="icon">🔍</span>
+      <h3>لعبة الاختلافات</h3>
+      <p>ابحث عن الرموز المختلفة بين الشبكتين قبل انتهاء الوقت</p>
+    </div>
+    <div class="game-card" id="openMazeGame">
+      <span class="icon">🌀</span>
+      <h3>متاهة النجوم</h3>
+      <p>ساعد النجمة على الوصول إلى الهلال عبر المتاهة</p>
+    </div>
+    <div class="game-card" id="openMemoryGame">
+      <span class="icon">🧠</span>
+      <h3>لعبة الذاكرة</h3>
+      <p>اقلب البطاقات وطابق بين كل رمزين متماثلين</p>
+    </div>
+    <div class="game-card" id="openCatchGame">
+      <span class="icon">🌠</span>
+      <h3>التقط النجوم</h3>
+      <p>اضغط على النجوم قبل أن تسقط، وتجنّب الهلال الخاطئ</p>
+    </div>
+    <div class="game-card" id="openUnscrambleGame">
+      <span class="icon">🔤</span>
+      <h3>فك شفرة السورة</h3>
+      <p>رتّب الحروف المبعثرة لتكتشف اسم السورة الصحيح</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">🏆 لوحة الأبطال</h2>
+  <div class="leaderboard-wrap">
+    <p class="leaderboard-note">تُحفظ النتائج على هذا الجهاز/المتصفح فقط — اكتب اسمك بالأعلى ليُحفظ تقدّمك ويظهر هنا 🌟</p>
+    <p class="cert-empty" id="leaderboardEmpty">لا توجد نتائج محفوظة بعد. اجمع نجوماً ليظهر اسمك هنا!</p>
+    <div class="leaderboard-list" id="leaderboardList"></div>
+    <button class="report-btn" id="openReportBtn">📊 تقرير التقدّم القابل للطباعة</button>
+  </div>
+
+  <h2 class="section-title">🔗 مصادر إضافية موثوقة</h2>
+  <div class="external-links-wrap">
+    <a class="external-link-card" href="https://quran.com" target="_blank" rel="noopener noreferrer">
+      <span class="icon">📖</span>
+      <div>
+        <h3>Quran.com</h3>
+        <p>موقع رسمي وموثوق لقراءة القرآن كاملاً والاستماع للتلاوات — بدون إعلانات</p>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+  </div>
+
+  <h2 class="section-title">🎓 شهاداتي</h2>
+  <div class="cert-gallery-wrap">
+    <p class="cert-empty" id="certEmptyMsg">أكمل اختبار أي سورة بنجاح لتحصل على شهادتك الأولى ✨</p>
+    <div class="cert-gallery" id="certGallery"></div>
+  </div>
+</main>
+
+<footer>صُنع بمحبة لتعليم الأطفال جزء عمّ 🌙⭐</footer>
+
+<div class="overlay" id="overlay">
+  <div class="panel" id="panel">
+    <button class="close" id="closeBtn">✕</button>
+    <div class="panel-head">
+      <div class="num" id="pNum"></div>
+      <h2 id="pName"></h2>
+      <div class="tags">
+        <span class="tag" id="pVerses"></span>
+        <span class="tag" id="pType"></span>
+      </div>
+    </div>
+
+    <p class="mindmap-note">هذه الخريطة تلخيص مبسّط بأسلوب اجتهادي لأهم موضوعات السورة، وليست تفسيراً معتمداً — يُنصح بمراجعتها مع تفسير موثوق كـ"الميسّر" أو "السعدي" 📚</p>
+    <div class="orbit-wrap" id="orbitWrap">
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring inner"></div>
+      <div class="center-node" id="centerNode"></div>
+    </div>
+
+    <button class="celebrate-inline-btn" id="celebrateInlineBtn">🎆 احتفل الآن</button>
+    <button class="tafsir-btn" id="tafsirBtn">📖 تفسير كل آية للأطفال</button>
+    <button class="surahgames-btn" id="surahGamesBtn">🎲 ألعاب عن هذه السورة</button>
+    <button class="teacher-mode-btn" id="teacherModeBtn">🖥️ وضع المعلمة</button>
+    <button class="play-btn" id="playBtn">🎮 ابدأ اللعبة واجمع النجوم</button>
+
+    <div class="tafsir-panel" id="tafsirPanel">
+      <p class="tafsir-note">النص القرآني يُحمَّل مباشرة من مصدر موثوق، والتفسير المبسط بأسلوب سهل للأطفال — للمعنى الدقيق يُفضّل الرجوع إلى المصحف مع أحد الوالدين أو المعلم 🌙</p>
+      <div class="tafsir-list" id="tafsirList"></div>
+    </div>
+
+    <div class="surahgames-panel" id="surahGamesPanel">
+      <div class="surahgames-menu" id="surahGamesMenu">
+        <button class="sg-choice" data-game="match">🧩<span>صل الرمز بمحوره</span></button>
+        <button class="sg-choice" data-game="truefalse">💡<span>صح أم خطأ</span></button>
+        <button class="sg-choice" data-game="arrange">🔤<span>رتب كلمات الآية</span></button>
+        <button class="sg-choice" data-game="complete">🧠<span>أكمل الآية</span></button>
+        <button class="sg-choice" data-game="emoji">🎯<span>اختر الرمز المناسب</span></button>
+      </div>
+      <div class="surahgames-play" id="surahGamesPlay"></div>
+    </div>
+
+    <div class="quiz" id="quiz">
+      <div class="qprog" id="qProg"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextBtn">التالي ⬅</button>
+      <div class="result" id="result">
+        <div class="big" id="resultEmoji">🎉</div>
+        <div class="msg" id="resultMsg"></div>
+        <div class="sub" id="resultSub"></div>
+        <div class="result-btns">
+          <button class="ghost-btn cert-btn" id="certBtn" style="display:none;">🎓 شهادتي</button>
+          <button class="ghost-btn" id="retryBtn">🔁 أعد اللعبة</button>
+          <button class="ghost-btn" id="closeResultBtn">✨ إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Spot the Difference Game -->
+<div class="overlay" id="diffOverlay">
+  <div class="panel">
+    <button class="close" id="diffCloseBtn">✕</button>
+    <div class="panel-head">
+      <h2>🔍 لعبة الاختلافات</h2>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">اضغط على الرموز في الشبكة اليمنى التي تختلف عن الشبكة اليسرى</p>
+    </div>
+    <div class="diff-status">
+      <span>🔎 وُجد: <b id="diffFound">0</b> / <span id="diffTotal">0</span></span>
+      <button class="ghost-btn" id="diffNewBtn" style="padding:6px 14px; font-size:12px;">🔁 لعبة جديدة</button>
+    </div>
+    <div class="diff-boards">
+      <div>
+        <div class="diff-board-label">الشبكة الأصلية</div>
+        <div class="diff-board left" id="diffBoardLeft"></div>
+      </div>
+      <div>
+        <div class="diff-board-label">ابحث عن الاختلافات هنا</div>
+        <div class="diff-board right" id="diffBoardRight"></div>
+      </div>
+    </div>
+    <div class="diff-win" id="diffWin">
+      <div class="big">🏆</div>
+      <div class="msg" style="font-family:'Lalezar',sans-serif; font-size:22px;">أحسنت! وجدت كل الاختلافات</div>
+      <div class="result-btns" style="margin-top:10px;">
+        <button class="ghost-btn" id="diffPlayAgainBtn">🔁 العب مرة أخرى</button>
+        <button class="ghost-btn" id="diffCloseBtn2">✨ إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Maze Game -->
+<div class="overlay" id="mazeOverlay">
+  <div class="panel">
+    <button class="close" id="mazeCloseBtn">✕</button>
+    <div class="panel-head">
+      <h2>🌀 متاهة النجوم</h2>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">حرّك النجمة ⭐ عبر المتاهة حتى تصل إلى الهلال 🌙</p>
+    </div>
+    <div class="maze-status">
+      <span>👣 الخطوات: <b id="mazeMoves">0</b></span>
+      <button class="ghost-btn" id="mazeNewBtn" style="padding:6px 14px; font-size:12px;">🔁 متاهة جديدة</button>
+    </div>
+    <div class="maze-grid" id="mazeGrid"></div>
+    <div class="dpad">
+      <div></div>
+      <button id="mazeUp">⬆️</button>
+      <div></div>
+      <button id="mazeLeft">➡️</button>
+      <div></div>
+      <button id="mazeRight">⬅️</button>
+      <div></div>
+      <button id="mazeDown">⬇️</button>
+      <div></div>
+    </div>
+    <div class="maze-win" id="mazeWin">
+      <div class="big">🎉</div>
+      <div class="msg" style="font-family:'Lalezar',sans-serif; font-size:22px;">وصلت إلى الهلال بنجاح!</div>
+      <div class="sub" id="mazeWinSub" style="color:var(--dim); font-size:13px; margin:4px 0 10px;"></div>
+      <div class="result-btns">
+        <button class="ghost-btn" id="mazePlayAgainBtn">🔁 العب مرة أخرى</button>
+        <button class="ghost-btn" id="mazeCloseBtn2">✨ إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Memory Match Game -->
+<div class="overlay" id="memoryOverlay">
+  <div class="panel">
+    <button class="close" id="memoryCloseBtn">✕</button>
+    <div class="panel-head">
+      <h2>🧠 لعبة الذاكرة</h2>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">اقلب بطاقتين في كل مرة وحاول إيجاد كل الأزواج المتطابقة</p>
+    </div>
+    <div class="maze-status">
+      <span>🔄 المحاولات: <b id="memoryMoves">0</b></span>
+      <button class="ghost-btn" id="memoryNewBtn" style="padding:6px 14px; font-size:12px;">🔁 لعبة جديدة</button>
+    </div>
+    <div class="memory-grid" id="memoryGrid"></div>
+    <div class="maze-win" id="memoryWin">
+      <div class="big">🏆</div>
+      <div class="msg" style="font-family:'Lalezar',sans-serif; font-size:22px;">أحسنت! طابقت كل البطاقات</div>
+      <div class="sub" id="memoryWinSub" style="color:var(--dim); font-size:13px; margin:4px 0 10px;"></div>
+      <div class="result-btns">
+        <button class="ghost-btn" id="memoryPlayAgainBtn">🔁 العب مرة أخرى</button>
+        <button class="ghost-btn" id="memoryCloseBtn2">✨ إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Catch the Stars Game -->
+<div class="overlay" id="catchOverlay">
+  <div class="panel">
+    <button class="close" id="catchCloseBtn">✕</button>
+    <div class="panel-head">
+      <h2>🌠 التقط النجوم</h2>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">اضغط على ⭐ لتكسب نقطة، وابتعد عن 🌑 لأنها تخصم نقطة</p>
+    </div>
+    <div class="maze-status">
+      <span>🏅 النقاط: <b id="catchScore">0</b></span>
+      <span>⏱️ الوقت: <b id="catchTime">30</b></span>
+    </div>
+    <div class="catch-field" id="catchField">
+      <button class="catch-start-btn" id="catchStartBtn">▶ ابدأ اللعبة</button>
+    </div>
+    <div class="maze-win" id="catchWin">
+      <div class="big">🎯</div>
+      <div class="msg" style="font-family:'Lalezar',sans-serif; font-size:22px;">انتهى الوقت!</div>
+      <div class="sub" id="catchWinSub" style="color:var(--dim); font-size:13px; margin:4px 0 10px;"></div>
+      <div class="result-btns">
+        <button class="ghost-btn" id="catchPlayAgainBtn">🔁 العب مرة أخرى</button>
+        <button class="ghost-btn" id="catchCloseBtn2">✨ إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Unscramble the Surah Name Game -->
+<div class="overlay" id="unscrambleOverlay">
+  <div class="panel">
+    <button class="close" id="unscrambleCloseBtn">✕</button>
+    <div class="panel-head">
+      <h2>🔤 فك شفرة السورة</h2>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">اضغط على الحروف بالترتيب الصحيح لتكوين اسم السورة</p>
+    </div>
+    <div class="maze-status">
+      <span>🏅 حلّيت: <b id="unscrambleScore">0</b></span>
+      <button class="ghost-btn" id="unscrambleSkipBtn" style="padding:6px 14px; font-size:12px;">⏭️ كلمة أخرى</button>
+    </div>
+    <div class="unscramble-slots" id="unscrambleSlots"></div>
+    <div class="unscramble-tiles" id="unscrambleTiles"></div>
+    <div class="feedback" id="unscrambleFeedback"></div>
+    <div class="maze-win" id="unscrambleWin">
+      <div class="big">🌟</div>
+      <div class="msg" style="font-family:'Lalezar',sans-serif; font-size:22px;">أحسنت! هذا صحيح</div>
+      <div class="sub" id="unscrambleWinSub" style="color:var(--dim); font-size:13px; margin:4px 0 10px;"></div>
+      <div class="result-btns">
+        <button class="ghost-btn" id="unscrambleNextBtn">➡️ كلمة جديدة</button>
+        <button class="ghost-btn" id="unscrambleCloseBtn2">✨ إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Printable Progress Report -->
+<div class="overlay" id="reportOverlay">
+  <div class="panel report-panel" id="reportPanel">
+    <button class="close no-print" id="reportCloseBtn">✕</button>
+    <div class="progress-report" id="progressReportBody">
+      <div class="report-border">
+        <div class="report-title">تقرير تقدّم الطالب/ـة</div>
+        <div class="report-sub" id="reportPlayerLine"></div>
+        <div class="report-stat-row">
+          <div class="report-stat"><b id="reportStars"></b><span>نجمة مجمّعة</span></div>
+          <div class="report-stat"><b id="reportCompletedCount"></b><span>سورة مكتملة</span></div>
+          <div class="report-stat"><b id="reportCertCount"></b><span>شهادة</span></div>
+        </div>
+        <div class="report-section-title">📚 السور المكتملة</div>
+        <div class="report-surah-grid" id="reportCompletedGrid"></div>
+        <div class="report-section-title">🎓 الشهادات المحصّلة</div>
+        <div class="report-surah-grid" id="reportCertGrid"></div>
+        <div class="report-footer" id="reportDate"></div>
+      </div>
+    </div>
+    <div class="result-btns no-print" style="margin-top:16px;">
+      <button class="ghost-btn" id="reportPrintBtn">🖨️ طباعة / حفظ كـ PDF</button>
+      <button class="ghost-btn" id="reportCloseBtn2">✨ إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher Mode: clean presentation view for Zoom / in-class teaching -->
+<div class="overlay" id="teacherModeOverlay">
+  <div class="teacher-panel" id="teacherPanel">
+    <button class="close no-print" id="teacherCloseBtn">✕</button>
+    <div class="teacher-header">
+      <span id="teacherPageLabel"></span>
+      <span id="teacherPageCount"></span>
+    </div>
+    <div class="teacher-content" id="teacherContent"></div>
+    <div class="teacher-nav no-print">
+      <button class="ghost-btn" id="teacherPrevBtn">➡️ السابق</button>
+      <div class="teacher-dots" id="teacherDots"></div>
+      <button class="ghost-btn" id="teacherNextBtn">التالي ⬅️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Certificate of Completion -->
+<div class="overlay" id="certOverlay">
+  <div class="panel cert-panel" id="certPanel">
+    <button class="close no-print" id="certCloseBtn">✕</button>
+    <div class="certificate" id="certificateBody">
+      <div class="cert-border">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAIAAABEtEjdAAAAtGVYSWZJSSoACAAAAAYAEgEDAAEAAAABAAAAGgEFAAEAAABWAAAAGwEFAAEAAABeAAAAKAEDAAEAAAACAAAAEwIDAAEAAAABAAAAaYcEAAEAAABmAAAAAAAAAGAAAAABAAAAYAAAAAEAAAAGAACQBwAEAAAAMDIxMAGRBwAEAAAAAQIDAACgBwAEAAAAMDEwMAGgAwABAAAA//8AAAKgBAABAAAA9AEAAAOgBAABAAAA9AEAAAAAAAAA4cNEAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAFxGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogIDxBdHRyaWI6QWRzPgogICA8cmRmOlNlcT4KICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI2LTAzLTE5PC9BdHRyaWI6Q3JlYXRlZD4KICAgICA8QXR0cmliOkRhdGE+eyZxdW90O2RvYyZxdW90OzomcXVvdDtEQUctT0V0WmpTVSZxdW90OywmcXVvdDt1c2VyJnF1b3Q7OiZxdW90O1VBR3ZKQ1JpOXhJJnF1b3Q7LCZxdW90O2JyYW5kJnF1b3Q7OiZxdW90O2NhbnZhIHBybyZxdW90OywmcXVvdDt0ZW1wbGF0ZSZxdW90OzomcXVvdDtCbHVlIFllbGxvdyBhbmQgV2hpdGUgSWxsdXN0cmF0aXZlICBDb21wYW55IExvZ28mcXVvdDt9PC9BdHRyaWI6RGF0YT4KICAgICA8QXR0cmliOkV4dElkPjJmZjViZjY1LTIyZTUtNDc2NC1iMzNmLTY2NDE2NjBjOWYwZDwvQXR0cmliOkV4dElkPgogICAgIDxBdHRyaWI6RmJJZD41MjUyNjU5MTQxNzk1ODA8L0F0dHJpYjpGYklkPgogICAgIDxBdHRyaWI6VG91Y2hUeXBlPjI8L0F0dHJpYjpUb3VjaFR5cGU+CiAgICA8L3JkZjpsaT4KICAgPC9yZGY6U2VxPgogIDwvQXR0cmliOkFkcz4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6ZGM9J2h0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvJz4KICA8ZGM6dGl0bGU+CiAgIDxyZGY6QWx0PgogICAgPHJkZjpsaSB4bWw6bGFuZz0neC1kZWZhdWx0Jz5CTEVORCAtIDE8L3JkZjpsaT4KICAgPC9yZGY6QWx0PgogIDwvZGM6dGl0bGU+CiA8L3JkZjpEZXNjcmlwdGlvbj4KCiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0nJwogIHhtbG5zOnBkZj0naHR0cDovL25zLmFkb2JlLmNvbS9wZGYvMS4zLyc+CiAgPHBkZjpBdXRob3I+TWFqZWRhYWJ1ZmFyd2VoPC9wZGY6QXV0aG9yPgogPC9yZGY6RGVzY3JpcHRpb24+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczp4bXA9J2h0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8nPgogIDx4bXA6Q3JlYXRvclRvb2w+Q2FudmEgZG9jPURBRy1PRXRaalNVIHVzZXI9VUFHdkpDUmk5eEkgYnJhbmQ9Y2FudmEgcHJvIHRlbXBsYXRlPUJsdWUgWWVsbG93IGFuZCBXaGl0ZSBJbGx1c3RyYXRpdmUgIENvbXBhbnkgTG9nbzwveG1wOkNyZWF0b3JUb29sPgogPC9yZGY6RGVzY3JpcHRpb24+CjwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9J3InPz4kfuVFAAAgAElEQVR4nO3dB1QUSds24P8c3vC9m3M0p1VREFQUFMWAIqKABDNiFhUxYADBnDGjqJgxYcCc1pzjmjO6RhRR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" alt="BLEND" class="cert-logo">
+        <div class="cert-title">شهادة إتمام</div>
+        <div class="cert-medal">🏅</div>
+        <div class="cert-line">تشهد منصة <b>BLEND</b> التعليمية بأن الطالب/ـة</div>
+        <div class="cert-name" id="certName">بطل</div>
+        <div class="cert-line">قد أتمّ/ـت بنجاح تعلّم واختبار</div>
+        <div class="cert-surah" id="certSurah">سورة ---</div>
+        <div class="cert-line">ضمن رحلة "جزء عمّ: رحلة بين النجوم" 🌌</div>
+        <div class="cert-footer">
+          <span id="certDate"></span>
+          <span class="cert-signature">منصة BLEND التعليمية ✦</span>
+        </div>
+      </div>
+    </div>
+    <div class="result-btns no-print" style="margin-top:16px;">
+      <button class="ghost-btn" id="certPrintBtn">🖨️ طباعة / حفظ كـ PDF</button>
+      <button class="ghost-btn" id="certCloseBtn2">✨ إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Data: 37 surahs of Juz Amma ---------------- */
+const surahs = [
+{n:78,icon:"📰",name:"النبأ",verses:40,type:"مكية",theme:"التساؤل عن يوم القيامة",
+  ayahs:["عمّ يتساءل الناس؟", "عن الخبر العظيم (يوم القيامة)", "الذي هم فيه مختلفون", "سيعلمون الحقيقة", "ثم سيعلمونها أكثر", "ألم نجعل الأرض ممهدة للعيش؟", "والجبال أوتاداً تثبّتها", "وخلقناكم أزواجاً (ذكوراً وإناثاً)", "وجعلنا نومكم راحة لكم", "وجعلنا الليل غطاءً يستركم", "وجعلنا النهار وقتاً للعمل والسعي", "وبنينا فوقكم سبع سماوات قوية", "وجعلنا الشمس مصباحاً منيراً", "وأنزلنا من السحب مطراً غزيراً", "لنخرج به الحب والنبات", "والبساتين الملتفة بالأشجار", "إن يوم الفصل (القيامة) موعد محدد", "يوم يُنفخ في الصور فتأتون أفواجاً", "وتُفتح السماء فتصير أبواباً", "وتُسيَّر الجبال فتصبح كالسراب", "إن جهنم كانت بالمرصاد", "للطاغين مكاناً يرجعون إليه", "ماكثين فيها زمناً طويلاً", "لا يذوقون فيها برداً ولا شراباً", "إلا ماءً حاراً وصديداً", "جزاءً موافقاً لأعمالهم", "إنهم كانوا لا يخافون الحساب", "وكذّبوا بآيات الله تكذيباً", "وكل شيء أحصيناه وكتبناه", "فذوقوا العذاب، لن نزيدكم إلا عذاباً", "أما المتقون فلهم الفوز والنجاة", "بساتين وأعناب", "وأزواج متقاربات في السن", "وكأس مملوء بالشراب الطيب", "لا يسمعون فيها كلاماً باطلاً ولا كذباً", "عطاءً وجزاءً كافياً من ربهم", "رب السماوات والأرض، الرحمن", "يوم يقوم الملَك والملائكة صفاً، لا يتكلمون إلا بإذنه بالحق", "ذلك اليوم الحق، فمن شاء اتخذ إلى ربه طريق نجاة", "إنا أنذرناكم عذاباً قريباً، يوم ينظر المرء ما قدّمت يداه، ويتمنى الكافر لو كان تراباً"],
+  branches:["يوم القيامة","نعم الله في الخلق","عذاب الطاغين","نعيم المتقين","خلق الإنسان أزواجاً","السماوات السبع"],
+  vocab:[["النبأ", "الخبر المهم"], ["أوتاداً", "أشياء تثبت الأرض مثل المسامير"], ["سراباً", "شيء يبدو من بعيد وهماً وليس حقيقة"], ["غساقاً", "شراب بارد مؤلم جداً"]],
+  benefits:["الاستعداد ليوم القيامة بالإيمان والعمل الصالح", "الشكر لله على نعمة الأرض والسماء والنوم", "الحذر من التكذيب بالحساب"]},
+{n:79,icon:"👼",name:"النازعات",verses:46,type:"مكية",theme:"قبض الأرواح وقصة موسى وفرعون",
+  ayahs:["والملائكة التي تنزع الأرواح بشدة (أرواح الكفار)", "والتي تنزعها برفق (أرواح المؤمنين)", "والملائكة التي تسبح بسرعة لتنفيذ أوامر الله", "فتسبق غيرها في تنفيذ الأمر", "فتدبر الأمور التي أمرها الله بها", "يوم ترجف الأرض رجفة شديدة (النفخة الأولى)", "يتبعها النفخة الثانية", "قلوب في ذلك اليوم خائفة مضطربة", "أبصارها خاشعة ذليلة", "يقول الكفار: أنُعاد إلى الحياة بعد الموت؟", "أنُعاد وقد صرنا عظاماً بالية؟", "قالوا: تلك رجعة خاسرة إن حدثت", "إنما هي صيحة واحدة (النفخة)", "فإذا الناس أحياء على وجه الأرض", "هل بلغك خبر موسى؟", "إذ ناداه ربه في الوادي المقدس", "اذهب إلى فرعون فقد تجاوز الحد في الطغيان", "وقل له: هل تريد أن تتطهر من الذنوب؟", "وأهديك إلى طريق ربك فتخافه", "فأراه موسى المعجزة الكبرى", "فكذّب فرعون وعصى", "ثم أدبر يسعى في محاربة الحق", "فجمع الناس ونادى فيهم", "فقال: أنا ربكم الأعلى", "فأخذه الله عقاباً في الدنيا والآخرة", "إن في ذلك عبرة لمن يخاف الله", "أخلقكم أشد أم خلق السماء؟ رفعها الله وأتقن بناءها", "رفع سقفها وسواها", "وأظلم ليلها وأخرج ضحاها (نهارها)", "والأرض بعد ذلك بسطها وجعلها صالحة للحياة", "أخرج منها ماءها ومرعاها", "وثبّت الجبال فيها", "متاعاً لكم ولأنعامكم تنتفعون به", "فإذا جاءت القيامة الكبرى", "يوم يتذكر الإنسان كل ما عمل", "وأظهرت النار لكل من يراها", "فأما من تجاوز الحد في الطغيان", "وفضّل الحياة الدنيا على الآخرة", "فإن الجحيم هي مأواه", "وأما من خاف الوقوف بين يدي ربه ومنع نفسه عن الهوى", "فإن الجنة هي مأواه", "يسألونك عن الساعة متى موعدها؟", "أنت لست مسؤولاً عن معرفة موعدها", "علمها عند الله وحده", "أنت فقط منذر لمن يخاف تلك الساعة", "كأنهم يوم يرونها لم يلبثوا في الدنيا إلا وقتاً قصيراً"],
+  branches:["الملائكة وقبض الأرواح","قصة موسى وفرعون","أهوال الساعة","خشية الله","خلق السماء والأرض","الجنة والنار"],
+  vocab:[["الناشطات", "الملائكة التي تنزل برفق"], ["الطاغية", "تجاوز الحد في الظلم والكبر"], ["الرادفة", "النفخة الثانية في الصور"]],
+  benefits:["الاعتبار بقصة فرعون وعاقبة الطغيان", "الاستعداد للحساب لأن كل شيء محفوظ عند الله", "عظمة خلق السماء والأرض تدل على قدرة الله"]},
+{n:80,icon:"😟",name:"عبس",verses:42,type:"مكية",theme:"أدب الدعوة وقصة ابن أم مكتوم",
+  ayahs:["عبس النبي ﷺ وأعرض بوجهه", "لأن جاءه الرجل الأعمى يسأل", "وما يدريك؟ لعله يريد أن يتطهر ويتعلم", "أو يتذكر فتنفعه الذكرى", "أما من استغنى عن الإيمان (الغني المتكبر)", "فأنت تهتم به وتقبل عليه", "وما عليك إن لم يتطهر (ليس ذنبك)", "وأما من جاءك يسعى للخير", "وهو يخشى الله", "فأنت عنه تتشاغل (كان يجب الاهتمام به)", "لا تفعل ذلك، فالقرآن تذكرة للجميع", "فمن شاء تذكّر واتعظ به", "وهو في صحف مكرمة (اللوح المحفوظ)", "مرفوعة القدر مطهرة من كل خطأ", "بأيدي كتبة (ملائكة) ينسخونها", "كرام في منزلتهم، أبرار في أخلاقهم", "قُتل (لُعن) الإنسان الكافر ما أشد كفره!", "من أي شيء خلقه الله؟", "من نطفة (ماء) خلقه وقدّر خلقه بدقة", "ثم يسّر له طريق الحياة", "ثم أماته وجعل له قبراً", "ثم إذا شاء الله بعثه يوم القيامة", "كلا، لم يقم الإنسان بما أمره الله به", "فلينظر الإنسان إلى طعامه كيف يأتيه", "أنّا صببنا الماء من السماء بغزارة", "ثم شققنا الأرض للنبات شقاً", "فأنبتنا فيها الحبوب", "والعنب والعلف الأخضر", "والزيتون والنخيل", "والحدائق ذات الأشجار الملتفة", "والفاكهة والأعشاب للرعي", "متاعاً لكم ولأنعامكم", "فإذا جاءت الصيحة العظيمة (القيامة)", "يوم يفر المرء من أخيه", "ومن أمه وأبيه", "ومن زوجته وأولاده", "لكل إنسان يومئذ شأن يشغله عن غيره", "وجوه يوم القيامة مضيئة مسرورة", "ضاحكة مستبشرة بالخير (أهل الجنة)", "ووجوه أخرى عليها غبار", "تغشاها ظلمة وسواد", "أولئك هم الكفرة الفجرة (أهل النار)"],
+  branches:["قصة الأعمى","آداب الدعوة","نعم الطعام","أهوال القيامة","خلق الإنسان من نطفة","فرار الإنسان من أهله"],
+  vocab:[["عبس", "قطّب وجهه وأظهر الانزعاج"], ["الأعمى", "من فقد بصره"], ["صحف مكرمة", "كتاب القرآن المعظم عند الله"]],
+  benefits:["الاهتمام بكل إنسان يسعى للخير مهما كانت حالته", "عدم الانشغال بالكبراء عن أصحاب الحاجة الحقيقية", "شكر الله على نعمة الطعام وتدبيره"]},
+{n:81,icon:"☀️",name:"التكوير",verses:29,type:"مكية",theme:"علامات وأهوال يوم القيامة",
+  ayahs:["إذا الشمس لُفّت وأُطفئ نورها", "وإذا النجوم تساقطت من السماء", "وإذا الجبال سيّرت من أماكنها", "وإذا النوق الحوامل تُركت مهملة", "وإذا الوحوش جُمعت من هول ذلك اليوم", "وإذا البحار أُوقدت ناراً", "وإذا النفوس قُرنت بأعمالها (خير بخير وشر بشر)", "وإذا سُئلت البنت التي دُفنت وهي حية", "بأي ذنب قُتلت؟", "وإذا الصحف (صحائف الأعمال) نُشرت وفُتحت", "وإذا السماء كُشط عنها غطاؤها", "وإذا الجحيم أوقدت واشتد لهبها", "وإذا الجنة قُرّبت من أهلها", "عندها تعلم كل نفس ما أحضرت من عمل", "فأقسم بالنجوم التي تختفي", "تجري وتختفي في مسارها", "والليل حين يظلم ويُقبل", "والصبح حين يتنفس ويضيء", "إن هذا القرآن كلام رسول كريم (جبريل)", "صاحب قوة عند الله، مكانته عالية", "مُطاع هناك، أمين على الوحي", "وما نبيكم ﷺ مجنون كما يزعمون", "لقد رآه (رأى النبي جبريل) في صورته الحقيقية بوضوح", "وما هو ببخيل في تبليغ الوحي", "وما القرآن بكلام شيطان مطرود", "فأين تذهبون عن الحق؟ (لماذا تكذبون)", "ما هو إلا تذكير للعالمين", "لمن أراد منكم أن يسلك طريق الاستقامة", "وما تشاءون إلا أن يشاء الله رب العالمين"],
+  branches:["تكوير الشمس","تنزيه جبريل والوحي","مصير الناس","حرية الإرادة","تناثر النجوم","القسم بالليل والصبح"],
+  vocab:[["كُوّرت", "لُفّت وطُويت"], ["انكدرت", "سقطت وتناثرت"], ["الخنّس الجوار الكنّس", "النجوم التي تختفي وتظهر"]],
+  benefits:["الإيمان بعلامات يوم القيامة", "تصديق الوحي وأن القرآن ليس كلام مجنون أو شيطان", "حرية الاختيار بين الهداية والضلال"]},
+{n:82,icon:"🌌",name:"الانفطار",verses:19,type:"مكية",theme:"انشقاق السماء وعدل الله",
+  ayahs:["إذا السماء انشقت", "وإذا النجوم تناثرت وسقطت", "وإذا البحار فُجّرت واختلط بعضها ببعض", "وإذا القبور قُلبت وخرج من فيها", "عندها تعلم كل نفس ما قدّمت وما أخّرت من عمل", "يا أيها الإنسان ما الذي خدعك بربك الكريم؟", "الذي خلقك فسوّاك وعدّلك أحسن تعديل", "وركّبك في أي صورة أراد", "كلا، بل أنتم تكذبون بيوم الجزاء", "وإن عليكم ملائكة حافظين يراقبونكم", "كراماً عند الله، يكتبون أعمالكم", "يعلمون كل ما تفعلون", "إن الأبرار (المؤمنين) في نعيم يوم القيامة", "وإن الفجار (الكفار) في عذاب الجحيم", "يدخلونها يوم القيامة", "ولن يستطيعوا الخروج منها أبداً", "وما أدراك ما يوم الجزاء العظيم؟", "ثم ما أدراك ما هو؟ (تعظيم لهوله)", "يوم لا تملك نفس لنفس أخرى شيئاً، والأمر كله لله وحده"],
+  branches:["انشقاق السماء","الكرام الكاتبون","عدل يوم الدين","كرم الله بالإنسان","فناء البحار","قلب القبور"],
+  vocab:[["انفطرت", "انشقت"], ["الكرام الكاتبين", "الملائكة الذين يكتبون أعمال الإنسان"], ["الأبرار", "المؤمنون الطائعون"]],
+  benefits:["الله خلقنا وسوّانا بأحسن صورة فيجب شكره", "كل إنسان تحت رقابة ملائكة تكتب أعماله", "الاستعداد ليوم لا يملك فيه أحد لأحد شيئاً"]},
+{n:83,icon:"⚖️",name:"المطففين",verses:36,type:"مكية",theme:"التحذير من الغش في الميزان",
+  ayahs:["ويل (عذاب شديد) للمطففين (الغشاشين في الكيل والوزن)", "الذين إذا أخذوا حقهم من الناس بالكيل استوفوه كاملاً", "وإذا كالوا أو وزنوا للناس، أنقصوا حقهم", "ألا يظن هؤلاء أنهم سيُبعثون يوم القيامة؟", "ليوم عظيم هائل", "يوم يقف الناس بين يدي رب العالمين", "كلا، إن كتاب أعمال الفجار في سجّين (مكان ضيق سفلي)", "وما أدراك ما سجّين؟", "كتاب مكتوب محدد لا يتبدل", "ويل يومئذ للمكذبين بيوم الدين", "الذين يكذبون بيوم الحساب", "وما يكذّب به إلا كل معتدٍ آثم", "إذا تُتلى عليه آيات الله قال: أساطير الأولين (قصص قديمة)", "كلا، بل غطّى الذنب على قلوبهم فأعماها", "كلا، إنهم يوم القيامة محجوبون عن رؤية ربهم", "ثم إنهم داخلون النار", "ثم يُقال لهم: هذا الذي كنتم به تكذبون", "كلا، إن كتاب أعمال الأبرار (المؤمنين) في عليّين (مكان عالٍ رفيع)", "وما أدراك ما عليّون؟", "كتاب مكتوب محدد", "يشهده المقربون من الملائكة", "إن الأبرار في نعيم عظيم يوم القيامة", "على الأسرّة ينظرون إلى نعيم الجنة", "تعرف في وجوههم بريق النعيم والسرور", "يُسقون شراباً طيباً مختوماً", "ختامه مسك (رائحته طيبة)، وفي ذلك فليتنافس المتنافسون", "ومزاج ذلك الشراب من عين تسنيم", "عين يشرب منها المقربون صافية خالصة", "إن الكفار كانوا يسخرون من المؤمنين في الدنيا", "وإذا مرّ بهم المؤمنون كانوا يتغامزون ساخرين", "وإذا رجعوا إلى أهلهم عادوا فرحين بسخريتهم", "وإذا رأوا المؤمنين قالوا: إن هؤلاء لَضالون", "وما أُرسل هؤلاء الكفار حراساً على المؤمنين", "فاليوم (يوم القيامة) المؤمنون يضحكون من الكافرين", "على الأسرّة ينظرون إليهم في عذابهم", "هل جوزي الكفار بما كانوا يفعلون؟ (نعم جوزوا)"],
+  branches:["التطفيف بالميزان","سجل الفجار","سجل الأبرار","نعيم الجنة","سخرية الكفار بالمؤمنين","ضحك المؤمنين يوم القيامة"],
+  vocab:[["المطففين", "الذين ينقصون حق الناس في الكيل والوزن"], ["سجّين", "مكان ضيق أسفل يُكتب فيه سجل الفجار"], ["عليّون", "مكان عالٍ رفيع يُكتب فيه سجل الأبرار"], ["تسنيم", "عين ماء عالية في الجنة"]],
+  benefits:["الأمانة والعدل في التعامل مع الناس", "عدم السخرية من المؤمنين", "الإيمان بيوم الحساب يمنع الظلم"]},
+{n:84,icon:"🌠",name:"الانشقاق",verses:25,type:"مكية",theme:"انشقاق السماء وأخذ الكتاب",
+  ayahs:["إذا السماء انشقت", "وأطاعت أمر ربها كما يجب", "وإذا الأرض مُدّت وبُسطت", "وألقت ما فيها من الموتى وأفرغت نفسها", "وأطاعت أمر ربها كما يجب", "يا أيها الإنسان إنك تسعى إلى ربك سعياً فستلاقيه", "فمن أُعطي كتاب أعماله بيمينه", "فسوف يُحاسَب حساباً يسيراً هيناً", "ويرجع إلى أهله في الجنة فرحاً مسروراً", "وأما من أُعطي كتابه من وراء ظهره (الكفار)", "فسوف يتمنى الهلاك والموت من شدة العذاب", "ويدخل النار المستعرة الشديدة اللهب", "إنه كان في الدنيا فرحاً مغروراً بين أهله", "وظن أنه لن يرجع إلى الله أبداً", "بلى! إن ربه كان به بصيراً يراقبه دائماً", "فأقسم بالشفق (حمرة الغروب)", "والليل وما جمع من الظلام والمخلوقات", "والقمر إذا اكتمل نوره وضياؤه", "لتنتقلن من حال إلى حال (أطوار الحياة والموت والبعث)", "فما لهم لا يؤمنون بهذا القرآن؟", "وإذا قُرئ عليهم القرآن لا يسجدون خشوعاً", "بل الذين كفروا يكذبون بالحق", "والله أعلم بما يخفونه في قلوبهم", "فبشرهم بعذاب أليم مؤلم", "إلا الذين آمنوا وعملوا الصالحات فلهم أجر لا ينقطع أبداً"],
+  branches:["انشقاق السماء","أخذ الكتاب باليمين أو الشمال","الكدح إلى الله","الإيمان بالبعث","مد الأرض وبسطها","القسم بالشفق والقمر"],
+  vocab:[["انشقت", "انفتحت وتصدعت"], ["كدحاً", "تعباً ومشقة في السعي"], ["ملاقيه", "ستقابل ربك يوم القيامة"]],
+  benefits:["كل إنسان سيلقى ربه ويحاسَب على سعيه", "التفاؤل بيسر الحساب لأهل الطاعة", "الخشوع عند سماع القرآن"]},
+{n:85,icon:"🌟",name:"البروج",verses:22,type:"مكية",theme:"قصة أصحاب الأخدود",
+  ayahs:["والسماء ذات البروج (المنازل الكبيرة للنجوم والكواكب)", "واليوم الموعود (يوم القيامة)", "وشاهد ومشهود (يوم القيامة ومن يشهدونه)", "لُعن ولُعن أصحاب الأخدود (حفرة النار التي عذبوا بها المؤمنين)", "النار ذات الوقود المشتعلة بشدة", "إذ هم جالسون حول تلك الحفرة يشاهدون العذاب", "وهم يشهدون بأنفسهم ما يفعلونه بالمؤمنين", "وما عاقبوا المؤمنين إلا لأنهم آمنوا بالله العزيز الحميد", "الله الذي له ملك السماوات والأرض، وهو شاهد على كل شيء", "إن الذين عذّبوا المؤمنين والمؤمنات ولم يتوبوا فلهم عذاب جهنم وعذاب الحريق", "إن الذين آمنوا وعملوا الصالحات فلهم جنات فيها الفوز الكبير", "إن عقاب ربك شديد جداً لمن عصاه", "إنه سبحانه يبدأ الخلق ويعيده يوم القيامة", "وهو الغفور لمن تاب، الودود المحب لعباده الصالحين", "صاحب العرش المجيد الكريم", "فعّال لما يريد، لا يمنعه أحد", "هل بلغك خبر الجنود الظالمين؟", "جنود فرعون وثمود الذين كذّبوا رسلهم", "بل الذين كفروا مستمرون على التكذيب", "والله من ورائهم محيط بهم لا يفلتون منه", "بل هذا القرآن عظيم ومجيد", "محفوظ في اللوح المحفوظ عند الله لا يتغير ولا يُمس بسوء"],
+  branches:["أصحاب الأخدود","عزة الله وقدرته","القرآن المجيد","جزاء المؤمنين","جنود فرعون وثمود","اللوح المحفوظ"],
+  vocab:[["البروج", "منازل النجوم الكبيرة في السماء"], ["الأخدود", "الحفرة العميقة التي حُفرت للتعذيب"], ["الودود", "الله المحب لعباده الصالحين"]],
+  benefits:["الثبات على الإيمان مهما كان الأذى", "الله ينصر المؤمنين ولو تأخر النصر", "القرآن محفوظ من التحريف إلى الأبد"]},
+{n:86,icon:"⭐",name:"الطارق",verses:17,type:"مكية",theme:"خلق الإنسان وقدرة الله",
+  ayahs:["والسماء والطارق (النجم الذي يظهر ليلاً)", "وما أدراك ما الطارق؟", "هو النجم المضيء الشديد اللمعان", "ما من نفس إلا عليها ملَك يحفظ أعمالها", "فلينظر الإنسان من أي شيء خُلق", "خُلق من ماء يتدفق", "يخرج من بين الصلب والترائب (الصدر)", "إن الله على إعادته بعد الموت لَقادر", "يوم تُختبر السرائر (خفايا القلوب) وتُكشف", "فما للإنسان يومئذ من قوة يدافع بها عن نفسه، ولا ناصر ينصره", "والسماء ذات الرجع (تعيد المطر مرة بعد مرة)", "والأرض ذات الصدع (تنشق للنبات)", "إن هذا القرآن قول فاصل بين الحق والباطل", "وما هو بالهزل أو اللعب", "إن الكافرين يخططون بمكرهم لإبطال الحق", "والله أيضاً يدبر أمرهم ويُبطل كيدهم", "فأمهل الكافرين يا محمد وأمهلهم قليلاً (لن يفلتوا من عقاب الله)"],
+  branches:["النجم الثاقب","خلق الإنسان","حفظ الملائكة","قدرة الله على البعث","كشف السرائر يوم القيامة","القرآن الفاصل"],
+  vocab:[["الطارق", "النجم الذي يظهر ليلاً بلمعان شديد"], ["الترائب", "عظام الصدر"], ["السرائر", "ما يخفيه الإنسان في قلبه"]],
+  benefits:["كل إنسان عليه حافظ من الملائكة يسجل أعماله", "الله قادر على إعادة الإنسان بعد موته", "التفكر في خلق الإنسان يقوي الإيمان"]},
+{n:87,icon:"⬆️",name:"الأعلى",verses:19,type:"مكية",theme:"تسبيح الله وتيسير الوحي",
+  ayahs:["سبّح اسم ربك الأعلى (نزّهه عن كل نقص)", "الذي خلق كل شيء فأتقن خلقه", "والذي قدّر لكل مخلوق طريقه وهداه إليه", "والذي أخرج العشب والنبات من الأرض", "ثم جعله بعد اخضراره يابساً أسود", "سنجعلك تحفظ القرآن ولن تنساه يا محمد", "إلا ما شاء الله أن ينسيك، فهو يعلم كل شيء", "ونسهّل عليك كل أمر ييسر لك الخير", "فذكّر الناس بالقرآن ما دامت الذكرى تنفعهم", "سيتذكر من يخشى الله ويخافه", "ويبتعد عنها الأشقى الكافر العنيد", "الذي سيدخل النار الكبرى ويحترق بها", "ثم لا يموت فيها فيستريح، ولا يحيا حياة طيبة", "قد أفلح من تطهّر من الذنوب بالإيمان", "وذكر اسم ربه فصلّى له", "بل أنتم تفضّلون الحياة الدنيا الزائلة", "مع أن الآخرة خير وأبقى وأدوم", "إن هذا المعنى موجود في الكتب السابقة", "في صحف إبراهيم وموسى عليهما السلام"],
+  branches:["تسبيح اسم الله","تيسير الوحي","صفة المفلح والشقي","تفضيل الآخرة","خلق النبات وإخراجه","صحف إبراهيم وموسى"],
+  vocab:[["سبّح", "نزّه الله عن كل نقص"], ["الأشقى", "الكافر العنيد البعيد عن الحق"], ["صحف", "كتب سابقة نزلت على الأنبياء"]],
+  benefits:["تنزيه الله وذكره دائماً", "تفضيل الآخرة الباقية على الدنيا الفانية", "التطهر من الذنوب بالإيمان والعمل الصالح"]},
+{n:88,icon:"🌊",name:"الغاشية",verses:26,type:"مكية",theme:"أهوال القيامة ونعم الله",
+  ayahs:["هل بلغك خبر الغاشية؟ (القيامة التي تغشى الناس بأهوالها)", "وجوه يومئذ ذليلة خاشعة (وجوه الكفار)", "تعبت من العمل في النار وتعذبت", "تدخل ناراً شديدة الحرارة والاشتعال", "تُسقى من عين شديدة الحرارة والغليان", "ليس لهم طعام إلا من شجر ذي شوك مؤلم", "لا يُسمن ولا يغني من الجوع أبداً", "ووجوه يومئذ ناعمة مسرورة (وجوه المؤمنين)", "راضية عن سعيها وعملها في الدنيا", "في جنة عالية المكانة والمنزلة", "لا يسمعون فيها كلاماً باطلاً لاغياً", "فيها عين ماء جارية عذبة", "فيها أسرّة مرفوعة عالية", "وأكواب موضوعة جاهزة للشرب", "ووسائد مصفوفة مرتبة بجانب بعضها", "وبُسط فاخرة مفروشة للجلوس والراحة", "أفلا ينظرون إلى الإبل كيف خلقها الله بعجيب صنعه؟", "وإلى السماء كيف رُفعت بلا أعمدة؟", "وإلى الجبال كيف نُصبت وثُبتت؟", "وإلى الأرض كيف بُسطت ومُهّدت للعيش؟", "فذكّر الناس يا محمد، فأنت فقط مذكّر لهم", "لست متسلطاً عليهم لتجبرهم على الإيمان", "إلا من أعرض عن الحق وكفر بالله", "فسيعذبه الله عذاباً كبيراً شديداً", "إن إلى الله مرجعهم جميعاً يوم القيامة", "ثم إن على الله حسابهم وجزاءهم بما عملوا"],
+  branches:["أهوال القيامة","أهل النار وأهل الجنة","نعم الله في الخلق","التذكير بالدعوة","طعام أهل النار","أسرّة الجنة ونعيمها"],
+  vocab:[["الغاشية", "القيامة التي تغشى الناس بأهوالها"], ["ضريع", "شجر ذو شوك مؤلم لا ينفع آكله"], ["مبثوثة", "مفروشة ومرتبة للجلوس"]],
+  benefits:["التفكر في مخلوقات الله يقوي الإيمان", "الإيمان بالجنة والنار يدفع للعمل الصالح", "الدعوة إلى الله بالتذكير لا بالإكراه"]},
+{n:89,icon:"🌅",name:"الفجر",verses:30,type:"مكية",theme:"قصص عاد وثمود وفرعون",
+  ayahs:["والفجر (وقت بزوغ ضوء الصباح)", "وليالٍ عشر (أول عشر ليالٍ من ذي الحجة)", "والشفع والوتر (الأعداد الزوجية والفردية)", "والليل إذا يمضي وينقضي", "أليس في هذا القسم كفاية لذي عقل؟", "ألم تر كيف فعل ربك بقوم عاد؟", "أصحاب مدينة إرم ذات الأعمدة الشاهقة", "التي لم يُخلق مثلها في البلاد قوة وعظمة", "وبثمود الذين نحتوا الصخر في الوادي ليبنوا بيوتهم", "وبفرعون صاحب الجيوش والأوتاد (أدوات التعذيب)", "الذين طغوا وتجبروا في بلادهم", "فأكثروا الفساد فيها", "فصبّ عليهم ربك سوط عذاب شديد", "إن ربك يراقب كل شيء بدقة", "أما الإنسان فإذا أنعم الله عليه ظن أن ذلك تكريم له", "وإذا ضيّق عليه رزقه ظن أن الله أهانه (وهذا فهم خاطئ)", "كلا! بل أنتم لا تكرمون اليتيم كما يجب", "ولا يحث بعضكم بعضاً على إطعام الفقير المسكين", "وتأكلون ميراث الضعفاء واليتامى بجشع", "وتحبون المال حباً شديداً زائداً عن الحد", "كلا! إذا دُكّت الأرض دكاً شديداً (زلزلت وسويت)", "وجاء أمر ربك والملائكة صفاً صفاً يوم القيامة", "وأُحضرت جهنم في ذلك اليوم، فحينها يتذكر الإنسان لكن دون فائدة", "يقول: يا ليتني قدّمت عملاً صالحاً لهذا اليوم", "فيومئذ لا أحد يعذب مثل عذاب الله", "ولا أحد يقيّد ويأسر مثل قيده سبحانه", "يا أيتها النفس المطمئنة الآمنة بربها", "ارجعي إلى ربك راضية بما أعطاك، مرضياً عنك", "فادخلي في جماعة عبادي الصالحين", "وادخلي معهم جنتي"],
+  branches:["القسم بالفجر","قصص عاد وثمود وفرعون","حب المال والدنيا","النفس المطمئنة","إكرام اليتيم والمسكين","دك الأرض يوم القيامة"],
+  vocab:[["إرم ذات العماد", "مدينة قوم عاد ذات الأعمدة الشاهقة"], ["سوط عذاب", "عقوبة شديدة"], ["المطمئنة", "النفس الراضية المؤمنة الهادئة"]],
+  benefits:["الاعتبار بمصير الطغاة كعاد وثمود وفرعون", "إكرام اليتيم والمسكين واجب لا خيار", "طمأنينة النفس تكون بالإيمان والرضا بقضاء الله"]},
+{n:90,icon:"🏙️",name:"البلد",verses:20,type:"مكية",theme:"مشقة الحياة وفك الرقاب",
+  ayahs:["أقسم الله بهذا البلد (مكة المكرمة)", "وأنت يا محمد حلال لك القتال فيه (حين الحاجة)", "وأقسم بكل والد وما أنجب من أبناء", "لقد خلقنا الإنسان في مشقة وتعب مستمر", "أيظن الإنسان أن أحداً لن يقدر عليه أو يحاسبه؟", "يقول: لقد أنفقت مالاً كثيراً (متباهياً بغير حق)", "أيظن أن أحداً لم يره وهو ينفق؟", "ألم نجعل له عينين يبصر بهما؟", "ولساناً وشفتين ينطق بهما؟", "وهديناه إلى طريقي الخير والشر (بيّناهما له)", "فهلّا اقتحم طريق الخير الصعب (العقبة)؟", "وما أدراك ما هي هذه العقبة الصعبة؟", "هي: فك رقبة (تحرير عبد أو مساعدة محتاج)", "أو إطعام الطعام في يوم المجاعة الشديدة", "لليتيم القريب من الأقارب", "أو للمسكين الملتصق بالتراب من شدة الفقر", "ثم أن يكون من المؤمنين ويوصي بالصبر والرحمة", "أولئك هم أصحاب اليمين (أهل السعادة يوم القيامة)", "والذين كفروا بآياتنا هم أصحاب الشمال (أهل الشقاء)", "عليهم نار مغلقة عليهم من كل جانب"],
+  branches:["القسم بالبلد الحرام","خلق الإنسان في كبد","فك الرقاب والإطعام","أصحاب اليمين والشمال","نعمة العينين واللسان","طريق الخير الصعب"],
+  vocab:[["كبد", "مشقة وتعب"], ["العقبة", "الطريق الصعب إلى الخير"], ["أصحاب الميمنة والمشأمة", "أهل السعادة وأهل الشقاء يوم القيامة"]],
+  benefits:["الحياة مليئة بالمشقة فيجب الصبر والعمل الصالح", "مساعدة اليتيم والمسكين طريق للجنة", "شكر نعمة العينين واللسان بالخير"]},
+{n:91,icon:"🌞",name:"الشمس",verses:15,type:"مكية",theme:"تزكية النفس وقصة ثمود",
+  ayahs:["والشمس وضياؤها في وضح النهار", "والقمر إذا تبع الشمس واستمد نوره منها", "والنهار إذا أضاء وكشف الأرض", "والليل إذا أظلم وغطى كل شيء", "والسماء وبنائها العجيب المحكم", "والأرض وبسطها الواسع", "والنفس وتسويتها (تعديل خلقها)", "فألهمها ربها معرفة الفجور والتقوى (الخير والشر)", "قد أفلح من طهّر نفسه بالإيمان والعمل الصالح", "وقد خسر من دنّس نفسه بالمعاصي", "كذّبت قبيلة ثمود نبيها بسبب طغيانهم", "حين قام أشقاهم لعقر الناقة", "فقال لهم رسول الله صالح: احذروا ناقة الله ولا تمسوها بسوء، ودعوها تشرب", "فكذّبوه وعقروا الناقة، فأهلكهم الله بذنبهم وسوّى عليهم العقاب", "ولا يخاف الله عاقبة ذلك (فهو لا يُسأل عما يفعل)"],
+  branches:["القسم بالشمس والقمر","تسوية النفس وإلهامها","فلاح من زكاها","قصة ثمود والناقة","القسم بالليل والنهار","خسارة من دنّس نفسه"],
+  vocab:[["سوّاها", "خلقها وعدّلها بإتقان"], ["الفجور والتقوى", "الشر والخير المُلهَمان في النفس"], ["عقروها", "قتلوا الناقة بقطع أرجلها"]],
+  benefits:["تزكية النفس بالإيمان والعمل الصالح تجلب الفلاح", "الابتعاد عن المعاصي يحفظ النفس من الخسارة", "طاعة أوامر الله كما أمر صالح قومه"]},
+{n:92,icon:"🌙",name:"الليل",verses:21,type:"مكية",theme:"اختلاف السعي بين الخير والشر",
+  ayahs:["والليل إذا يغطي بظلامه كل شيء", "والنهار إذا تجلى وأضاء", "وخلق الله للذكر والأنثى", "إن أعمالكم وسعيكم مختلف (بين خير وشر)", "فأما من أعطى ماله للفقراء واتقى الله", "وصدّق بالخير والجزاء الحسن", "فسنيسر له طريق الخير والسعادة", "وأما من بخل بماله واستغنى عن الله", "وكذّب بالخير والثواب", "فسنيسر له طريق الشر والشقاء", "وما ينفعه ماله إذا هلك ومات دون إيمان", "إن علينا أن نبيّن للناس طريق الهداية", "وإن لنا ملك الآخرة والدنيا", "فحذّرتكم ناراً تتوهج وتشتعل بشدة", "لا يدخلها إلا الكافر الأشقى الشديد الكفر", "الذي كذّب بالحق وأعرض عنه", "وسيُبعد عنها التقي الذي يخاف الله", "الذي يعطي ماله ليتطهر من الذنوب", "وليس عطاؤه مقابل جزاء من أحد", "بل يبتغي بذلك رضا الله العظيم وحده", "وسوف يرضى بما أعطاه الله من ثواب"],
+  branches:["القسم بالليل والنهار","اختلاف السعي","تيسير اليسرى أو العسرى","الغنى بالتقوى","العطاء والتقوى","نار تتلظى"],
+  vocab:[["تجلّى", "ظهر وأضاء"], ["تردّى", "هلك وسقط في الشر"], ["اليسرى والعسرى", "طريق السهولة وطريق الصعوبة"]],
+  benefits:["العطاء والتقوى يؤديان إلى راحة القلب", "البخل والاستغناء عن الله يؤديان إلى الشقاء", "الإخلاص في العمل يكون لوجه الله فقط"]},
+{n:93,icon:"🌄",name:"الضحى",verses:11,type:"مكية",theme:"تسلية النبي ﷺ ونعم الله عليه",
+  ayahs:["والضحى (وقت ارتفاع الشمس صباحاً)", "والليل إذا سكن وهدأ", "ما تركك ربك يا محمد وما أبغضك (لم يتخل عنك)", "وللآخرة خير لك من الدنيا", "وسوف يعطيك ربك حتى ترضى", "ألم يجدك يتيماً فآواك وكفلك؟", "ووجدك لا تعرف طريق الهداية فهداك؟", "ووجدك فقيراً فأغناك بفضله؟", "فأما اليتيم فلا تُهنه أو تظلمه", "وأما السائل المحتاج فلا تزجره أو تنهره", "وأما نعمة ربك عليك فحدّث بها واشكرها"],
+  branches:["القسم بالضحى","تسلية النبي ﷺ","نعم الله عليه","الإحسان لليتيم والسائل","اليتيم الذي آواه الله","شكر النعمة بالحديث عنها"],
+  vocab:[["قلاك", "أبغضك وتخلى عنك"], ["اليتيم", "من فقد أباه وهو صغير"], ["السائل", "المحتاج الذي يطلب المساعدة"]],
+  benefits:["الله لا يتخلى عن عباده الصالحين حتى في الصعوبة", "شكر النعم يكون بذكرها والتحدث عنها", "الإحسان لليتيم والمحتاج من أخلاق النبي ﷺ"]},
+{n:94,icon:"🕊️",name:"الشرح",verses:8,type:"مكية",theme:"شرح الصدر وتيسير الأمر",
+  ayahs:["ألم نوسّع لك صدرك يا محمد ونشرحه للخير؟", "ووضعنا عنك ثقلك الذي أثقل ظهرك؟", "الذي كان يثقل كاهلك ويشغل بالك؟", "ورفعنا لك ذكرك عالياً (يُذكر اسمك مع اسم الله)", "فإن مع الصعوبة يسراً وسهولة", "حقاً إن مع الصعوبة يسراً (تكرار للتأكيد والطمأنينة)", "فإذا فرغت من عملك، فاجتهد في العبادة", "وإلى ربك وحده فتوجه بالرغبة والدعاء"],
+  branches:["شرح الصدر","رفع الذكر","مع العسر يسرا","الفراغ للعبادة","وضع الثقل عن النبي","التوجه إلى الله بالدعاء"],
+  vocab:[["شرح الصدر", "توسيعه للخير وطمأنته"], ["وزرك", "الحمل الثقيل والهم"], ["ارغب", "توجّه بالدعاء والرغبة الصادقة"]],
+  benefits:["مع كل صعوبة يأتي يُسر وفرج من الله", "الاجتهاد في العبادة بعد الانتهاء من العمل", "التوجه لله وحده بالدعاء والحاجات"]},
+{n:95,icon:"🌳",name:"التين",verses:8,type:"مكية",theme:"أحسن تقويم للإنسان",
+  ayahs:["والتين والزيتون (قسم بهاتين الفاكهتين المباركتين)", "وطور سينين (الجبل الذي كلّم الله عليه موسى)", "وهذا البلد الآمن (مكة المكرمة)", "لقد خلقنا الإنسان في أحسن صورة وتكوين", "ثم رددناه إلى أسفل مراتب الهرم والضعف إن لم يؤمن", "إلا الذين آمنوا وعملوا الصالحات فلهم أجر دائم لا ينقطع", "فما الذي يجعلك تكذّب بعد هذا بيوم الجزاء؟", "أليس الله بأحكم الحاكمين وأعدلهم؟"],
+  branches:["القسم بالتين والزيتون","أحسن تقويم","أسفل سافلين إلا المؤمنين","عدل الله","طور سينين والبلد الأمين","أجر المؤمنين الدائم"],
+  vocab:[["طور سينين", "الجبل الذي كلّم الله عليه موسى"], ["أحسن تقويم", "أفضل صورة وخلقة"], ["أسفل سافلين", "أدنى درجة"]],
+  benefits:["الإنسان مكرّم بأحسن خلقة فيجب أن يحافظ على كرامته", "الإيمان والعمل الصالح يحفظان مكانة الإنسان", "الله أعدل الحاكمين فلا ظلم في حكمه"]},
+{n:96,icon:"📖",name:"العلق",verses:19,type:"مكية",theme:"أول الوحي وخلق الإنسان",
+  ayahs:["اقرأ باسم ربك الذي خلق كل شيء", "خلق الإنسان من علقة (دم متجمد)", "اقرأ، وربك الأكرم الذي يعطي بلا حساب", "الذي علّم الإنسان الكتابة بالقلم", "علّم الإنسان ما لم يكن يعرفه من قبل", "كلا، إن الإنسان يتجاوز حدّه ويتكبر", "حين يرى نفسه غنياً لا يحتاج لأحد", "إن إلى ربك وحده رجوع الجميع يوم القيامة", "أرأيت الذي ينهى عبداً عن الصلاة؟", "عندما يصلي المؤمن لربه؟", "أرأيت إن كان هذا العبد على هدى؟", "أو كان يأمر بالتقوى وطاعة الله؟", "أرأيت إن كذّب هذا الناهي وأعرض عن الحق؟", "ألا يعلم أن الله يراه ويراقبه؟", "كلا! لئن لم يتوقف عن عناده لنأخذنّه بشدة من ناصيته (مقدمة رأسه)", "ناصية كاذبة كثيرة الخطأ", "فليدعُ أهله وأصحابه لينصروه إن استطاعوا", "وسندعو ملائكة العذاب الأشداء لمعاقبته", "كلا، لا تطعه في منعك عن الصلاة، بل اسجد لله واقترب منه بالعبادة"],
+  branches:["اقرأ باسم ربك","خلق الإنسان من علق","طغيان الغنى","السجود والقرب من الله","تعليم الإنسان بالقلم","الناهي عن الصلاة"],
+  vocab:[["علق", "دم متجمد يبدأ منه خلق الإنسان"], ["الناصية", "مقدمة الرأس"], ["الزبانية", "ملائكة العذاب الأشداء"]],
+  benefits:["القراءة والعلم نعمة عظيمة يجب طلبها", "عدم التكبر بالمال أو الغنى", "السجود والعبادة طريق القرب من الله"]},
+{n:97,icon:"✨",name:"القدر",verses:5,type:"مكية",theme:"فضل ليلة القدر",
+  ayahs:["إنا أنزلنا القرآن في ليلة القدر المباركة", "وما أدراك ما شأن ليلة القدر العظيمة؟", "العبادة فيها خير من عبادة ألف شهر (أكثر من 83 سنة)", "تنزل فيها الملائكة وجبريل بإذن ربهم بكل خير وقدر", "هي ليلة سلام وأمان حتى طلوع الفجر"],
+  branches:["فضل ليلة القدر","نزول القرآن فيها","خير من ألف شهر","تنزل الملائكة والسلام","سلام الليلة حتى الفجر","عظمة ليلة القدر"],
+  vocab:[["ليلة القدر", "ليلة عظيمة نزل فيها القرآن"], ["خير من ألف شهر", "أفضل من العبادة في أكثر من 83 سنة"], ["سلام", "أمان وخير حتى طلوع الفجر"]],
+  benefits:["اغتنام ليلة القدر بالعبادة والدعاء", "تعظيم القرآن الكريم الذي نزل في ليلة مباركة", "طلب الرحمة والمغفرة في أوقات الفضل"]},
+{n:98,icon:"📜",name:"البينة",verses:8,type:"مدنية",theme:"التوحيد ودين القيمة",
+  ayahs:["لم يكن الكافرون من أهل الكتاب والمشركين لينتهوا عن كفرهم حتى تأتيهم البينة الواضحة", "وهي رسول من الله يتلو صحفاً مطهرة من كل باطل", "فيها كتب وأحكام قيّمة صحيحة عادلة", "وما تفرق أهل الكتاب في دينهم إلا بعد أن جاءهم العلم الواضح بصحة نبوة محمد", "وما أُمروا إلا بعبادة الله وحده مخلصين له الدين، وإقامة الصلاة وإيتاء الزكاة، وذلك هو الدين الصحيح القويم", "إن الذين كفروا من أهل الكتاب والمشركين مصيرهم نار جهنم خالدين فيها، أولئك هم شر الخلق", "إن الذين آمنوا وعملوا الصالحات هم خير الخلق عند الله", "جزاؤهم عند ربهم جنات دائمة تجري تحتها الأنهار، رضي الله عنهم ورضوا عنه، وذلك لمن خاف ربه"],
+  branches:["إرسال الرسول بالبينة","أمر أهل الكتاب بالتوحيد","دين القيمة","خير البرية وشرها","صحف مطهرة","جزاء المؤمنين بالجنة"],
+  vocab:[["البينة", "الدليل والحجة الواضحة"], ["منفكّين", "متروكين على كفرهم بلا حجة"], ["خير البرية", "أفضل الخلق"]],
+  benefits:["إخلاص العبادة لله وحده", "إقامة الصلاة وإيتاء الزكاة من أسس الدين", "طلب رضا الله يقود إلى الجنة"]},
+{n:99,icon:"🌍",name:"الزلزلة",verses:8,type:"مدنية",theme:"زلزلة الأرض وحساب الأعمال",
+  ayahs:["إذا اهتزت الأرض اهتزازاً شديداً قوياً يوم القيامة", "وأخرجت الأرض ما بداخلها من الكنوز والموتى", "وقال الإنسان متعجباً: ما الذي أصاب الأرض؟", "في ذلك اليوم تخبر الأرض بكل ما حدث عليها", "لأن ربك أوحى إليها وأمرها بذلك", "يومئذ يخرج الناس من قبورهم متفرقين ليروا نتيجة أعمالهم", "فمن يعمل مقدار ذرة من الخير يره", "ومن يعمل مقدار ذرة من الشر يره"],
+  branches:["زلزلة الأرض","إخراج الأثقال","شهادة الأرض","مثقال ذرة خير أو شر","تعجب الإنسان من الزلزلة","خروج الناس أشتاتاً"],
+  vocab:[["زلزالها", "اهتزازها الشديد"], ["أثقالها", "ما بداخل الأرض من كنوز وموتى"], ["أشتاتاً", "متفرقين مختلفين"]],
+  benefits:["كل عمل ولو صغيراً له أثر وحساب", "الاستعداد ليوم تشهد فيه الأرض بكل ما حدث عليها", "الحرص على الأعمال الصالحة الصغيرة والكبيرة"]},
+{n:100,icon:"🐎",name:"العاديات",verses:11,type:"مكية",theme:"كنود الإنسان وحب المال",
+  ayahs:["والخيل التي تعدو بسرعة وهي تلهث من شدة الجري", "فتقدح الشرر بحوافرها من شدة الاصطدام بالحجارة", "فتغير على الأعداء صباحاً باكراً", "فتثير بجريها غباراً كثيفاً", "فتدخل به وسط جمع الأعداء", "إن الإنسان لكفور بنعم ربه جاحد لها", "وإنه بذلك شاهد على نفسه بالتقصير", "وإنه لحب المال شديد الحرص والتعلق", "أفلا يعلم هذا الإنسان متى تُخرج الموتى من قبورها؟", "وتُظهر ما في القلوب من خير أو شر؟", "إن ربهم بهم يوم القيامة خبير عليم بكل شيء"],
+  branches:["القسم بالخيل العاديات","كنود الإنسان","حب المال الشديد","بعثرة القبور","الشرر من حوافر الخيل","علم الله بما في الصدور"],
+  vocab:[["العاديات", "الخيل التي تعدو بسرعة"], ["الكنود", "الجحود وعدم شكر النعمة"], ["بُعثرت", "أُخرجت وقُلبت"]],
+  benefits:["شكر نعم الله وعدم جحودها", "الاعتدال في حب المال وعدم الانشغال به عن الآخرة", "الإيمان بأن الله يعلم كل ما في القلوب"]},
+{n:101,icon:"💥",name:"القارعة",verses:11,type:"مكية",theme:"هول يوم القيامة والموازين",
+  ayahs:["القارعة (يوم القيامة التي تقرع القلوب بشدتها)", "وما أدراك ما هذه القارعة العظيمة؟", "ثم ما أدراك ما هي؟ (تكرار للتعظيم)", "يوم يكون الناس كالفراش المتطاير المنتشر من الخوف والحيرة", "وتكون الجبال كالصوف المنفوش الخفيف الذي تطيره الريح", "فأما من ثقلت موازين حسناته الطيبة", "فهو في عيشة راضية هنيئة في الجنة", "وأما من خفّت موازين حسناته", "فمأواه ومسكنه نار هاوية عميقة", "وما أدراك ما هذه النار الهاوية؟", "هي نار شديدة الحرارة والاشتعال"],
+  branches:["هول القارعة","الناس كالفراش المبثوث","ثقل الموازين وخفتها","نار حامية","الجبال كالصوف المنفوش","العيشة الراضية"],
+  vocab:[["القارعة", "القيامة التي تقرع القلوب بشدتها"], ["الفراش المبثوث", "تشبيه لحيرة الناس يوم القيامة"], ["هاوية", "نار عميقة شديدة الحرارة"]],
+  benefits:["الاستعداد لثقل الموازين بالأعمال الصالحة", "تذكر هول يوم القيامة يدفع للطاعة", "العمل الصالح هو ما يثقل الميزان"]},
+{n:102,icon:"💰",name:"التكاثر",verses:8,type:"مكية",theme:"التكاثر في الدنيا والغفلة",
+  ayahs:["شغلكم التباهي بكثرة الأموال والأولاد عن طاعة الله", "حتى زرتم المقابر (بمعنى: حتى متّم)", "كلا! سوف تعلمون خطأ ما كنتم عليه", "ثم كلا! سوف تعلمون (تكرار للتأكيد والتحذير)", "لو تعلمون علم اليقين لما انشغلتم بهذا التفاخر", "لترون جهنم بأعينكم يوم القيامة رؤية واضحة", "ثم لترونها رؤية اليقين التام", "ثم لتُسألن يومئذ عن كل نعمة أنعم الله بها عليكم"],
+  branches:["التكاثر يلهي","زيارة المقابر","رؤية الجحيم يقينا","السؤال عن النعيم","علم اليقين","التفاخر بالأموال والأولاد"],
+  vocab:[["التكاثر", "التباهي بكثرة المال والأولاد"], ["علم اليقين", "العلم الثابت الذي لا شك فيه"], ["النعيم", "كل ما أنعم الله به على الإنسان"]],
+  benefits:["عدم الانشغال بالدنيا عن الآخرة", "كل نعمة سيُسأل عنها الإنسان يوم القيامة", "التفكر في الموت يقلل التعلق بالدنيا"]},
+{n:103,icon:"⏳",name:"العصر",verses:3,type:"مكية",theme:"الإيمان والعمل والتواصي بالحق",
+  ayahs:["والعصر (الزمن الذي يمر ولا يعود)", "إن كل إنسان في خسارة إن لم يستثمر وقته بالخير", "إلا الذين آمنوا وعملوا الصالحات، وأوصى بعضهم بعضاً بالحق والصبر"],
+  branches:["القسم بالعصر","خسران الإنسان","الإيمان والعمل الصالح","التواصي بالحق والصبر","قيمة الزمن","النجاة من الخسران"],
+  vocab:[["العصر", "الزمن والوقت الذي يمر ولا يعود"], ["خسر", "ضيّع وفقد"], ["تواصوا", "أوصى بعضهم بعضاً"]],
+  benefits:["استثمار الوقت بالعمل الصالح", "الإيمان والعمل الصالح ينجيان من الخسران", "التواصي بالحق والصبر بين المسلمين"]},
+{n:104,icon:"🗣️",name:"الهمزة",verses:9,type:"مكية",theme:"وعيد الهمز واللمز وجمع المال",
+  ayahs:["ويل (عذاب) لكل من يعيب الناس بقوله أو فعله", "الذي يجمع المال ويحسبه ويعده باستمرار (بخلاً وحرصاً)", "يظن أن ماله سيجعله يعيش للأبد", "كلا! سيُرمى في نار محطّمة كاسرة", "وما أدراك ما هذه النار المحطّمة؟", "هي نار الله الموقدة المشتعلة بقوة", "التي تصل حرارتها إلى القلوب وتحرقها من الداخل", "إنها مغلقة عليهم من كل جانب لا مفر منها", "في أعمدة طويلة ممدودة تُحكم إغلاقها عليهم"],
+  branches:["وعيد الهمزة اللمزة","جمع المال وعده","نار الحطمة","الأعمدة الممددة","ظن الخلود بالمال","حرارة النار في القلوب"],
+  vocab:[["الهمزة اللمزة", "من يعيب الناس بالقول أو الإشارة"], ["الحطمة", "نار تحطم كل من فيها"], ["مؤصدة", "مغلقة من كل جانب"]],
+  benefits:["الابتعاد عن الغيبة والسخرية من الناس", "عدم التعلق بالمال وجمعه دون إنفاق في الخير", "المال لن ينفع صاحبه يوم القيامة إن لم يُزكّ"]},
+{n:105,icon:"🐘",name:"الفيل",verses:5,type:"مكية",theme:"قصة أصحاب الفيل",
+  ayahs:["ألم تعلم كيف فعل ربك بأصحاب الفيل الذين أرادوا هدم الكعبة؟", "ألم يجعل مكرهم وخطتهم في ضياع وفشل؟", "وأرسل عليهم طيوراً كثيرة تتوالى أفواجاً", "ترميهم بحجارة من طين محروق صلب", "فجعلهم كأوراق الزرع التي أكلها الحيوان وتناثرت (هلكوا تماماً)"],
+  branches:["أصحاب الفيل","إبطال كيدهم","الطير الأبابيل","الحجارة من سجيل","حماية الكعبة","هلاك الجيش المهاجم"],
+  vocab:[["أصحاب الفيل", "جيش أبرهة الذي أراد هدم الكعبة"], ["أبابيل", "طيور كثيرة متتابعة أفواجاً"], ["سجّيل", "طين محروق متحجر"]],
+  benefits:["الله يحمي بيته الحرام ويدافع عنه", "كيد الظالمين يعود عليهم بالفشل", "التوكل على الله في مواجهة الأعداء"]},
+{n:106,icon:"🕋",name:"قريش",verses:4,type:"مكية",theme:"نعمة الإطعام والأمن",
+  ayahs:["لأجل تعويد قريش على رحلاتهم التجارية الآمنة (الإيلاف)", "رحلتهم في الشتاء إلى اليمن، وفي الصيف إلى الشام", "فليعبدوا رب هذا البيت الحرام (الكعبة) الذي أنعم عليهم", "الذي أطعمهم من الجوع وآمنهم من الخوف"],
+  branches:["إيلاف قريش","رحلتا الشتاء والصيف","عبادة رب البيت","الإطعام والأمن","تجارة قريش الآمنة","نعمة الأمن من الخوف"],
+  vocab:[["إيلافهم", "تعويدهم واعتيادهم على الأمر"], ["رحلة الشتاء والصيف", "رحلتا التجارة إلى اليمن والشام"], ["رب هذا البيت", "الله رب الكعبة"]],
+  benefits:["شكر الله على نعمة الرزق والأمن", "عبادة الله وحده لأنه المنعم الحقيقي", "الأمن والاستقرار نعمة عظيمة تستحق الشكر"]},
+{n:107,icon:"🤲",name:"الماعون",verses:7,type:"مكية",theme:"الإحسان لليتيم والمسكين",
+  ayahs:["أرأيت الذي يكذّب بيوم الحساب والجزاء؟", "فذلك هو الذي يدفع اليتيم بجفاء وقسوة", "ولا يحث نفسه أو غيره على إطعام المسكين المحتاج", "فالويل (العذاب) للمصلين", "الذين يتكاسلون عن صلاتهم ولا يهتمون بها", "الذين يصلّون فقط ليراهم الناس (بلا إخلاص)", "ويمنعون إعارة الأدوات البسيطة التي ينتفع بها الجيران"],
+  branches:["تكذيب الدين","قهر اليتيم","الويل للمصلين الساهين","منع الماعون","الرياء في الصلاة","عدم إطعام المسكين"],
+  vocab:[["الماعون", "الأدوات البسيطة التي يستعيرها الجيران"], ["يدعّ اليتيم", "يدفعه ويعامله بقسوة"], ["ساهون", "غافلون متكاسلون عن الصلاة"]],
+  benefits:["الرحمة باليتيم والمسكين من علامات الإيمان", "الإخلاص في الصلاة وعدم الرياء", "التعاون مع الجيران بالأشياء البسيطة"]},
+{n:108,icon:"💧",name:"الكوثر",verses:3,type:"مكية",theme:"عطاء الله الكوثر",
+  ayahs:["أعطيناك يا محمد الخير الكثير (نهر الكوثر وغيره)", "فصلّ لربك وانحر (اذبح الأضاحي) شكراً له", "إن الذي يبغضك ويكرهك هو المقطوع الذكر، وليس أنت"],
+  branches:["عطاء الكوثر","الأمر بالصلاة والنحر","مبغضه هو الأبتر","شكر النعمة","نهر الكوثر في الجنة","الرد على أعداء النبي"],
+  vocab:[["الكوثر", "نهر عظيم في الجنة أعطاه الله للنبي ﷺ"], ["انحر", "اذبح الأضاحي شكراً لله"], ["الأبتر", "مقطوع الذكر والخير"]],
+  benefits:["شكر نعم الله بالصلاة والتضحية", "أعداء الحق هم الخاسرون في النهاية", "كثرة عطاء الله لعباده الصالحين"]},
+{n:109,icon:"🚫",name:"الكافرون",verses:6,type:"مكية",theme:"البراءة من الشرك",
+  ayahs:["قل: يا أيها الكافرون", "لا أعبد ما تعبدون من الأصنام", "ولا أنتم عابدون الله الذي أعبده", "ولا أنا عابد ما عبدتموه من قبل", "ولا أنتم عابدون الله الذي أعبده", "لكم دينكم الذي اخترتموه، ولي ديني الذي أدين به"],
+  branches:["البراءة من الشرك","لا أعبد ما تعبدون","لكم دينكم ولي دين","التوحيد الخالص","رفض عبادة الأصنام","حرية الاعتقاد"],
+  vocab:[["الكافرون", "من رفضوا الإيمان بالله"], ["لكم دينكم ولي دين", "لكل إنسان حرية اختيار دينه لكن الحق واحد"]],
+  benefits:["وضوح العقيدة الإسلامية وعدم مجاملة الباطل", "احترام حرية الآخرين مع الثبات على الحق", "عدم الموافقة على الشرك تحت أي ظرف"]},
+{n:110,icon:"🏆",name:"النصر",verses:3,type:"مدنية",theme:"نصر الله وفتح مكة",
+  ayahs:["إذا جاء نصر الله وتحقق الفتح (فتح مكة)", "ورأيت الناس يدخلون في دين الله أفواجاً كثيرة", "فسبّح بحمد ربك واطلب منه المغفرة، إنه كثير التوبة على عباده"],
+  branches:["نصر الله والفتح","دخول الناس في الدين أفواجا","التسبيح والاستغفار","شكر النعمة","فتح مكة","الاستغفار عند النصر"],
+  vocab:[["الفتح", "فتح مكة المكرمة"], ["أفواجاً", "جماعات كثيرة"], ["التوبة", "الرجوع إلى الله والاستغفار"]],
+  benefits:["الشكر عند تحقق النصر وليس الغرور", "الاستغفار والتوبة في كل الأحوال", "انتشار الدين علامة على رحمة الله بالناس"]},
+{n:111,icon:"🔥",name:"المسد",verses:5,type:"مكية",theme:"هلاك أبي لهب",
+  ayahs:["خسرت يدا أبي لهب وخسر هو نفسه (بسبب عداوته للإسلام)", "ما نفعه ماله وما كسبه من جاه ومنصب؟", "سيدخل ناراً شديدة الاشتعال والالتهاب", "وامرأته أيضاً ستُعذب، وهي التي كانت تحمل الشوك لتؤذي به النبي", "في عنقها حبل من ليف شديد الفتل (تُعذب به)"],
+  branches:["ذم أبي لهب","هلاك ماله وكسبه","نار ذات لهب","حمالة الحطب","امرأة أبي لهب","الحبل من مسد"],
+  vocab:[["تبّت", "خسرت وهلكت"], ["حمالة الحطب", "امرأة أبي لهب التي كانت تؤذي النبي"], ["مسد", "ليف مفتول شديد"]],
+  benefits:["المال والجاه لا ينفعان صاحب الكفر والعناد", "عاقبة معاداة الحق وأهله وخيمة", "الثبات على الدعوة رغم أذى المعارضين"]},
+{n:112,icon:"☝️",name:"الإخلاص",verses:4,type:"مكية",theme:"توحيد الله الخالص",
+  ayahs:["قل: هو الله واحد أحد لا شريك له", "الله الصمد الذي يحتاج إليه كل الخلق وهو غني عنهم", "لم يلد ولداً ولم يولد من أحد", "ولم يكن له مثيل أو شبيه أحد أبداً"],
+  branches:["الله أحد","الله الصمد","لم يلد ولم يولد","لا كفء له أحداً","توحيد الله الخالص","نفي الشريك عن الله"],
+  vocab:[["أحد", "واحد لا شريك له"], ["الصمد", "الذي يحتاجه كل الخلق وهو غني عنهم"], ["كفواً", "مثيلاً أو شبيهاً"]],
+  benefits:["تعلّم التوحيد الخالص لله وحده", "الله ليس كمثله شيء", "هذه السورة تعدل ثلث القرآن لعظمة معناها"]},
+{n:113,icon:"🌤️",name:"الفلق",verses:5,type:"مكية",theme:"الاستعاذة من الشرور",
+  ayahs:["قل: أعوذ (ألتجئ) برب الفجر (الصبح) من كل شر", "من شر ما خلق الله من مخلوقات مؤذية", "ومن شر ظلام الليل إذا اشتد وأقبل", "ومن شر السواحر اللاتي ينفثن في العقد (يعملن السحر)", "ومن شر الحاسد إذا حسد وتمنى زوال النعمة عن غيره"],
+  branches:["الاستعاذة برب الفلق","شر ما خلق وغاسق","شر النفاثات في العقد","شر حاسد إذا حسد","شر ظلام الليل","شر السحر"],
+  vocab:[["الفلق", "الصبح"], ["غاسق", "الليل إذا اشتد ظلامه"], ["النفاثات في العقد", "السواحر اللاتي يعملن السحر"]],
+  benefits:["الاستعاذة بالله من كل شر", "الحذر من الحسد والسحر بالالتجاء إلى الله", "طلب الحماية من الله في كل وقت"]},
+{n:114,icon:"👥",name:"الناس",verses:6,type:"مكية",theme:"الاستعاذة من وسوسة الشيطان",
+  ayahs:["قل: أعوذ (ألتجئ) برب الناس (خالقهم ومربيهم)", "ملك الناس (المتصرف في أمورهم)", "إله الناس (المستحق للعبادة وحده)", "من شر الشيطان الذي يوسوس ويختفي عند ذكر الله", "الذي يوسوس في صدور الناس بالشر", "سواء كان من الجن أو من الإنس"],
+  branches:["الاستعاذة برب الناس","ملك الناس وإله الناس","شر الوسواس الخناس","يوسوس في صدور الناس","الاستعاذة من الجن والإنس","وسوسة الشيطان الخناس"],
+  vocab:[["الوسواس الخناس", "الشيطان الذي يوسوس ثم يختفي عند ذكر الله"], ["يوسوس", "يهمس بالشر في القلب"], ["الجنة والناس", "نوعان ممن يوسوسون"]],
+  benefits:["الاستعاذة بالله من وسوسة الشيطان دائماً", "ذكر الله يطرد وسوسة الشيطان", "الحذر من وسواس الإنس كما الجن"]},
+];
+
+const emojis = ['🌟','🌙','🔥','🌊','🕊️','📖','⚖️','🌿','👼','🏔️','🕋','🌸'];
+const cardColors = ['#ffc94c','#ff6fa5','#48d8c8','#9b7bff','#ff9f5a','#6ee7b7'];
+const tips = [
+  "خذ وقتك في قراءة كل فرع في الخريطة قبل أن تلعب 🧠",
+  "كل إجابة صحيحة = نجمة جديدة في مجموعتك ⭐",
+  "حاول أن تحفظ اسم السورة وعدد آياتها 📖",
+  "أحسنت! واصل رحلتك بين نجوم جزء عمّ 🚀",
+];
+
+let starTotal = surahs.length * 6; // 6 questions per surah
+let starCount = 0;
+let completed = {}; // {surahNum: true}
+let certificates = {}; // {surahNum: {name, date}}
+let playerName = '';
+
+document.getElementById('starTotal').textContent = starTotal;
+
+/* ---------------- Local leaderboard (saved on this device/browser) ---------------- */
+const LEADERBOARD_KEY = 'juzAmmaLeaderboard';
+function loadLeaderboard(){
+  try{
+    return JSON.parse(localStorage.getItem(LEADERBOARD_KEY)) || {};
+  } catch(e){ return {}; }
+}
+function saveLeaderboard(board){
+  try{ localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(board)); } catch(e){ /* storage unavailable */ }
+}
+function persistCurrentScore(){
+  if(!playerName) return;
+  const board = loadLeaderboard();
+  board[playerName] = Math.max(board[playerName] || 0, starCount);
+  saveLeaderboard(board);
+  renderLeaderboard();
+}
+function renderLeaderboard(){
+  const wrap = document.getElementById('leaderboardList');
+  const emptyMsg = document.getElementById('leaderboardEmpty');
+  if(!wrap) return;
+  const board = loadLeaderboard();
+  const entries = Object.entries(board).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  wrap.innerHTML = '';
+  emptyMsg.style.display = entries.length ? 'none' : 'block';
+  const medals = ['🥇','🥈','🥉'];
+  entries.forEach(([name, stars], i)=>{
+    const row = document.createElement('div');
+    row.className = 'leaderboard-row' + (name===playerName ? ' me' : '');
+    row.innerHTML = `<span class="lb-rank">${medals[i] || (i+1)}</span>
+      <span class="lb-name">${name}</span>
+      <span class="lb-stars">⭐ ${stars}</span>`;
+    wrap.appendChild(row);
+  });
+}
+
+/* ---------------- Printable progress report ---------------- */
+function renderProgressReport(){
+  document.getElementById('reportPlayerLine').textContent =
+    `الطالب/ـة: ${greetName()} — النقاط الحالية: ${starCount} من ${starTotal}`;
+  document.getElementById('reportStars').textContent = starCount;
+
+  const completedNums = Object.keys(completed).map(Number);
+  document.getElementById('reportCompletedCount').textContent = completedNums.length;
+  const completedGrid = document.getElementById('reportCompletedGrid');
+  completedGrid.innerHTML = '';
+  if(completedNums.length){
+    completedNums.sort((a,b)=>a-b).forEach(n=>{
+      const s = surahs.find(x=>x.n===n);
+      if(!s) return;
+      const chip = document.createElement('span');
+      chip.className = 'report-surah-chip';
+      chip.textContent = `${s.icon} ${s.name}`;
+      completedGrid.appendChild(chip);
+    });
+  } else {
+    completedGrid.innerHTML = '<p class="report-empty">لم يُكمَل أي اختبار سورة بعد</p>';
+  }
+
+  const certNums = Object.keys(certificates).map(Number);
+  document.getElementById('reportCertCount').textContent = certNums.length;
+  const certGrid = document.getElementById('reportCertGrid');
+  certGrid.innerHTML = '';
+  if(certNums.length){
+    certNums.sort((a,b)=>a-b).forEach(n=>{
+      const s = surahs.find(x=>x.n===n);
+      if(!s) return;
+      const chip = document.createElement('span');
+      chip.className = 'report-surah-chip';
+      chip.textContent = `${s.icon} ${s.name}`;
+      certGrid.appendChild(chip);
+    });
+  } else {
+    certGrid.innerHTML = '<p class="report-empty">لا توجد شهادات بعد</p>';
+  }
+
+  document.getElementById('reportDate').textContent =
+    'تاريخ التقرير: ' + new Date().toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'});
+}
+
+document.getElementById('openReportBtn').addEventListener('click', ()=>{
+  renderProgressReport();
+  document.getElementById('reportOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+});
+function closeReport(){
+  document.getElementById('reportOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('reportCloseBtn').addEventListener('click', closeReport);
+document.getElementById('reportCloseBtn2').addEventListener('click', closeReport);
+document.getElementById('reportOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='reportOverlay') closeReport();
+});
+document.getElementById('reportPrintBtn').addEventListener('click', ()=>{
+  window.print();
+});
+
+const nameInput = document.getElementById('playerNameInput');
+nameInput.addEventListener('input', ()=>{
+  playerName = nameInput.value.trim();
+  if(playerName){
+    const board = loadLeaderboard();
+    starCount = board[playerName] || 0;
+  } else {
+    starCount = 0;
+  }
+  updateProgress();
+  renderLeaderboard();
+});
+function greetName(){ return playerName ? playerName : 'بطل'; }
+
+/* ---------------- Sound effects: varied, randomized each time ---------------- */
+let soundOn = true;
+let actx = null;
+function ensureAudioCtx(){
+  if(!actx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) actx = new AC();
+  }
+  if(actx && actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function tone(freq, start, dur, type='sine', peak=0.18){
+  if(!soundOn) return;
+  const ctx = ensureAudioCtx();
+  if(!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+  gain.gain.setValueAtTime(0, ctx.currentTime + start);
+  gain.gain.linearRampToValueAtTime(peak, ctx.currentTime + start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + dur + 0.05);
+}
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+const OPEN_SOUND_VARIANTS = [
+  () => { tone(440,0,0.1,'triangle',0.12); tone(660,0.06,0.14,'triangle',0.12); },
+  () => { tone(392,0,0.1,'sine',0.13); tone(523.25,0.07,0.12,'sine',0.13); tone(659.25,0.14,0.14,'sine',0.13); },
+  () => { tone(587.33,0,0.09,'triangle',0.12); tone(880,0.05,0.16,'triangle',0.1); },
+];
+function playOpenSound(){ pick(OPEN_SOUND_VARIANTS)(); }
+
+const WIN_SOUND_VARIANTS = [
+  () => { tone(523.25,0,0.14,'sine',0.17); tone(659.25,0.12,0.14,'sine',0.17); tone(783.99,0.24,0.14,'sine',0.17); tone(1046.5,0.36,0.32,'sine',0.2); },
+  () => { tone(392,0,0.12,'triangle',0.16); tone(523.25,0.1,0.12,'triangle',0.16); tone(659.25,0.2,0.12,'triangle',0.16); tone(880,0.3,0.3,'triangle',0.2); },
+  () => { tone(659.25,0,0.1,'sine',0.16); tone(880,0.09,0.1,'sine',0.16); tone(1046.5,0.18,0.1,'sine',0.16); tone(1318.5,0.27,0.3,'sine',0.2); },
+  () => { tone(440,0,0.1,'square',0.08); tone(554.37,0.08,0.1,'square',0.08); tone(659.25,0.16,0.1,'square',0.08); tone(880,0.24,0.28,'square',0.1); },
+];
+function playWinSound(){ pick(WIN_SOUND_VARIANTS)(); }
+
+function playCorrectSound(){
+  const variants = [
+    () => { tone(880,0,0.08,'sine',0.14); tone(1174.66,0.06,0.12,'sine',0.14); },
+    () => { tone(659.25,0,0.07,'triangle',0.13); tone(987.77,0.05,0.1,'triangle',0.13); },
+  ];
+  pick(variants)();
+}
+function playWrongSound(){
+  const variants = [
+    () => { tone(220,0,0.12,'sawtooth',0.08); },
+    () => { tone(196,0,0.14,'triangle',0.09); },
+  ];
+  pick(variants)();
+}
+
+const soundToggleBtn = document.getElementById('soundToggle');
+soundToggleBtn.addEventListener('click', ()=>{
+  soundOn = !soundOn;
+  soundToggleBtn.textContent = soundOn ? '🔊' : '🔇';
+  ensureAudioCtx();
+  if(soundOn) playOpenSound();
+});
+
+/* ---------------- Winning celebration: a different style each time ---------------- */
+const CELEBRATION_PALETTES = [
+  { pieces:['🎉','⭐','✨','🌟','🎊','🌙'], colors:['#ffc94c','#ff6fa5','#48d8c8','#9b7bff','#ff9f5a','#6ee7b7','#ffffff'] },
+  { pieces:['🌠','🪐','💫','🌟','✨','🌌'], colors:['#9b7bff','#48d8c8','#ffc94c','#6ee7b7','#ffffff'] },
+  { pieces:['🎊','🎈','🎉','💛','⭐','🌟'], colors:['#ff6fa5','#ffc94c','#ff9f5a','#ffffff'] },
+  { pieces:['🕌','🌙','⭐','✨','📖','🌟'], colors:['#48d8c8','#ffc94c','#6ee7b7','#ffffff'] },
+];
+function celebrate(){
+  playWinSound();
+  const palette = pick(CELEBRATION_PALETTES);
+  spawnConfetti(palette.pieces);
+  spawnFireworks(palette.colors);
+}
+
+function spawnConfetti(pieces){
+  const layer = document.createElement('div');
+  layer.style.cssText = 'position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden;';
+  document.body.appendChild(layer);
+  const count = 22 + Math.floor(Math.random()*14);
+  for(let i=0;i<count;i++){
+    const piece = document.createElement('div');
+    piece.textContent = pick(pieces);
+    const left = Math.random()*100;
+    const size = 14 + Math.random()*20;
+    const duration = 1.4 + Math.random()*1.6;
+    const delay = Math.random()*0.5;
+    const rotate = (Math.random()*360)|0;
+    piece.style.cssText = `position:absolute; left:${left}%; top:-40px; font-size:${size}px;
+      animation:confetti-fall ${duration}s ease-in ${delay}s forwards; transform:rotate(${rotate}deg);`;
+    layer.appendChild(piece);
+  }
+  setTimeout(()=>layer.remove(), 3200);
+}
+
+function spawnFireworks(colors){
+  const bursts = 3 + Math.floor(Math.random()*3);
+  for(let b=0;b<bursts;b++){
+    const delay = b * (180 + Math.random()*120);
+    setTimeout(()=>{
+      const originX = 15 + Math.random()*70; // vw %
+      const originY = 12 + Math.random()*48; // vh %
+      const particleCount = 14 + Math.floor(Math.random()*10);
+      for(let i=0;i<particleCount;i++){
+        const angle = (Math.PI*2 * i)/particleCount + Math.random()*0.3;
+        const distance = 50 + Math.random()*100;
+        const dx = Math.cos(angle)*distance;
+        const dy = Math.sin(angle)*distance;
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+        p.style.left = originX+'vw';
+        p.style.top = originY+'vh';
+        p.style.background = pick(colors);
+        p.style.setProperty('--dx', dx+'px');
+        p.style.setProperty('--dy', dy+'px');
+        p.style.animation = `firework-particle ${0.6+Math.random()*0.4}s ease-out forwards`;
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 1100);
+      }
+    }, delay);
+  }
+}
+
+document.getElementById('fireworksBtn').addEventListener('click', ()=>{
+  celebrate();
+});
+document.getElementById('celebrateInlineBtn').addEventListener('click', ()=>{
+  celebrate();
+});
+
+/* ---------------- Ayah-by-ayah: real verse text + simplified tafsir for kids ---------------- */
+const ayahTextCache = {}; // {surahNum: [verse text,...]}
+
+async function fetchAyahText(surahNum){
+  if(ayahTextCache[surahNum]) return ayahTextCache[surahNum];
+  const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/quran-uthmani`);
+  if(!res.ok) throw new Error('network');
+  const json = await res.json();
+  const texts = json.data.ayahs.map(a => a.text);
+  ayahTextCache[surahNum] = texts;
+  return texts;
+}
+
+async function renderTafsir(){
+  const list = document.getElementById('tafsirList');
+  const s = currentSurah;
+  if(!s.ayahs) return;
+  list.innerHTML = '<p class="tafsir-loading">⏳ جاري تحميل نص الآيات...</p>';
+
+  let verseTexts = null;
+  try{
+    verseTexts = await fetchAyahText(s.n);
+  } catch(e){
+    verseTexts = null;
+  }
+
+  if(document.getElementById('pName').textContent !== s.name) return; // surah changed while loading
+
+  list.innerHTML = '';
+  if(!verseTexts){
+    const warn = document.createElement('p');
+    warn.className = 'tafsir-loading';
+    warn.textContent = 'تعذّر تحميل نص الآيات من الإنترنت الآن، إليك التفسير المبسط فقط:';
+    list.appendChild(warn);
+  }
+  s.ayahs.forEach((text, i)=>{
+    const item = document.createElement('div');
+    item.className = 'tafsir-item';
+    const arabic = verseTexts ? `<div class="ayah-text">${verseTexts[i] || ''}</div>` : '';
+    item.innerHTML = `<span class="vnum">${i+1}</span><div>${arabic}<div class="ayah-explain">${text}</div></div>`;
+    list.appendChild(item);
+  });
+}
+document.getElementById('tafsirBtn').addEventListener('click', ()=>{
+  const panel = document.getElementById('tafsirPanel');
+  const isOpening = !panel.classList.contains('open');
+  panel.classList.toggle('open');
+  if(isOpening) renderTafsir();
+});
+
+/* ---------------- Per-surah mini games (5 activities about the open surah) ---------------- */
+document.getElementById('surahGamesBtn').addEventListener('click', ()=>{
+  const panel = document.getElementById('surahGamesPanel');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')){
+    document.getElementById('surahGamesPlay').innerHTML = '';
+    document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+  }
+});
+document.querySelectorAll('.sg-choice').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    playClickTileSound();
+    startSurahGame(btn.dataset.game);
+  });
+});
+
+function startSurahGame(type){
+  const area = document.getElementById('surahGamesPlay');
+  area.innerHTML = '<p class="sg-instructions">⏳ جاري التحضير...</p>';
+  if(type === 'match') renderSgMatch(area);
+  else if(type === 'truefalse') renderSgTrueFalse(area);
+  else if(type === 'arrange') renderSgArrange(area);
+  else if(type === 'complete') renderSgComplete(area);
+  else if(type === 'emoji') renderSgEmoji(area);
+}
+
+/* 1) صل الرمز بمحوره — match each branch's emoji to its topic text */
+function renderSgMatch(area){
+  const s = currentSurah;
+  const idx = surahs.indexOf(s);
+  const picks = shuffle(s.branches.map((b,i)=>({ text:b, icon: emojis[(idx+i+1)%emojis.length] }))).slice(0,4);
+  const leftOrder = shuffle(picks.map(p=>p.icon));
+  const rightOrder = shuffle(picks.map(p=>p.text));
+  let selectedIcon = null, selectedText = null, matchedCount = 0;
+
+  area.innerHTML = `
+    <p class="sg-instructions">اضغط على رمز ثم على النص الذي يطابقه</p>
+    <div class="sg-match-cols">
+      <div class="sg-match-col" id="sgLeftCol"></div>
+      <div class="sg-match-col" id="sgRightCol"></div>
+    </div>
+    <div class="sg-feedback" id="sgFeedback"></div>
+    <button class="sg-next-btn" id="sgNextBtn">🔁 مجموعة جديدة</button>
+  `;
+  const leftCol = document.getElementById('sgLeftCol');
+  const rightCol = document.getElementById('sgRightCol');
+  leftOrder.forEach(icon=>{
+    const el = document.createElement('div');
+    el.className = 'sg-match-item';
+    el.style.fontSize = '22px';
+    el.textContent = icon;
+    el.addEventListener('click', ()=>{
+      if(el.classList.contains('matched')) return;
+      document.querySelectorAll('#sgLeftCol .sg-match-item').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedIcon = { el, icon };
+      trySgMatch();
+    });
+    leftCol.appendChild(el);
+  });
+  rightOrder.forEach(text=>{
+    const el = document.createElement('div');
+    el.className = 'sg-match-item';
+    el.textContent = text;
+    el.addEventListener('click', ()=>{
+      if(el.classList.contains('matched')) return;
+      document.querySelectorAll('#sgRightCol .sg-match-item').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedText = { el, text };
+      trySgMatch();
+    });
+    rightCol.appendChild(el);
+  });
+
+  function trySgMatch(){
+    if(!selectedIcon || !selectedText) return;
+    const correctPair = picks.find(p=>p.icon===selectedIcon.icon);
+    if(correctPair && correctPair.text === selectedText.text){
+      selectedIcon.el.classList.add('matched');
+      selectedText.el.classList.add('matched');
+      playCorrectSound();
+      matchedCount++;
+      document.getElementById('sgFeedback').textContent = 'أحسنت! ⭐';
+      document.getElementById('sgFeedback').style.color = '#6ee7b7';
+      if(matchedCount === picks.length){
+        celebrate();
+        document.getElementById('sgFeedback').textContent = 'أتممت كل التوصيلات! 🎉';
+        document.getElementById('sgNextBtn').classList.add('show');
+      }
+    } else {
+      playWrongSound();
+      selectedIcon.el.classList.add('wrong');
+      selectedText.el.classList.add('wrong');
+      document.getElementById('sgFeedback').textContent = 'حاول مرة أخرى';
+      document.getElementById('sgFeedback').style.color = '#ff6fa5';
+      setTimeout(()=>{
+        selectedIcon.el.classList.remove('selected','wrong');
+        selectedText.el.classList.remove('selected','wrong');
+      }, 400);
+    }
+    selectedIcon = null; selectedText = null;
+  }
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgMatch(area));
+}
+
+/* 2) صح أم خطأ — true/false statements about this surah */
+function renderSgTrueFalse(area){
+  const s = currentSurah;
+  const statements = [
+    { text: `عدد آيات سورة ${s.name} هو ${s.verses}`, correct: true },
+    { text: `عدد آيات سورة ${s.name} هو ${s.verses + (Math.random()>0.5?5:-5)}`, correct: false },
+    { text: `سورة ${s.name} ${s.type}`, correct: true },
+    { text: `سورة ${s.name} ${s.type === 'مكية' ? 'مدنية' : 'مكية'}`, correct: false },
+    { text: `من موضوعات سورة ${s.name}: ${pick(s.branches)}`, correct: true },
+    { text: `من موضوعات سورة ${s.name}: ${pick(surahs.filter(x=>x.n!==s.n).flatMap(x=>x.branches))}`, correct: false },
+  ];
+  const chosen = pick(statements);
+  area.innerHTML = `
+    <p class="sg-instructions">هل هذه العبارة صحيحة أم خاطئة؟</p>
+    <div class="sg-ayah-display" style="font-family:'Tajawal',sans-serif; font-size:15px; color:var(--ink);">${chosen.text}</div>
+    <div class="sg-emoji-options">
+      <button class="ghost-btn" id="sgTrueBtn" style="border-color:#6ee7b7;">✅ صح</button>
+      <button class="ghost-btn" id="sgFalseBtn" style="border-color:#ff6fa5;">❌ خطأ</button>
+    </div>
+    <div class="sg-feedback" id="sgFeedback"></div>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ عبارة جديدة</button>
+  `;
+  function answer(userSaysTrue){
+    const ok = userSaysTrue === chosen.correct;
+    document.getElementById('sgFeedback').textContent = ok ? 'إجابة صحيحة! ⭐' : `غير صحيح، العبارة كانت ${chosen.correct?'صحيحة':'خاطئة'}`;
+    document.getElementById('sgFeedback').style.color = ok ? '#6ee7b7' : '#ff6fa5';
+    if(ok) playCorrectSound(); else playWrongSound();
+    document.getElementById('sgTrueBtn').disabled = true;
+    document.getElementById('sgFalseBtn').disabled = true;
+    document.getElementById('sgNextBtn').classList.add('show');
+  }
+  document.getElementById('sgTrueBtn').addEventListener('click', ()=>answer(true));
+  document.getElementById('sgFalseBtn').addEventListener('click', ()=>answer(false));
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgTrueFalse(area));
+}
+
+/* 3) رتب كلمات الآية — arrange the words of a real ayah of this surah */
+async function renderSgArrange(area){
+  const s = currentSurah;
+  area.innerHTML = '<p class="sg-instructions">⏳ جاري تحميل آية من السورة...</p>';
+  let verseTexts;
+  try{ verseTexts = await fetchAyahText(s.n); } catch(e){ verseTexts = null; }
+  if(!verseTexts){
+    area.innerHTML = '<p class="sg-instructions">تعذّر تحميل نص الآية الآن، حاول لاحقاً 🌙</p>';
+    return;
+  }
+  const verseIdx = Math.floor(Math.random()*verseTexts.length);
+  const words = verseTexts[verseIdx].split(/\s+/).filter(w=>w);
+  if(words.length < 2 || words.length > 8){ return renderSgArrange(area); } // pick a reasonably-sized ayah
+  const shuffled = shuffle(words.map((w,i)=>({id:i, w, used:false})));
+  const slots = new Array(words.length).fill(null);
+
+  area.innerHTML = `
+    <p class="sg-instructions">رتّب كلمات الآية رقم ${verseIdx+1} من سورة ${s.name}</p>
+    <div class="sg-answer-line" id="sgSlots"></div>
+    <div class="sg-word-bank" id="sgWords"></div>
+    <div class="sg-feedback" id="sgFeedback"></div>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ آية جديدة</button>
+  `;
+  function render(){
+    const slotsDiv = document.getElementById('sgSlots');
+    const wordsDiv = document.getElementById('sgWords');
+    slotsDiv.innerHTML = '';
+    wordsDiv.innerHTML = '';
+    slots.forEach((val,i)=>{
+      const span = document.createElement('span');
+      span.textContent = val!==null ? shuffled.find(t=>t.id===val).w : '‌';
+      span.style.minWidth = val!==null ? 'auto' : '28px';
+      if(val!==null){
+        span.addEventListener('click', ()=>{
+          shuffled.find(t=>t.id===val).used = false;
+          slots[i] = null;
+          render();
+        });
+      }
+      slotsDiv.appendChild(span);
+    });
+    shuffled.forEach(t=>{
+      const btn = document.createElement('button');
+      btn.className = 'sg-word-tile' + (t.used?' used':'');
+      btn.textContent = t.w;
+      btn.addEventListener('click', ()=>{
+        if(t.used) return;
+        const emptyIdx = slots.indexOf(null);
+        if(emptyIdx===-1) return;
+        slots[emptyIdx] = t.id;
+        t.used = true;
+        playClickTileSound();
+        render();
+        checkArrange();
+      });
+      wordsDiv.appendChild(btn);
+    });
+  }
+  function checkArrange(){
+    if(slots.includes(null)) return;
+    const attempt = slots.map(id=>shuffled.find(t=>t.id===id).w).join(' ');
+    const correct = words.join(' ');
+    const fb = document.getElementById('sgFeedback');
+    if(attempt === correct){
+      fb.textContent = 'أحسنت! هذا هو الترتيب الصحيح ⭐';
+      fb.style.color = '#6ee7b7';
+      celebrate();
+      document.getElementById('sgNextBtn').classList.add('show');
+    } else {
+      fb.textContent = 'ليس بعد، حاول ترتيباً آخر 💫';
+      fb.style.color = '#ff6fa5';
+      playWrongSound();
+      setTimeout(()=>{
+        shuffled.forEach(t=>t.used=false);
+        slots.fill(null);
+        fb.textContent = '';
+        render();
+      }, 900);
+    }
+  }
+  render();
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgArrange(area));
+}
+
+/* 4) أكمل الآية — pick the missing word of a real ayah (also covers "discover the correct word") */
+async function renderSgComplete(area){
+  const s = currentSurah;
+  area.innerHTML = '<p class="sg-instructions">⏳ جاري تحميل آية من السورة...</p>';
+  let verseTexts;
+  try{ verseTexts = await fetchAyahText(s.n); } catch(e){ verseTexts = null; }
+  if(!verseTexts){
+    area.innerHTML = '<p class="sg-instructions">تعذّر تحميل نص الآية الآن، حاول لاحقاً 🌙</p>';
+    return;
+  }
+  const candidates = verseTexts.map((t,i)=>({t,i})).filter(x=>x.t.split(/\s+/).length>=3);
+  if(!candidates.length){ area.innerHTML = '<p class="sg-instructions">لا توجد آية مناسبة لهذه اللعبة في هذه السورة 🌙</p>'; return; }
+  const chosen = pick(candidates);
+  const words = chosen.t.split(/\s+/).filter(w=>w);
+  const blankIdx = 1 + Math.floor(Math.random()*(words.length-2)); // avoid first/last word
+  const correctWord = words[blankIdx];
+  const displayWords = words.map((w,i)=> i===blankIdx ? '____' : w).join(' ');
+
+  const allWords = verseTexts.flatMap(t=>t.split(/\s+/)).filter(w=>w && w!==correctWord);
+  const distractors = shuffle([...new Set(allWords)]).slice(0,2);
+  const options = shuffle([correctWord, ...distractors]);
+
+  area.innerHTML = `
+    <p class="sg-instructions">أكمل الآية رقم ${chosen.i+1} من سورة ${s.name}</p>
+    <div class="sg-ayah-display">${displayWords}</div>
+    <div class="sg-emoji-options" id="sgOptions"></div>
+    <div class="sg-feedback" id="sgFeedback"></div>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ آية جديدة</button>
+  `;
+  const optsDiv = document.getElementById('sgOptions');
+  options.forEach(w=>{
+    const btn = document.createElement('button');
+    btn.className = 'ghost-btn';
+    btn.textContent = w;
+    btn.addEventListener('click', ()=>{
+      const fb = document.getElementById('sgFeedback');
+      if(w === correctWord){
+        fb.textContent = 'أحسنت! ⭐';
+        fb.style.color = '#6ee7b7';
+        playCorrectSound();
+      } else {
+        fb.textContent = `غير صحيح، الكلمة الصحيحة: ${correctWord}`;
+        fb.style.color = '#ff6fa5';
+        playWrongSound();
+      }
+      optsDiv.querySelectorAll('button').forEach(b=>b.disabled=true);
+      document.getElementById('sgNextBtn').classList.add('show');
+    });
+    optsDiv.appendChild(btn);
+  });
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgComplete(area));
+}
+
+/* 5) اختر الرمز المناسب — choose the emoji that best matches a topic of this surah (substitute for illustrated images) */
+function renderSgEmoji(area){
+  const s = currentSurah;
+  const idx = surahs.indexOf(s);
+  const branchIdx = Math.floor(Math.random()*s.branches.length);
+  const branchText = s.branches[branchIdx];
+  const correctIcon = emojis[(idx+branchIdx+1)%emojis.length];
+  const wrongIcons = shuffle(emojis.filter(e=>e!==correctIcon)).slice(0,2);
+  const options = shuffle([correctIcon, ...wrongIcons]);
+
+  area.innerHTML = `
+    <p class="sg-instructions">أي رمز يعبّر أكثر عن هذا المحور من سورة ${s.name}؟</p>
+    <div class="sg-ayah-display" style="font-family:'Tajawal',sans-serif; font-size:15px; color:var(--ink);">${branchText}</div>
+    <div class="sg-emoji-options" id="sgOptions"></div>
+    <div class="sg-feedback" id="sgFeedback"></div>
+    <button class="sg-next-btn" id="sgNextBtn">➡️ محور جديد</button>
+  `;
+  const optsDiv = document.getElementById('sgOptions');
+  options.forEach(icon=>{
+    const btn = document.createElement('button');
+    btn.className = 'sg-emoji-opt';
+    btn.textContent = icon;
+    btn.addEventListener('click', ()=>{
+      const fb = document.getElementById('sgFeedback');
+      if(icon === correctIcon){
+        fb.textContent = 'اختيار رائع! ⭐';
+        fb.style.color = '#6ee7b7';
+        playCorrectSound();
+      } else {
+        fb.textContent = 'حاول التفكير مرة أخرى في المرة القادمة';
+        fb.style.color = '#ff6fa5';
+        playWrongSound();
+      }
+      optsDiv.querySelectorAll('button').forEach(b=>b.disabled=true);
+      document.getElementById('sgNextBtn').classList.add('show');
+    });
+    optsDiv.appendChild(btn);
+  });
+  document.getElementById('sgNextBtn').addEventListener('click', ()=>renderSgEmoji(area));
+}
+
+/* ---------------- Teacher Mode: clean presentation for Zoom / in-class ---------------- */
+let teacherPageIndex = 0;
+const TEACHER_PAGE_NAMES = ['اسم السورة','موضوع السورة','الآيات','الخريطة الذهنية','المفردات','الأسئلة','الفوائد'];
+
+function buildTeacherPages(s){
+  const idx = surahs.indexOf(s);
+  const sampleAyahs = s.ayahs.slice(0, 8); // keep the slide readable for longer surahs
+  const sampleQuestions = buildQuestions(s).slice(0, 3);
+
+  return [
+    // 1) اسم السورة
+    `<div class="t-icon">${s.icon}</div>
+     <h2>سورة ${s.name}</h2>
+     <p class="t-sub">السورة رقم ${s.n} في المصحف — ${s.verses} آية — ${s.type}</p>`,
+
+    // 2) موضوع السورة
+    `<div class="t-icon">📌</div>
+     <h2>موضوع السورة</h2>
+     <p class="t-sub" style="max-width:520px;">${s.theme}</p>`,
+
+    // 3) الآيات
+    `<h2>الآيات</h2>
+     <ul class="teacher-list">
+       ${sampleAyahs.map((a,i)=>`<li><b>آية ${i+1}:</b> ${a}</li>`).join('')}
+       ${s.ayahs.length > sampleAyahs.length ? `<li style="text-align:center; color:var(--dim);">... و${s.ayahs.length - sampleAyahs.length} آية إضافية (اعرضيها من زر "تفسير كل آية")</li>` : ''}
+     </ul>`,
+
+    // 4) الخريطة الذهنية
+    `<h2>الخريطة الذهنية</h2>
+     <ul class="teacher-list">
+       ${s.branches.map((b,i)=>`<li>${emojis[(idx+i+1)%emojis.length]} &nbsp; ${b}</li>`).join('')}
+     </ul>`,
+
+    // 5) المفردات (كلمات من الآيات ومعانيها المبسطة)
+    `<h2>المفردات</h2>
+     <ul class="teacher-list">
+       ${s.vocab.map(([w,m])=>`<li><b>${w}:</b> ${m}</li>`).join('')}
+     </ul>`,
+
+    // 6) الأسئلة (مع الإجابة الصحيحة موضحة للمعلمة)
+    `<h2>أسئلة للمناقشة</h2>
+     ${sampleQuestions.map(q=>`
+       <div class="teacher-q-block">
+         <div class="qtxt">${q.text}</div>
+         ${q.options.map(o=>`<span class="qopt${o===q.correct?' correct':''}">${o}</span>`).join('')}
+       </div>
+     `).join('')}`,
+
+    // 7) الفوائد
+    `<h2>الفوائد المستفادة</h2>
+     <ul class="teacher-list">
+       ${s.benefits.map(b=>`<li>✨ ${b}</li>`).join('')}
+     </ul>`,
+  ];
+}
+
+function renderTeacherPage(){
+  const s = currentSurah;
+  const pages = buildTeacherPages(s);
+  teacherPageIndex = Math.max(0, Math.min(teacherPageIndex, pages.length-1));
+  document.getElementById('teacherContent').innerHTML = pages[teacherPageIndex];
+  document.getElementById('teacherPageLabel').textContent = TEACHER_PAGE_NAMES[teacherPageIndex];
+  document.getElementById('teacherPageCount').textContent = `${teacherPageIndex+1} / ${pages.length}`;
+  const dots = document.getElementById('teacherDots');
+  dots.innerHTML = pages.map((_,i)=>`<span class="${i===teacherPageIndex?'active':''}"></span>`).join('');
+  document.getElementById('teacherPrevBtn').style.visibility = teacherPageIndex===0 ? 'hidden' : 'visible';
+  document.getElementById('teacherNextBtn').style.visibility = teacherPageIndex===pages.length-1 ? 'hidden' : 'visible';
+}
+
+document.getElementById('teacherModeBtn').addEventListener('click', ()=>{
+  teacherPageIndex = 0;
+  document.getElementById('teacherModeOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderTeacherPage();
+});
+function closeTeacherMode(){
+  document.getElementById('teacherModeOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('teacherCloseBtn').addEventListener('click', closeTeacherMode);
+document.getElementById('teacherModeOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='teacherModeOverlay') closeTeacherMode();
+});
+document.getElementById('teacherPrevBtn').addEventListener('click', ()=>{
+  teacherPageIndex--; playClickTileSound(); renderTeacherPage();
+});
+document.getElementById('teacherNextBtn').addEventListener('click', ()=>{
+  teacherPageIndex++; playClickTileSound(); renderTeacherPage();
+});
+document.addEventListener('keydown', (e)=>{
+  if(!document.getElementById('teacherModeOverlay').classList.contains('open')) return;
+  if(e.key === 'ArrowRight'){ teacherPageIndex = Math.max(0, teacherPageIndex-1); renderTeacherPage(); }
+  if(e.key === 'ArrowLeft'){ teacherPageIndex++; renderTeacherPage(); }
+  if(e.key === 'Escape'){ closeTeacherMode(); }
+});
+
+/* ---------------- Certificates of completion ---------------- */
+function showCertificate(surahNum){
+  const s = surahs.find(x=>x.n===surahNum);
+  const cert = certificates[surahNum];
+  if(!s || !cert) return;
+  document.getElementById('certName').textContent = cert.name;
+  document.getElementById('certSurah').textContent = `سورة ${s.name} ${s.icon}`;
+  document.getElementById('certDate').textContent = cert.date;
+  document.getElementById('certOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCertificate(){
+  document.getElementById('certOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('certBtn').addEventListener('click', ()=>{
+  showCertificate(currentSurah.n);
+});
+document.getElementById('certCloseBtn').addEventListener('click', closeCertificate);
+document.getElementById('certCloseBtn2').addEventListener('click', closeCertificate);
+document.getElementById('certOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='certOverlay') closeCertificate();
+});
+document.getElementById('certPrintBtn').addEventListener('click', ()=>{
+  window.print();
+});
+
+function renderCertGallery(){
+  const gallery = document.getElementById('certGallery');
+  const emptyMsg = document.getElementById('certEmptyMsg');
+  const nums = Object.keys(certificates).map(Number).sort((a,b)=>a-b);
+  gallery.innerHTML = '';
+  emptyMsg.style.display = nums.length ? 'none' : 'block';
+  nums.forEach(n=>{
+    const s = surahs.find(x=>x.n===n);
+    if(!s) return;
+    const mini = document.createElement('div');
+    mini.className = 'cert-mini';
+    mini.innerHTML = `<span class="medal">${s.icon}</span><span class="cname">${s.name}</span>`;
+    mini.addEventListener('click', ()=>showCertificate(n));
+    gallery.appendChild(mini);
+  });
+}
+
+/* starfield */
+const starsDiv = document.getElementById('stars');
+for(let i=0;i<90;i++){
+  const s = document.createElement('div');
+  s.className='twinkle';
+  const size = Math.random()*2.4+0.6;
+  s.style.width=size+'px'; s.style.height=size+'px';
+  s.style.top=Math.random()*100+'%'; s.style.left=Math.random()*100+'%';
+  s.style.animationDelay=(Math.random()*3)+'s';
+  s.style.animationDuration=(2+Math.random()*3)+'s';
+  starsDiv.appendChild(s);
+}
+
+renderLeaderboard();
+
+/* mascot tip rotation */
+let tipIdx=0;
+setInterval(()=>{
+  tipIdx=(tipIdx+1)%tips.length;
+  document.getElementById('mascotTip').textContent = tips[tipIdx];
+}, 5000);
+
+/* render grid */
+const grid = document.getElementById('grid');
+surahs.forEach((s,i)=>{
+  const card = document.createElement('div');
+  card.className='card';
+  card.id='card-'+s.n;
+  card.style.setProperty('--c', cardColors[i % cardColors.length]);
+  card.innerHTML = `
+    <span class="done">✅</span>
+    <span class="num">سورة ${s.n}</span>
+    <span class="star-icon">${s.icon}</span>
+    <h3>${s.name}</h3>
+    <span class="meta">${s.verses} آية · ${s.type}</span>
+  `;
+  card.addEventListener('click', ()=>openSurah(s.n));
+  grid.appendChild(card);
+});
+
+/* modal logic */
+const overlay = document.getElementById('overlay');
+let currentSurah = null;
+let quizState = null;
+
+function openSurah(n){
+  playOpenSound();
+  currentSurah = surahs.find(x=>x.n===n);
+  const idx = surahs.indexOf(currentSurah);
+  const color = cardColors[idx % cardColors.length];
+
+  document.getElementById('pNum').textContent = 'سورة رقم ' + currentSurah.n + ' في القرآن الكريم';
+  document.getElementById('pName').textContent = currentSurah.name;
+  document.getElementById('pVerses').textContent = currentSurah.verses + ' آية';
+  document.getElementById('pType').textContent = currentSurah.type;
+
+  const centerNode = document.getElementById('centerNode');
+  centerNode.style.setProperty('--c', color);
+  centerNode.innerHTML = `<span>سورة ${currentSurah.name}</span><span class="center-theme">${currentSurah.theme}</span>`;
+
+  const orbitWrap = document.getElementById('orbitWrap');
+  orbitWrap.querySelectorAll('.branch-node').forEach(el=>el.remove());
+  const branchList = currentSurah.branches;
+  const count = branchList.length;
+  const radius = count <= 4 ? 44 : count <= 6 ? 41 : 38; // percent of container
+  const maxW = count <= 4 ? 190 : count <= 6 ? 155 : 130;
+  branchList.forEach((b,i)=>{
+    const node = document.createElement('div');
+    node.className = 'branch-node';
+    node.style.maxWidth = maxW + 'px';
+    const angle = (2*Math.PI * i)/count - Math.PI/2; // start at top, go clockwise
+    const left = 50 + radius*Math.cos(angle);
+    const top = 50 + radius*Math.sin(angle);
+    node.style.left = left + '%';
+    node.style.top = top + '%';
+    node.style.transform = 'translate(-50%,-50%)';
+    node.innerHTML = `<span class="em">${emojis[(idx+i+1) % emojis.length]}</span>${b}`;
+    orbitWrap.appendChild(node);
+  });
+
+  resetQuizUI();
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  overlay.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.getElementById('closeBtn').addEventListener('click', closeModal);
+overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
+
+/* quiz */
+function resetQuizUI(){
+  document.getElementById('quiz').classList.remove('open');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('playBtn').style.display='block';
+  document.getElementById('certBtn').style.display='none';
+  document.getElementById('tafsirPanel').classList.remove('open');
+  document.getElementById('surahGamesPanel').classList.remove('open');
+  document.getElementById('surahGamesPlay').innerHTML = '';
+  document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+}
+
+function buildQuestions(s){
+  const idx = surahs.findIndex(x=>x.n===s.n);
+  const pool = [];
+
+  // verse count
+  const opts1 = new Set([s.verses]);
+  while(opts1.size<3){
+    const delta = [-10,-6,6,10,15][Math.floor(Math.random()*5)];
+    const v = s.verses + delta;
+    if(v>0) opts1.add(v);
+  }
+  pool.push({
+    text: `كم عدد آيات سورة ${s.name}؟`,
+    options: shuffle([...opts1]).map(String),
+    correct: String(s.verses)
+  });
+
+  // main theme
+  const otherThemes = surahs.filter(x=>x.n!==s.n).map(x=>x.theme);
+  pool.push({
+    text: `ما الموضوع الرئيسي في سورة ${s.name}؟`,
+    options: shuffle([s.theme, ...shuffle(otherThemes).slice(0,2)]),
+    correct: s.theme
+  });
+
+  // Meccan or Medinan
+  pool.push({
+    text: `هل سورة ${s.name} مكية أم مدنية؟`,
+    options: shuffle(['مكية','مدنية']),
+    correct: s.type
+  });
+
+  // one branch-topic question with varied phrasing per slot (avoids repeated wording)
+  const branchPhrasings = [
+    `أي مما يلي من موضوعات سورة ${s.name}؟`,
+    `من عناصر سورة ${s.name}:`,
+    `أي مما يلي ذُكر في سورة ${s.name}؟`,
+    `من الأفكار الموجودة في سورة ${s.name}:`,
+  ];
+  const otherBranches = surahs.filter(x=>x.n!==s.n).flatMap(x=>x.branches);
+  s.branches.forEach((branch, bi)=>{
+    pool.push({
+      text: branchPhrasings[bi % branchPhrasings.length],
+      options: shuffle([branch, ...shuffle(otherBranches.filter(b=>b!==branch)).slice(0,2)]),
+      correct: branch
+    });
+  });
+
+  // surah number in the Qur'an
+  const optsNum = new Set([s.n]);
+  while(optsNum.size<3){
+    const delta = [-8,-5,5,8,12][Math.floor(Math.random()*5)];
+    const v = s.n + delta;
+    if(v>=1 && v<=114) optsNum.add(v);
+  }
+  pool.push({
+    text: `ما رقم سورة ${s.name} في ترتيب المصحف؟`,
+    options: shuffle([...optsNum]).map(String),
+    correct: String(s.n)
+  });
+
+  // simple comparison - easy for kids (no need to recall the exact number)
+  const isLong = s.verses > 10;
+  pool.push({
+    text: `هل عدد آيات سورة ${s.name} أكثر من 10 آيات أم أقل؟`,
+    options: shuffle(['أكثر من 10','أقل من 10']),
+    correct: isLong ? 'أكثر من 10' : 'أقل من 10'
+  });
+
+  // first letter of the surah name - fun and simple letter-recognition
+  const arabicLetters = ['ا','ب','ت','ث','ج','ح','خ','د','ر','ز','س','ش','ص','ط','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي'];
+  const firstLetter = s.name[0];
+  const letterDistractors = shuffle(arabicLetters.filter(l=>l!==firstLetter)).slice(0,2);
+  pool.push({
+    text: `بأي حرف يبدأ اسم سورة ${s.name}؟`,
+    options: shuffle([firstLetter, ...letterDistractors]),
+    correct: firstLetter
+  });
+
+  // pick 6 unique questions at random (no repeated question text) — different subset each time
+  const seenText = new Set();
+  const unique = shuffle(pool).filter(q=>{
+    if(seenText.has(q.text)) return false;
+    seenText.add(q.text);
+    return true;
+  });
+
+  return shuffle(unique.slice(0, 6));
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+document.getElementById('playBtn').addEventListener('click', ()=>{
+  const questions = buildQuestions(currentSurah);
+  quizState = { questions, idx:0, score:0 };
+  document.getElementById('playBtn').style.display='none';
+  document.getElementById('quiz').classList.add('open');
+  document.getElementById('result').classList.remove('show');
+  renderQuestion();
+});
+
+function renderQuestion(){
+  const {questions, idx} = quizState;
+  const q = questions[idx];
+  document.getElementById('qProg').textContent = `سؤال ${idx+1} من ${questions.length}`;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML='';
+  q.options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className='opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', ()=>handleAnswer(btn, opt, q));
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function handleAnswer(btn, opt, q){
+  const allOpts = document.querySelectorAll('#options .opt');
+  allOpts.forEach(o=>o.style.pointerEvents='none');
+
+  if(opt === q.correct){
+    btn.classList.add('correct');
+    document.getElementById('feedback').textContent = 'إجابة صحيحة! ⭐ أحسنت';
+    document.getElementById('feedback').style.color = '#6ee7b7';
+    quizState.score++;
+    starCount++;
+    playCorrectSound();
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    allOpts.forEach(o=>{ if(o.textContent===q.correct) o.classList.add('correct'); });
+    document.getElementById('feedback').textContent = 'حاول مرة أخرى في المرة القادمة 💫 الإجابة الصحيحة موضحة';
+    document.getElementById('feedback').style.color = '#ff6fa5';
+    playWrongSound();
+  }
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  quizState.idx++;
+  if(quizState.idx < quizState.questions.length){
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult(){
+  document.getElementById('quiz').querySelector('.qprog').textContent='';
+  document.getElementById('qText').textContent='';
+  document.getElementById('options').innerHTML='';
+  document.getElementById('feedback').textContent='';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  const score = quizState.score;
+  const total = quizState.questions.length;
+  const name = greetName();
+  document.getElementById('resultEmoji').textContent =
+    score===total ? '🏆' : score>=total*0.7 ? '🎉' : score>0 ? '🌟' : '🌙';
+  document.getElementById('resultMsg').textContent =
+    score===total ? `ممتاز يا ${name}! أتقنت السورة بالكامل` :
+    score>=total*0.7 ? `أحسنت يا ${name}! أداء رائع` :
+    score>0 ? `عمل جيد يا ${name}، واصل التقدم` :
+    `لا بأس يا ${name}، حاول مرة أخرى وستنجح!`;
+  document.getElementById('resultSub').textContent = `جمعت ${score} من ${total} نجوم في هذه الجولة`;
+  document.getElementById('result').classList.add('show');
+
+  const certBtn = document.getElementById('certBtn');
+  if(score >= total*0.7){
+    celebrate();
+    certificates[currentSurah.n] = { name: greetName(), date: new Date().toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'}) };
+    certBtn.style.display = 'inline-block';
+    renderCertGallery();
+  } else {
+    certBtn.style.display = 'none';
+  }
+
+  if(score>0 && !completed[currentSurah.n]){
+    completed[currentSurah.n] = true;
+    const card = document.getElementById('card-'+currentSurah.n);
+    if(card) card.classList.add('completed');
+  }
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  const questions = buildQuestions(currentSurah);
+  quizState = { questions, idx:0, score:0 };
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('quiz').classList.add('open');
+  renderQuestion();
+});
+
+document.getElementById('closeResultBtn').addEventListener('click', closeModal);
+
+function updateProgress(){
+  document.getElementById('starCount').textContent = starCount;
+  const pct = Math.min(100, (starCount/starTotal)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  persistCurrentScore();
+}
+
+/* =================================================================
+   STANDALONE GAME 1: Spot the Difference
+   ================================================================= */
+const DIFF_ROWS = 5, DIFF_COLS = 6, DIFF_COUNT = 4;
+const DIFF_ICON_POOL = ['🌙','⭐','🌟','🕌','📖','🌸','🕋','✨','🌿','🪐'];
+let diffState = null;
+
+function newDiffGame(){
+  const baseIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)];
+  let altIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)];
+  while(altIcon === baseIcon){ altIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)]; }
+
+  const total = DIFF_ROWS * DIFF_COLS;
+  const diffIndices = new Set();
+  while(diffIndices.size < DIFF_COUNT){
+    diffIndices.add(Math.floor(Math.random()*total));
+  }
+  diffState = { baseIcon, altIcon, diffIndices, found:new Set(), total };
+
+  document.getElementById('diffTotal').textContent = DIFF_COUNT;
+  document.getElementById('diffFound').textContent = 0;
+  document.getElementById('diffWin').classList.remove('show');
+  renderDiffBoards();
+}
+
+function renderDiffBoards(){
+  const left = document.getElementById('diffBoardLeft');
+  const right = document.getElementById('diffBoardRight');
+  left.innerHTML = ''; right.innerHTML = '';
+  for(let i=0;i<diffState.total;i++){
+    const leftCell = document.createElement('div');
+    leftCell.className = 'diff-cell';
+    leftCell.textContent = diffState.baseIcon;
+    left.appendChild(leftCell);
+
+    const rightCell = document.createElement('div');
+    rightCell.className = 'diff-cell';
+    const isDiff = diffState.diffIndices.has(i);
+    rightCell.textContent = isDiff ? diffState.altIcon : diffState.baseIcon;
+    if(diffState.found.has(i)) rightCell.classList.add('found');
+    rightCell.addEventListener('click', ()=>handleDiffClick(i, rightCell));
+    right.appendChild(rightCell);
+  }
+}
+
+function handleDiffClick(i, cell){
+  if(diffState.found.has(i)) return;
+  if(diffState.diffIndices.has(i)){
+    diffState.found.add(i);
+    cell.classList.add('found');
+    playCorrectSound();
+    document.getElementById('diffFound').textContent = diffState.found.size;
+    if(diffState.found.size === DIFF_COUNT){
+      setTimeout(()=>{
+        document.getElementById('diffWin').classList.add('show');
+        celebrate();
+      }, 200);
+    }
+  } else {
+    cell.classList.add('wrong');
+    playWrongSound();
+    setTimeout(()=>cell.classList.remove('wrong'), 300);
+  }
+}
+
+document.getElementById('openDiffGame').addEventListener('click', ()=>{
+  playOpenSound();
+  document.getElementById('diffOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  newDiffGame();
+});
+function closeDiffGame(){
+  document.getElementById('diffOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('diffCloseBtn').addEventListener('click', closeDiffGame);
+document.getElementById('diffCloseBtn2').addEventListener('click', closeDiffGame);
+document.getElementById('diffOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='diffOverlay') closeDiffGame();
+});
+document.getElementById('diffNewBtn').addEventListener('click', ()=>{ newDiffGame(); });
+document.getElementById('diffPlayAgainBtn').addEventListener('click', ()=>{ newDiffGame(); });
+
+/* =================================================================
+   STANDALONE GAME 2: Maze (recursive-backtracker generated)
+   ================================================================= */
+const MAZE_SIZE = 8; // 8x8 cells
+let mazeState = null;
+
+function generateMazeGrid(size){
+  const cells = [];
+  for(let r=0;r<size;r++){
+    const row = [];
+    for(let c=0;c<size;c++){
+      row.push({ visited:false, walls:{N:true,E:true,S:true,W:true} });
+    }
+    cells.push(row);
+  }
+  const stack = [[0,0]];
+  cells[0][0].visited = true;
+  const dirs = [
+    ['N',-1,0,'S'], ['E',0,1,'W'], ['S',1,0,'N'], ['W',0,-1,'E']
+  ];
+  while(stack.length){
+    const [r,c] = stack[stack.length-1];
+    const neighbors = [];
+    for(const [dir,dr,dc,opp] of dirs){
+      const nr=r+dr, nc=c+dc;
+      if(nr>=0 && nr<size && nc>=0 && nc<size && !cells[nr][nc].visited){
+        neighbors.push([dir,nr,nc,opp]);
+      }
+    }
+    if(neighbors.length){
+      const [dir,nr,nc,opp] = neighbors[Math.floor(Math.random()*neighbors.length)];
+      cells[r][c].walls[dir] = false;
+      cells[nr][nc].walls[opp] = false;
+      cells[nr][nc].visited = true;
+      stack.push([nr,nc]);
+    } else {
+      stack.pop();
+    }
+  }
+  return cells;
+}
+
+function newMazeGame(){
+  const cells = generateMazeGrid(MAZE_SIZE);
+  mazeState = { cells, player:{r:0,c:0}, goal:{r:MAZE_SIZE-1,c:MAZE_SIZE-1}, moves:0 };
+  document.getElementById('mazeMoves').textContent = 0;
+  document.getElementById('mazeWin').classList.remove('show');
+  renderMaze();
+}
+
+function renderMaze(){
+  const grid = document.getElementById('mazeGrid');
+  grid.style.gridTemplateColumns = `repeat(${MAZE_SIZE}, 1fr)`;
+  grid.style.gridTemplateRows = `repeat(${MAZE_SIZE}, 1fr)`;
+  grid.innerHTML = '';
+  const cellPx = 340 / MAZE_SIZE;
+  for(let r=0;r<MAZE_SIZE;r++){
+    for(let c=0;c<MAZE_SIZE;c++){
+      const cellData = mazeState.cells[r][c];
+      const div = document.createElement('div');
+      div.className = 'maze-cell';
+      const borders = [];
+      if(cellData.walls.N) borders.push('border-top:2px solid rgba(255,255,255,.5)');
+      if(cellData.walls.S) borders.push('border-bottom:2px solid rgba(255,255,255,.5)');
+      if(cellData.walls.E) borders.push('border-right:2px solid rgba(255,255,255,.5)');
+      if(cellData.walls.W) borders.push('border-left:2px solid rgba(255,255,255,.5)');
+      div.style.cssText = borders.join(';');
+      div.style.background = (r+c)%2===0 ? 'rgba(255,255,255,.03)' : 'rgba(255,255,255,.01)';
+
+      const occ = document.createElement('div');
+      occ.className = 'occ';
+      if(r===mazeState.goal.r && c===mazeState.goal.c) occ.textContent='🌙';
+      if(r===mazeState.player.r && c===mazeState.player.c) occ.textContent='⭐';
+      div.appendChild(occ);
+      grid.appendChild(div);
+    }
+  }
+}
+
+function moveMazePlayer(dir){
+  const {r,c} = mazeState.player;
+  const cellData = mazeState.cells[r][c];
+  const moveMap = {
+    up:['N',-1,0], down:['S',1,0], left:['W',0,-1], right:['E',0,1]
+  };
+  const [wallKey,dr,dc] = moveMap[dir];
+  if(cellData.walls[wallKey]){
+    playWrongSound();
+    return;
+  }
+  mazeState.player.r += dr;
+  mazeState.player.c += dc;
+  mazeState.moves++;
+  document.getElementById('mazeMoves').textContent = mazeState.moves;
+  playCorrectSound();
+  renderMaze();
+  if(mazeState.player.r === mazeState.goal.r && mazeState.player.c === mazeState.goal.c){
+    setTimeout(()=>{
+      document.getElementById('mazeWinSub').textContent = `وصلت في ${mazeState.moves} خطوة`;
+      document.getElementById('mazeWin').classList.add('show');
+      celebrate();
+    }, 150);
+  }
+}
+
+document.getElementById('openMazeGame').addEventListener('click', ()=>{
+  playOpenSound();
+  document.getElementById('mazeOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  newMazeGame();
+});
+function closeMazeGame(){
+  document.getElementById('mazeOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('mazeCloseBtn').addEventListener('click', closeMazeGame);
+document.getElementById('mazeCloseBtn2').addEventListener('click', closeMazeGame);
+document.getElementById('mazeOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='mazeOverlay') closeMazeGame();
+});
+document.getElementById('mazeNewBtn').addEventListener('click', ()=>{ newMazeGame(); });
+document.getElementById('mazePlayAgainBtn').addEventListener('click', ()=>{ newMazeGame(); });
+
+document.getElementById('mazeUp').addEventListener('click', ()=>moveMazePlayer('up'));
+document.getElementById('mazeDown').addEventListener('click', ()=>moveMazePlayer('down'));
+document.getElementById('mazeLeft').addEventListener('click', ()=>moveMazePlayer('left'));
+document.getElementById('mazeRight').addEventListener('click', ()=>moveMazePlayer('right'));
+
+document.addEventListener('keydown', (e)=>{
+  if(!document.getElementById('mazeOverlay').classList.contains('open')) return;
+  const map = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'right', ArrowRight:'left' }; // RTL: flip left/right
+  if(map[e.key]){ e.preventDefault(); moveMazePlayer(map[e.key]); }
+});
+
+/* =================================================================
+   STANDALONE GAME 3: Memory Match
+   ================================================================= */
+const MEMORY_ICONS = ['🌙','⭐','🕌','📖','🕋','🌟','🌿','🪐'];
+let memoryState = null;
+
+function newMemoryGame(){
+  const pairIcons = shuffle(MEMORY_ICONS).slice(0,6); // 6 pairs = 12 cards
+  const cards = shuffle([...pairIcons, ...pairIcons]).map((icon,i)=>({ id:i, icon, flipped:false, matched:false }));
+  memoryState = { cards, movesCount:0, firstPick:null, secondPick:null, lock:false, matchedCount:0 };
+  document.getElementById('memoryMoves').textContent = 0;
+  document.getElementById('memoryWin').classList.remove('show');
+  renderMemory();
+}
+
+function renderMemory(){
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML = '';
+  memoryState.cards.forEach(card=>{
+    const div = document.createElement('div');
+    div.className = 'memory-card' + (card.flipped?' flipped':'') + (card.matched?' matched':'');
+    div.innerHTML = `<span class="face">${card.icon}</span><span class="back">✨</span>`;
+    div.addEventListener('click', ()=>flipMemoryCard(card.id));
+    grid.appendChild(div);
+  });
+}
+
+function flipMemoryCard(id){
+  if(memoryState.lock) return;
+  const card = memoryState.cards.find(c=>c.id===id);
+  if(card.flipped || card.matched) return;
+  card.flipped = true;
+  renderMemory();
+
+  if(!memoryState.firstPick){
+    memoryState.firstPick = card;
+    return;
+  }
+  memoryState.secondPick = card;
+  memoryState.lock = true;
+  memoryState.movesCount++;
+  document.getElementById('memoryMoves').textContent = memoryState.movesCount;
+
+  if(memoryState.firstPick.icon === memoryState.secondPick.icon){
+    memoryState.firstPick.matched = true;
+    memoryState.secondPick.matched = true;
+    memoryState.matchedCount++;
+    memoryState.firstPick = null;
+    memoryState.secondPick = null;
+    memoryState.lock = false;
+    playCorrectSound();
+    renderMemory();
+    if(memoryState.matchedCount === MEMORY_ICONS.slice(0,6).length){
+      setTimeout(()=>{
+        document.getElementById('memoryWinSub').textContent = `أنهيت اللعبة في ${memoryState.movesCount} محاولة`;
+        document.getElementById('memoryWin').classList.add('show');
+        celebrate();
+      }, 200);
+    }
+  } else {
+    playWrongSound();
+    setTimeout(()=>{
+      memoryState.firstPick.flipped = false;
+      memoryState.secondPick.flipped = false;
+      memoryState.firstPick = null;
+      memoryState.secondPick = null;
+      memoryState.lock = false;
+      renderMemory();
+    }, 800);
+  }
+}
+
+document.getElementById('openMemoryGame').addEventListener('click', ()=>{
+  playOpenSound();
+  document.getElementById('memoryOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  newMemoryGame();
+});
+function closeMemoryGame(){
+  document.getElementById('memoryOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('memoryCloseBtn').addEventListener('click', closeMemoryGame);
+document.getElementById('memoryCloseBtn2').addEventListener('click', closeMemoryGame);
+document.getElementById('memoryOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='memoryOverlay') closeMemoryGame();
+});
+document.getElementById('memoryNewBtn').addEventListener('click', newMemoryGame);
+document.getElementById('memoryPlayAgainBtn').addEventListener('click', newMemoryGame);
+
+/* =================================================================
+   STANDALONE GAME 4: Catch the Stars (arcade reflex game)
+   ================================================================= */
+let catchState = null;
+
+function startCatchGame(){
+  const field = document.getElementById('catchField');
+  field.innerHTML = '';
+  document.getElementById('catchWin').classList.remove('show');
+  document.getElementById('catchScore').textContent = 0;
+  document.getElementById('catchTime').textContent = 30;
+
+  catchState = { score:0, timeLeft:30, running:true, spawnTimer:null, countdownTimer:null };
+
+  catchState.spawnTimer = setInterval(spawnFallingItem, 750);
+  catchState.countdownTimer = setInterval(()=>{
+    catchState.timeLeft--;
+    document.getElementById('catchTime').textContent = catchState.timeLeft;
+    if(catchState.timeLeft <= 0) endCatchGame();
+  }, 1000);
+}
+
+function spawnFallingItem(){
+  if(!catchState || !catchState.running) return;
+  const field = document.getElementById('catchField');
+  const isGood = Math.random() > 0.3; // 70% good stars, 30% bad moons
+  const el = document.createElement('div');
+  el.className = 'falling-item';
+  el.textContent = isGood ? '⭐' : '🌑';
+  const fieldW = field.clientWidth || 340;
+  const startX = Math.random() * (fieldW - 34);
+  el.style.left = startX + 'px';
+  el.style.top = '-30px';
+  field.appendChild(el);
+
+  const duration = 2600 + Math.random()*1200;
+  const fieldH = field.clientHeight || 320;
+  let start = null;
+  function step(ts){
+    if(!start) start = ts;
+    const progress = (ts - start) / duration;
+    if(progress >= 1 || !catchState || !catchState.running){
+      el.remove();
+      return;
+    }
+    el.style.top = (progress * (fieldH + 30) - 30) + 'px';
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  el.addEventListener('click', ()=>{
+    if(!catchState || !catchState.running) return;
+    const field = document.getElementById('catchField');
+    const pop = document.createElement('div');
+    pop.className = 'score-pop';
+    pop.style.left = el.style.left;
+    pop.style.top = el.style.top;
+    if(isGood){
+      catchState.score++;
+      pop.textContent = '+1';
+      pop.style.color = '#6ee7b7';
+      playCorrectSound();
+    } else {
+      catchState.score = Math.max(0, catchState.score - 1);
+      pop.textContent = '-1';
+      pop.style.color = '#ff6fa5';
+      playWrongSound();
+    }
+    document.getElementById('catchScore').textContent = catchState.score;
+    field.appendChild(pop);
+    setTimeout(()=>pop.remove(), 650);
+    el.remove();
+  });
+}
+
+function endCatchGame(){
+  if(!catchState) return;
+  catchState.running = false;
+  clearInterval(catchState.spawnTimer);
+  clearInterval(catchState.countdownTimer);
+  document.getElementById('catchField').querySelectorAll('.falling-item').forEach(el=>el.remove());
+  document.getElementById('catchWinSub').textContent = `نتيجتك النهائية: ${catchState.score} نقطة`;
+  document.getElementById('catchWin').classList.add('show');
+  if(catchState.score >= 8) celebrate();
+}
+
+document.getElementById('catchStartBtn').addEventListener('click', startCatchGame);
+document.getElementById('openCatchGame').addEventListener('click', ()=>{
+  playOpenSound();
+  document.getElementById('catchOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  const field = document.getElementById('catchField');
+  field.innerHTML = '<button class="catch-start-btn" id="catchStartBtn">▶ ابدأ اللعبة</button>';
+  document.getElementById('catchStartBtn').addEventListener('click', startCatchGame);
+  document.getElementById('catchWin').classList.remove('show');
+});
+function closeCatchGame(){
+  document.getElementById('catchOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  if(catchState){
+    catchState.running = false;
+    clearInterval(catchState.spawnTimer);
+    clearInterval(catchState.countdownTimer);
+  }
+}
+document.getElementById('catchCloseBtn').addEventListener('click', closeCatchGame);
+document.getElementById('catchCloseBtn2').addEventListener('click', closeCatchGame);
+document.getElementById('catchOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='catchOverlay') closeCatchGame();
+});
+document.getElementById('catchPlayAgainBtn').addEventListener('click', startCatchGame);
+
+/* =================================================================
+   STANDALONE GAME 5: Unscramble the Surah Name
+   ================================================================= */
+let unscrambleState = null;
+let unscrambleScore = 0;
+
+function newUnscrambleRound(){
+  const s = pick(surahs);
+  let letters = Array.from(s.name);
+  let shuffled = shuffle(letters);
+  // make sure it's actually shuffled (avoid rare identical order for very short names)
+  let attempts = 0;
+  while(shuffled.join('') === letters.join('') && attempts < 5){
+    shuffled = shuffle(letters);
+    attempts++;
+  }
+  unscrambleState = {
+    surah: s,
+    answer: letters,
+    tiles: shuffled.map((ch, i)=>({ id:i, ch, used:false })),
+    slots: new Array(letters.length).fill(null),
+  };
+  document.getElementById('unscrambleWin').classList.remove('show');
+  document.getElementById('unscrambleFeedback').textContent = '';
+  renderUnscramble();
+}
+
+function renderUnscramble(){
+  const slotsDiv = document.getElementById('unscrambleSlots');
+  const tilesDiv = document.getElementById('unscrambleTiles');
+  slotsDiv.innerHTML = '';
+  tilesDiv.innerHTML = '';
+
+  unscrambleState.slots.forEach((val, i)=>{
+    const slot = document.createElement('div');
+    slot.className = 'unscramble-slot' + (val !== null ? ' filled' : '');
+    slot.textContent = val !== null ? unscrambleState.tiles[val].ch : '';
+    slot.addEventListener('click', ()=>{
+      if(val === null) return;
+      unscrambleState.tiles[val].used = false;
+      unscrambleState.slots[i] = null;
+      renderUnscramble();
+    });
+    slotsDiv.appendChild(slot);
+  });
+
+  unscrambleState.tiles.forEach(tile=>{
+    const btn = document.createElement('button');
+    btn.className = 'unscramble-tile' + (tile.used ? ' used' : '');
+    btn.textContent = tile.ch;
+    btn.addEventListener('click', ()=>{
+      if(tile.used) return;
+      const emptyIdx = unscrambleState.slots.indexOf(null);
+      if(emptyIdx === -1) return;
+      unscrambleState.slots[emptyIdx] = tile.id;
+      tile.used = true;
+      playClickTileSound();
+      renderUnscramble();
+      checkUnscramble();
+    });
+    tilesDiv.appendChild(btn);
+  });
+}
+
+function playClickTileSound(){ tone(500, 0, 0.06, 'triangle', 0.1); }
+
+function checkUnscramble(){
+  if(unscrambleState.slots.includes(null)) return; // not full yet
+  const attempt = unscrambleState.slots.map(idx => unscrambleState.tiles[idx].ch).join('');
+  const correct = unscrambleState.answer.join('');
+  if(attempt === correct){
+    unscrambleScore++;
+    document.getElementById('unscrambleScore').textContent = unscrambleScore;
+    document.getElementById('unscrambleWinSub').textContent = `اسم السورة: ${unscrambleState.surah.name} ${unscrambleState.surah.icon}`;
+    document.getElementById('unscrambleWin').classList.add('show');
+    if(unscrambleScore % 3 === 0) celebrate(); else playCorrectSound();
+  } else {
+    document.getElementById('unscrambleFeedback').textContent = 'ليس صحيحاً بعد، حاول ترتيباً آخر 💫';
+    document.getElementById('unscrambleFeedback').style.color = '#ff6fa5';
+    playWrongSound();
+    setTimeout(()=>{
+      // reset tiles back to the pool so the child can try again
+      unscrambleState.tiles.forEach(t=>t.used=false);
+      unscrambleState.slots = new Array(unscrambleState.answer.length).fill(null);
+      document.getElementById('unscrambleFeedback').textContent = '';
+      renderUnscramble();
+    }, 900);
+  }
+}
+
+document.getElementById('openUnscrambleGame').addEventListener('click', ()=>{
+  playOpenSound();
+  document.getElementById('unscrambleOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  newUnscrambleRound();
+});
+function closeUnscrambleGame(){
+  document.getElementById('unscrambleOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('unscrambleCloseBtn').addEventListener('click', closeUnscrambleGame);
+document.getElementById('unscrambleCloseBtn2').addEventListener('click', closeUnscrambleGame);
+document.getElementById('unscrambleOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='unscrambleOverlay') closeUnscrambleGame();
+});
+document.getElementById('unscrambleSkipBtn').addEventListener('click', ()=>{ playClickTileSound(); newUnscrambleRound(); });
+document.getElementById('unscrambleNextBtn').addEventListener('click', ()=>{ playClickTileSound(); newUnscrambleRound(); });
+</script>
+</body>
+</html>

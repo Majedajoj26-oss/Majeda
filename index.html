@@ -1665,14 +1665,21 @@ document.getElementById('tafsirBtn').addEventListener('click', ()=>{
   const panel = document.getElementById('tafsirPanel');
   const isOpening = !panel.classList.contains('open');
   panel.classList.toggle('open');
-  if(isOpening) renderTafsir();
+  if(isOpening){
+    document.getElementById('surahGamesPanel').classList.remove('open');
+    document.getElementById('surahGamesPlay').innerHTML = '';
+    document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+    renderTafsir();
+  }
 });
 
 /* ---------------- Per-surah mini games (5 activities about the open surah) ---------------- */
 document.getElementById('surahGamesBtn').addEventListener('click', ()=>{
   const panel = document.getElementById('surahGamesPanel');
+  const isOpening = !panel.classList.contains('open');
   panel.classList.toggle('open');
-  if(panel.classList.contains('open')){
+  if(isOpening){
+    document.getElementById('tafsirPanel').classList.remove('open');
     document.getElementById('surahGamesPlay').innerHTML = '';
     document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
   }

@@ -126,6 +126,25 @@
 
   main{position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:26px 18px 70px;}
 
+  .juz-selector{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:8px;
+  }
+  .juz-choice{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:16px 28px; border-radius:18px; cursor:pointer;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18);
+    color:var(--ink); font-family:'Tajawal',sans-serif; min-width:170px;
+    transition:.2s;
+  }
+  .juz-choice:hover{background:rgba(255,255,255,.12);}
+  .juz-choice.active{
+    background:linear-gradient(160deg, rgba(255,201,76,.18), rgba(255,111,165,.1));
+    border-color:var(--gold); box-shadow:0 0 18px rgba(255,201,76,.25);
+  }
+  .juz-choice .juz-icon{font-size:38px;}
+  .juz-choice .juz-name{font-family:'Lalezar',sans-serif; font-size:26px; color:var(--gold);}
+  .juz-choice .juz-sub{font-size:11px; color:var(--dim);}
+
   .section-title{
     font-family:'Lalezar',sans-serif; font-weight:400; font-size:26px; text-align:center;
     margin:44px 0 18px; color:var(--gold);
@@ -420,14 +439,6 @@
   .sg-choice.active{border-color:var(--gold); background:rgba(255,201,76,.14);}
   .sg-play-area{min-height:60px;}
   .sg-instructions{font-size:12px; color:var(--dim); text-align:center; margin-bottom:12px;}
-  .sg-match-cols{display:flex; gap:14px; justify-content:center;}
-  .sg-match-col{display:flex; flex-direction:column; gap:8px; width:45%;}
-  .sg-match-item{
-    padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.06); font-size:12.5px; text-align:center; cursor:pointer;
-  }
-  .sg-match-item.selected{border-color:var(--gold); background:rgba(255,201,76,.15);}
-  .sg-match-item.matched{border-color:var(--mint); background:rgba(110,231,183,.15); opacity:.6; cursor:default;}
   .sg-word-bank{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; direction:rtl; margin-bottom:12px;}
   .sg-word-tile{
     padding:8px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.22);
@@ -472,13 +483,13 @@
     border:4px solid var(--gold); box-shadow:0 0 30px rgba(255,201,76,.4);
     transition:transform 3.5s cubic-bezier(.17,.67,.12,1);
   }
-  .sg-wheel-seg{
-    position:absolute; top:50%; left:50%; width:48%; height:2px;
-    transform-origin:0 0; text-align:right; padding-right:10px;
+  .sg-wheel-labels{
+    position:absolute; inset:0; pointer-events:none; z-index:3;
   }
-  .sg-wheel-seg span{
-    display:inline-block; transform:translateY(-50%); font-size:11px; font-weight:700;
-    color:#1a1140; white-space:nowrap; letter-spacing:-.2px;
+  .sg-wheel-label{
+    position:absolute; transform:translate(-50%,-50%);
+    font-size:12px; font-weight:800; color:#1a1140; white-space:nowrap;
+    background:rgba(255,255,255,.55); padding:3px 8px; border-radius:999px;
   }
   .sg-wheel-pointer{
     position:absolute; top:-14px; left:50%; transform:translateX(-50%);
@@ -744,6 +755,20 @@
 </div>
 
 <main>
+  <div class="juz-selector">
+    <button class="juz-choice active" id="juzChoice-amma">
+      <span class="juz-icon">🌌</span>
+      <span class="juz-name">جزء عمّ</span>
+      <span class="juz-sub">الجزء 30 — 37 سورة</span>
+    </button>
+    <button class="juz-choice" id="juzChoice-tabarak">
+      <span class="juz-icon">📖</span>
+      <span class="juz-name">جزء تبارك</span>
+      <span class="juz-sub">الجزء 29 — 11 سورة</span>
+    </button>
+  </div>
+
+  <h2 class="section-title" id="gridSectionTitle">🌌 سور جزء عمّ</h2>
   <div class="grid" id="grid"></div>
 
   <h2 class="section-title">🎲 ألعاب إضافية</h2>
@@ -838,7 +863,7 @@
       <button class="sg-wheel-trigger-btn" id="sgWheelTriggerBtn">🎡 دوّري العجلة لاختيار عشوائي</button>
       <div class="surahgames-menu" id="surahGamesMenu">
         <button class="sg-choice" data-game="quiz">🎮<span>ابدأ اللعبة واجمع النجوم</span></button>
-        <button class="sg-choice" data-game="match">🧩<span>صل الرمز بمحوره</span></button>
+        <button class="sg-choice" data-game="wordmeaning">📖<span>الكلمة وتفسيرها</span></button>
         <button class="sg-choice" data-game="truefalse">💡<span>صح أم خطأ</span></button>
         <button class="sg-choice" data-game="arrange">🔤<span>رتب كلمات الآية</span></button>
         <button class="sg-choice" data-game="complete">🧠<span>أكمل الآية</span></button>
@@ -1087,7 +1112,7 @@
 
 <script>
 /* ---------------- Data: 37 surahs of Juz Amma ---------------- */
-const surahs = [
+const surahsAmma = [
 {n:78,icon:"📰",name:"النبأ",verses:40,type:"مكية",theme:"التساؤل عن يوم القيامة",
   ayahs:["عمّ يتساءل الناس؟", "عن الخبر العظيم (يوم القيامة)", "الذي هم فيه مختلفون", "سيعلمون الحقيقة", "ثم سيعلمونها أكثر", "ألم نجعل الأرض ممهدة للعيش؟", "والجبال أوتاداً تثبّتها", "وخلقناكم أزواجاً (ذكوراً وإناثاً)", "وجعلنا نومكم راحة لكم", "وجعلنا الليل غطاءً يستركم", "وجعلنا النهار وقتاً للعمل والسعي", "وبنينا فوقكم سبع سماوات قوية", "وجعلنا الشمس مصباحاً منيراً", "وأنزلنا من السحب مطراً غزيراً", "لنخرج به الحب والنبات", "والبساتين الملتفة بالأشجار", "إن يوم الفصل (القيامة) موعد محدد", "يوم يُنفخ في الصور فتأتون أفواجاً", "وتُفتح السماء فتصير أبواباً", "وتُسيَّر الجبال فتصبح كالسراب", "إن جهنم كانت بالمرصاد", "للطاغين مكاناً يرجعون إليه", "ماكثين فيها زمناً طويلاً", "لا يذوقون فيها برداً ولا شراباً", "إلا ماءً حاراً وصديداً", "جزاءً موافقاً لأعمالهم", "إنهم كانوا لا يخافون الحساب", "وكذّبوا بآيات الله تكذيباً", "وكل شيء أحصيناه وكتبناه", "فذوقوا العذاب، لن نزيدكم إلا عذاباً", "أما المتقون فلهم الفوز والنجاة", "بساتين وأعناب", "وأزواج متقاربات في السن", "وكأس مملوء بالشراب الطيب", "لا يسمعون فيها كلاماً باطلاً ولا كذباً", "عطاءً وجزاءً كافياً من ربهم", "رب السماوات والأرض، الرحمن", "يوم يقوم الملَك والملائكة صفاً، لا يتكلمون إلا بإذنه بالحق", "ذلك اليوم الحق، فمن شاء اتخذ إلى ربه طريق نجاة", "إنا أنذرناكم عذاباً قريباً، يوم ينظر المرء ما قدّمت يداه، ويتمنى الكافر لو كان تراباً"],
   branches:["يوم القيامة","نعم الله في الخلق","عذاب الطاغين","نعيم المتقين","خلق الإنسان أزواجاً","السماوات السبع"],
@@ -1275,6 +1300,57 @@ const surahs = [
   benefits:["الاستعاذة بالله من وسوسة الشيطان دائماً", "ذكر الله يطرد وسوسة الشيطان", "الحذر من وسواس الإنس كما الجن"]},
 ];
 
+const surahsTabarak = [
+{n:67,icon:"👑",name:"الملك",verses:30,type:"مكية",theme:"ملك الله وقدرته المطلقة، وابتلاء الإنسان بالموت والحياة",
+  branches:["ملك الله وقدرته", "خلق الموت والحياة ابتلاءً", "إتقان خلق السماوات", "عذاب الكافرين في النار", "التوكل والرزق من الله", "فضل السورة وحمايتها من عذاب القبر"],
+  vocab:[["تبارك", "تعاظم وكثر خيره"], ["فطور", "شقوق أو خلل"], ["الملك", "صاحب السلطان المطلق وهو الله"]],
+  benefits:["التفكر في خلق الله يقوي اليقين", "الخشية من الله في الغيب تنجي من العذاب", "شكر نعمة السمع والبصر والعقل"]},
+{n:68,icon:"✒️",name:"القلم",verses:52,type:"مكية",theme:"تنزيه خُلُق النبي ﷺ وقصة أصحاب الجنة عبرة في الشكر",
+  branches:["القسم بالقلم وأخلاق النبي", "قصة أصحاب الجنة (البستان)", "صفات الكافرين المتكبرين", "التحذير من طاعة كل حلاف مهين", "صبر النبي وعدم اليأس", "مصير المتقين والمجرمين"],
+  vocab:[["مسطور", "مكتوب"], ["الجنة (البستان)", "الحديقة المثمرة"], ["حلاف مهين", "كثير الحلف بالباطل حقير"]],
+  benefits:["حسن الخلق من صفات الأنبياء", "منع الصدقة يعاقب عليه الله في الدنيا والآخرة", "الصبر على أذى الناس وعدم الاستعجال بالغضب"]},
+{n:69,icon:"💥",name:"الحاقة",verses:52,type:"مكية",theme:"الحاقة الواقعة الحتمية ومصير المكذبين عبر التاريخ",
+  branches:["أهوال يوم القيامة الحاقة", "هلاك عاد وثمود وفرعون", "قصة الطوفان ونجاة سفينة نوح", "أخذ الكتاب باليمين أو الشمال", "نعيم أهل اليمين وعذاب أهل الشمال", "تنزيه القرآن أنه كلام الله"],
+  vocab:[["الحاقة", "القيامة الواقعة لا محالة"], ["الطاغية", "الصيحة المتجاوزة للحد"], ["حاسوباً يسيراً", "حساباً سهلاً بلا مناقشة"]],
+  benefits:["الاعتبار بهلاك الأمم المكذبة السابقة", "أهمية الأمانة في نقل القرآن دون تحريف", "السعي لأخذ كتاب الأعمال باليمين يوم القيامة"]},
+{n:70,icon:"🪜",name:"المعارج",verses:44,type:"مكية",theme:"أهوال يوم القيامة وصفات المؤمنين الناجين",
+  branches:["سؤال عن عذاب يوم القيامة", "طول ذلك اليوم وأهواله", "خُلق الإنسان هلوعاً", "صفات المصلين المحافظين على الصلاة", "الأمانة والشهادة بالحق", "مصير الكافرين المستعجلين بالعذاب"],
+  vocab:[["المعارج", "درجات ووسائل الصعود إلى السماء"], ["هلوعاً", "شديد الجزع والحرص"], ["خمسين ألف سنة", "طول يوم القيامة الشديد"]],
+  benefits:["المحافظة على الصلاة صفة من صفات المؤمنين", "أداء الأمانة والصدق في الشهادة", "الصبر الجميل في مواجهة أذى المكذبين"]},
+{n:71,icon:"🚢",name:"نوح",verses:28,type:"مكية",theme:"قصة نبي الله نوح وصبره الطويل مع قومه",
+  branches:["إرسال نوح لإنذار قومه", "دعوته السرية والجهرية", "وعد الاستغفار بالرزق والذرية", "إصرار قومه على الكفر والعناد", "دعاء نوح على قومه", "استغفار نوح لوالديه والمؤمنين"],
+  vocab:[["استغفروا ربكم", "اطلبوا مغفرته وستر ذنوبكم"], ["مدراراً", "غزيراً متتابعاً"], ["دياراً", "أحداً يسكن الديار"]],
+  benefits:["الصبر الطويل في الدعوة إلى الله", "الاستغفار سبب لنزول الرزق والبركة", "الدعاء للوالدين والمؤمنين من هدي الأنبياء"]},
+{n:72,icon:"👻",name:"الجن",verses:28,type:"مكية",theme:"إيمان طائفة من الجن بالقرآن وحقائق عن عالم الجن",
+  branches:["استماع الجن للقرآن وإيمانهم", "تنزيه الله عن الصاحبة والولد", "الجن الصالحون والجائرون", "منع الجن من استراق السمع", "المساجد لله وحده", "تبليغ الرسالة وعلم الغيب لله"],
+  vocab:[["نفراً من الجن", "جماعة منهم"], ["شهباً", "نجوماً محرقة تُرمى بها الشياطين"], ["رشداً", "الطريق الصحيح والهداية"]],
+  benefits:["القرآن يهدي الجن والإنس معاً", "التوحيد ونفي الشريك عن الله", "المساجد بيوت خاصة لعبادة الله وحده"]},
+{n:73,icon:"🌙",name:"المزمل",verses:20,type:"مكية",theme:"أمر النبي ﷺ بقيام الليل وترتيل القرآن",
+  branches:["أمر النبي بقيام الليل", "ترتيل القرآن وتدبره", "الليل أشد وطئاً وأقوم قيلاً", "الصبر على أذى المكذبين", "التحذير من عذاب كعذاب فرعون", "التخفيف في قيام الليل وأمر الزكاة"],
+  vocab:[["المزمل", "المتلفف بثيابه"], ["رتّل القرآن", "اقرأه بتأنٍّ وتدبر وتمهل"], ["كثيباً مهيلاً", "رملاً متناثراً سائلاً"]],
+  benefits:["قيام الليل يقوي القلب ويثبت الإيمان", "تلاوة القرآن بتدبر أفضل من السرعة", "التيسير ورفع الحرج من صفات هذا الدين"]},
+{n:74,icon:"🔥",name:"المدثر",verses:56,type:"مكية",theme:"أمر النبي بالإنذار ووصف عاقبة المكذبين في النار",
+  branches:["أمر النبي بالإنذار والتكبير", "التحذير من الكِبر وطلب الزيادة", "قصة الوليد بن المغيرة ومكره", "وصف نار سقر وخزنتها التسعة عشر", "أسباب دخول المجرمين النار", "القرآن تذكرة لمن شاء أن يتذكر"],
+  vocab:[["المدثر", "المتغطي بثيابه"], ["سقر", "اسم من أسماء نار جهنم"], ["الرجز", "الأصنام والذنوب"]],
+  benefits:["الدعوة إلى الله واجبة رغم الصعوبات", "إطعام المسكين والصلاة من أسباب النجاة من النار", "تعظيم الله وتطهير الظاهر والباطن"]},
+{n:75,icon:"⏳",name:"القيامة",verses:40,type:"مكية",theme:"القسم بيوم القيامة وإثبات البعث بعد الموت",
+  branches:["القسم بيوم القيامة والنفس اللوامة", "قدرة الله على جمع العظام", "أهوال يوم القيامة", "تعليمات تلقي الوحي للنبي", "النظر إلى وجه الله يوم القيامة", "أطوار خلق الإنسان دليل على البعث"],
+  vocab:[["النفس اللوامة", "النفس التي تلوم صاحبها على تقصيره"], ["برق البصر", "تحيّر النظر من شدة الهول"], ["السدى", "المتروك بلا حساب ولا أمر ونهي"]],
+  benefits:["الإيمان بالبعث بعد الموت أمر مؤكد", "الاستماع للقرآن بإنصات دون استعجال", "تدبر خلق الإنسان يقود إلى الإيمان بقدرة الله"]},
+{n:76,icon:"🧑",name:"الإنسان",verses:31,type:"مدنية",theme:"صفات الإنسان الشاكر ونعيم الأبرار في الجنة جزاءً على إحسانهم",
+  branches:["خلق الإنسان من نطفة أمشاج", "ابتلاء الإنسان بالهداية شاكراً أو كفوراً", "صفات الأبرار وإطعامهم رغم حاجتهم", "نعيم الجنة وثوابهم على الصبر", "أمر النبي بالصبر والذكر", "مشيئة الله وهدايته لمن يشاء"],
+  vocab:[["أمشاج", "أخلاط من ماء الرجل والمرأة"], ["سلاسلاً وأغلالاً", "قيوداً للمجرمين يوم القيامة"], ["سلسبيلاً", "اسم عين ماء عذبة في الجنة"]],
+  benefits:["إطعام الفقير والمسكين ولو مع حاجة النفس", "الإخلاص في العمل دون انتظار جزاء من الناس", "الصبر وذكر الله في كل وقت"]},
+{n:77,icon:"💨",name:"المرسلات",verses:50,type:"مكية",theme:"التحذير المتكرر من تكذيب يوم القيامة ومصير المكذبين",
+  branches:["القسم بالرياح والملائكة المرسلة", "تكرار «ويل يومئذ للمكذبين»", "هلاك الأمم السابقة المكذبة", "وصف ظل الدخان وشرر النار", "نعيم المتقين في الظلال والعيون", "القرآن آخر بيان يجب تصديقه"],
+  vocab:[["المرسلات", "الرياح أو الملائكة المرسلة بأمر الله"], ["ذات الصدع", "الأرض التي تتشقق بالنبات"], ["جمالات صفر", "إبل صفراء، تشبيه لشرر النار"]],
+  benefits:["التصديق بيوم القيامة وعدم التكذيب به", "الاعتبار بمصير الأمم المكذبة السابقة", "الشكر على نعمة الأرض والماء العذب"]},
+];
+
+const ALL_SURAHS = surahsAmma.concat(surahsTabarak);
+let surahs = surahsAmma;
+let activeJuz = "amma";
+
 const emojis = ['🌟','🌙','🔥','🌊','🕊️','📖','⚖️','🌿','👼','🏔️','🕋','🌸'];
 const cardColors = ['#ffc94c','#ff6fa5','#48d8c8','#9b7bff','#ff9f5a','#6ee7b7'];
 const tips = [
@@ -1284,7 +1360,7 @@ const tips = [
   "أحسنت! واصل رحلتك بين نجوم جزء عمّ 🚀",
 ];
 
-let starTotal = surahs.length * 6; // 6 questions per surah
+let starTotal = ALL_SURAHS.length * 6; // 6 questions per surah, across both juz sets
 let starCount = 0;
 let completed = {}; // {surahNum: true}
 let certificates = {}; // {surahNum: {name, date}}
@@ -1340,7 +1416,7 @@ function renderProgressReport(){
   completedGrid.innerHTML = '';
   if(completedNums.length){
     completedNums.sort((a,b)=>a-b).forEach(n=>{
-      const s = surahs.find(x=>x.n===n);
+      const s = ALL_SURAHS.find(x=>x.n===n);
       if(!s) return;
       const chip = document.createElement('span');
       chip.className = 'report-surah-chip';
@@ -1357,7 +1433,7 @@ function renderProgressReport(){
   certGrid.innerHTML = '';
   if(certNums.length){
     certNums.sort((a,b)=>a-b).forEach(n=>{
-      const s = surahs.find(x=>x.n===n);
+      const s = ALL_SURAHS.find(x=>x.n===n);
       if(!s) return;
       const chip = document.createElement('span');
       chip.className = 'report-surah-chip';
@@ -1555,7 +1631,10 @@ async function fetchAyahText(surahNum){
 async function renderTafsir(){
   const list = document.getElementById('tafsirList');
   const s = currentSurah;
-  if(!s.ayahs) return;
+  if(!s.ayahs){
+    list.innerHTML = '<p class="tafsir-loading">📖 التفسير المبسط لهذه السورة قيد الإعداد حالياً — تابعينا قريباً! يمكنك تجربة ألعاب "رتب كلمات الآية" و"أكمل الآية" فهي تعمل بالفعل لهذه السورة 🌙</p>';
+    return;
+  }
   list.innerHTML = '<p class="tafsir-loading">⏳ جاري تحميل نص الآيات...</p>';
 
   let verseTexts = null;
@@ -1622,10 +1701,10 @@ function startSurahGame(type){
   const area = document.getElementById('surahGamesPlay');
   area.innerHTML = '<p class="sg-instructions">⏳ جاري التحضير...</p>';
   if(type === 'wheel'){ renderSgWheel(area); return; }
-  if(type === 'match' || type === 'truefalse' || type === 'arrange' || type === 'complete'){
+  if(type === 'wordmeaning' || type === 'truefalse' || type === 'arrange' || type === 'complete'){
     sgStartSession(type);
   }
-  if(type === 'match') renderSgMatch(area);
+  if(type === 'wordmeaning') renderSgWordMeaning(area);
   else if(type === 'truefalse') renderSgTrueFalse(area);
   else if(type === 'arrange') renderSgArrange(area);
   else if(type === 'complete') renderSgComplete(area);
@@ -1635,7 +1714,7 @@ function startSurahGame(type){
 let sgSession = null;
 const SG_ROUNDS_TOTAL = 5;
 const SG_TITLES = {
-  match:'صل الرمز بمحوره', truefalse:'صح أم خطأ', arrange:'رتب كلمات الآية',
+  wordmeaning:'الكلمة وتفسيرها', truefalse:'صح أم خطأ', arrange:'رتب كلمات الآية',
   complete:'أكمل الآية'
 };
 function sgStartSession(type){
@@ -1683,86 +1762,50 @@ function sgShowSessionComplete(area){
 }
 
 /* 1) صل الرمز بمحوره — match each branch's emoji to its topic text */
-function renderSgMatch(area){
+function renderSgWordMeaning(area){
   const s = currentSurah;
-  const idx = surahs.indexOf(s);
-  const picks = shuffle(s.branches.map((b,i)=>({ text:b, icon: emojis[(idx+i+1)%emojis.length] }))).slice(0,4);
-  const leftOrder = shuffle(picks.map(p=>p.icon));
-  const rightOrder = shuffle(picks.map(p=>p.text));
-  let selectedIcon = null, selectedText = null, matchedCount = 0, hadMistake = false;
+  const [word, meaning] = pick(s.vocab);
+  const otherMeaningsSameSurah = s.vocab.filter(v=>v[0]!==word).map(v=>v[1]);
+  const otherMeaningsOtherSurahs = surahs.filter(x=>x.n!==s.n).flatMap(x=>x.vocab.map(v=>v[1]));
+  const distractorPool = otherMeaningsSameSurah.length >= 2 ? otherMeaningsSameSurah : otherMeaningsSameSurah.concat(shuffle(otherMeaningsOtherSurahs));
+  const distractors = shuffle(distractorPool.filter(m=>m!==meaning)).slice(0,2);
+  const options = shuffle([meaning, ...distractors]);
 
   area.innerHTML = `
-    <p class="sg-instructions">${sgRoundLabel()} — اضغط على رمز ثم على النص الذي يطابقه</p>
-    <div class="sg-match-cols">
-      <div class="sg-match-col" id="sgLeftCol"></div>
-      <div class="sg-match-col" id="sgRightCol"></div>
-    </div>
+    <p class="sg-instructions">${sgRoundLabel()} — ما معنى هذه الكلمة من سورة ${s.name}؟</p>
+    <div class="sg-ayah-display">${word}</div>
+    <div class="sg-emoji-options" id="sgOptions" style="flex-direction:column; align-items:stretch;"></div>
     <div class="sg-feedback" id="sgFeedback"></div>
     <button class="sg-next-btn" id="sgNextBtn">➡️ التالي</button>
   `;
-  const leftCol = document.getElementById('sgLeftCol');
-  const rightCol = document.getElementById('sgRightCol');
-  leftOrder.forEach(icon=>{
-    const el = document.createElement('div');
-    el.className = 'sg-match-item';
-    el.style.fontSize = '22px';
-    el.textContent = icon;
-    el.addEventListener('click', ()=>{
-      if(el.classList.contains('matched')) return;
-      document.querySelectorAll('#sgLeftCol .sg-match-item').forEach(x=>x.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedIcon = { el, icon };
-      trySgMatch();
-    });
-    leftCol.appendChild(el);
-  });
-  rightOrder.forEach(text=>{
-    const el = document.createElement('div');
-    el.className = 'sg-match-item';
-    el.textContent = text;
-    el.addEventListener('click', ()=>{
-      if(el.classList.contains('matched')) return;
-      document.querySelectorAll('#sgRightCol .sg-match-item').forEach(x=>x.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedText = { el, text };
-      trySgMatch();
-    });
-    rightCol.appendChild(el);
-  });
-
-  function trySgMatch(){
-    if(!selectedIcon || !selectedText) return;
-    const correctPair = picks.find(p=>p.icon===selectedIcon.icon);
-    if(correctPair && correctPair.text === selectedText.text){
-      selectedIcon.el.classList.add('matched');
-      selectedText.el.classList.add('matched');
-      playCorrectSound();
-      matchedCount++;
-      document.getElementById('sgFeedback').textContent = 'أحسنت! ⭐';
-      document.getElementById('sgFeedback').style.color = '#6ee7b7';
-      if(matchedCount === picks.length){
-        celebrate();
-        document.getElementById('sgFeedback').textContent = 'أتممت كل التوصيلات! 🎉';
-        document.getElementById('sgNextBtn').classList.add('show');
+  let wasCorrect = false;
+  const optsDiv = document.getElementById('sgOptions');
+  options.forEach(m=>{
+    const btn = document.createElement('button');
+    btn.className = 'ghost-btn';
+    btn.style.textAlign = 'right';
+    btn.textContent = m;
+    btn.addEventListener('click', ()=>{
+      const fb = document.getElementById('sgFeedback');
+      if(m === meaning){
+        wasCorrect = true;
+        fb.textContent = 'أحسنت! ⭐';
+        fb.style.color = '#6ee7b7';
+        playCorrectSound();
+      } else {
+        fb.textContent = `غير صحيح، المعنى الصحيح: ${meaning}`;
+        fb.style.color = '#ff6fa5';
+        playWrongSound();
       }
-    } else {
-      hadMistake = true;
-      playWrongSound();
-      selectedIcon.el.classList.add('wrong');
-      selectedText.el.classList.add('wrong');
-      document.getElementById('sgFeedback').textContent = 'حاول مرة أخرى';
-      document.getElementById('sgFeedback').style.color = '#ff6fa5';
-      setTimeout(()=>{
-        selectedIcon.el.classList.remove('selected','wrong');
-        selectedText.el.classList.remove('selected','wrong');
-      }, 400);
-    }
-    selectedIcon = null; selectedText = null;
-  }
+      optsDiv.querySelectorAll('button').forEach(b=>b.disabled=true);
+      document.getElementById('sgNextBtn').classList.add('show');
+    });
+    optsDiv.appendChild(btn);
+  });
   document.getElementById('sgNextBtn').addEventListener('click', ()=>{
-    sgRecordAnswer(!hadMistake);
+    sgRecordAnswer(wasCorrect);
     if(sgIsSessionDone()) sgShowSessionComplete(area);
-    else renderSgMatch(area);
+    else renderSgWordMeaning(area);
   });
 }
 
@@ -1959,11 +2002,11 @@ async function renderSgComplete(area){
 
 /* 5) عجلة الحظ — random-pick one of the surah activities (great for teacher-led play) */
 const WHEEL_ITEMS = [
-  { type:'quiz', icon:'🎮', label:'اختبار السورة', wheelLabel:'اختبار السورة' },
-  { type:'match', icon:'🧩', label:'صل الرمز', wheelLabel:'صل الرمز' },
-  { type:'truefalse', icon:'💡', label:'صح أم خطأ', wheelLabel:'صح أم خطأ' },
-  { type:'arrange', icon:'🔤', label:'رتب الكلمات', wheelLabel:'رتب الكلمات' },
-  { type:'complete', icon:'🧠', label:'أكمل الآية', wheelLabel:'أكمل الآية' },
+  { type:'quiz', icon:'🎮', label:'اختبار السورة', wheelLabel:'اختبار' },
+  { type:'wordmeaning', icon:'📖', label:'الكلمة وتفسيرها', wheelLabel:'كلمة' },
+  { type:'truefalse', icon:'💡', label:'صح أم خطأ', wheelLabel:'صح/خطأ' },
+  { type:'arrange', icon:'🔤', label:'رتب الكلمات', wheelLabel:'ترتيب' },
+  { type:'complete', icon:'🧠', label:'أكمل الآية', wheelLabel:'أكمل' },
 ];
 function renderSgWheel(area){
   area.innerHTML = `
@@ -1971,26 +2014,33 @@ function renderSgWheel(area){
     <div class="sg-wheel-wrap">
       <span class="sg-wheel-pointer">🔻</span>
       <div class="sg-wheel" id="sgWheelEl"></div>
+      <div class="sg-wheel-labels" id="sgWheelLabels"></div>
       <div class="sg-wheel-center"></div>
     </div>
     <button class="sg-spin-btn" id="sgSpinBtn">🎡 دوّري العجلة</button>
     <div class="sg-wheel-result" id="sgWheelResult"></div>
   `;
   const wheelEl = document.getElementById('sgWheelEl');
+  const labelsEl = document.getElementById('sgWheelLabels');
   const segAngle = 360 / WHEEL_ITEMS.length;
   const wheelColors = ['#ffc94c','#ff6fa5','#48d8c8','#9b7bff','#ff9f5a','#6ee7b7'];
   const gradientStops = WHEEL_ITEMS.map((item,i)=>
     `${wheelColors[i % wheelColors.length]} ${segAngle*i}deg ${segAngle*(i+1)}deg`
   ).join(', ');
   wheelEl.style.background = `conic-gradient(${gradientStops})`;
+  // Static, non-rotating labels positioned around the wheel — always upright and readable
   WHEEL_ITEMS.forEach((item,i)=>{
-    const seg = document.createElement('div');
-    seg.className = 'sg-wheel-seg';
-    const angle = segAngle*i + segAngle/2;
-    seg.style.transform = `rotate(${angle}deg)`;
-    const flip = (angle > 90 && angle < 270) ? 180 : 0;
-    seg.innerHTML = `<span style="transform:translateY(-50%) rotate(${90+flip}deg); display:inline-block;">${item.wheelLabel}</span>`;
-    wheelEl.appendChild(seg);
+    const angleDeg = segAngle*i + segAngle/2 - 90; // 0deg = top of circle
+    const angleRad = angleDeg * Math.PI / 180;
+    const radiusPct = 34; // distance from center as % of wheel width
+    const left = 50 + radiusPct*Math.cos(angleRad);
+    const top = 50 + radiusPct*Math.sin(angleRad);
+    const label = document.createElement('div');
+    label.className = 'sg-wheel-label';
+    label.style.left = left + '%';
+    label.style.top = top + '%';
+    label.textContent = item.wheelLabel;
+    labelsEl.appendChild(label);
   });
 
   let currentRotation = 0;
@@ -2032,7 +2082,8 @@ const TEACHER_PAGE_NAMES = ['اسم السورة','موضوع السورة','ا�
 
 function buildTeacherPages(s){
   const idx = surahs.indexOf(s);
-  const sampleAyahs = s.ayahs.slice(0, 8); // keep the slide readable for longer surahs
+  const hasAyahs = !!s.ayahs;
+  const sampleAyahs = hasAyahs ? s.ayahs.slice(0, 8) : []; // keep the slide readable for longer surahs
   const sampleQuestions = buildQuestions(s).slice(0, 3);
 
   return [
@@ -2047,16 +2098,17 @@ function buildTeacherPages(s){
      <p class="t-sub" style="max-width:520px;">${s.theme}</p>`,
 
     // 3) الآيات
-    `<h2>الآيات</h2>
+    hasAyahs ? `<h2>الآيات</h2>
      <ul class="teacher-list">
        ${sampleAyahs.map((a,i)=>`<li><b>آية ${i+1}:</b> ${a}</li>`).join('')}
        ${s.ayahs.length > sampleAyahs.length ? `<li style="text-align:center; color:var(--dim);">... و${s.ayahs.length - sampleAyahs.length} آية إضافية (اعرضيها من زر "تفسير كل آية")</li>` : ''}
-     </ul>`,
+     </ul>` : `<h2>الآيات</h2>
+     <p class="t-sub">التفسير المبسط لآيات هذه السورة قيد الإعداد حالياً 🌙</p>`,
 
     // 4) الخريطة الذهنية
     `<h2>الخريطة الذهنية</h2>
      <ul class="teacher-list">
-       ${s.branches.map((b,i)=>`<li>${emojis[(idx+i+1)%emojis.length]} &nbsp; ${b}</li>`).join('')}
+       ${s.branches.map(b=>`<li>${b}</li>`).join('')}
      </ul>`,
 
     // 5) المفردات (كلمات من الآيات ومعانيها المبسطة)
@@ -2124,7 +2176,7 @@ document.addEventListener('keydown', (e)=>{
 
 /* ---------------- Certificates of completion ---------------- */
 function showCertificate(surahNum){
-  const s = surahs.find(x=>x.n===surahNum);
+  const s = ALL_SURAHS.find(x=>x.n===surahNum);
   const cert = certificates[surahNum];
   if(!s || !cert) return;
   document.getElementById('certName').textContent = cert.name;
@@ -2156,7 +2208,7 @@ function renderCertGallery(){
   gallery.innerHTML = '';
   emptyMsg.style.display = nums.length ? 'none' : 'block';
   nums.forEach(n=>{
-    const s = surahs.find(x=>x.n===n);
+    const s = ALL_SURAHS.find(x=>x.n===n);
     if(!s) return;
     const mini = document.createElement('div');
     mini.className = 'cert-mini';
@@ -2190,21 +2242,38 @@ setInterval(()=>{
 
 /* render grid */
 const grid = document.getElementById('grid');
-surahs.forEach((s,i)=>{
-  const card = document.createElement('div');
-  card.className='card';
-  card.id='card-'+s.n;
-  card.style.setProperty('--c', cardColors[i % cardColors.length]);
-  card.innerHTML = `
-    <span class="done">✅</span>
-    <span class="num">سورة ${s.n}</span>
-    <span class="star-icon">${s.icon}</span>
-    <h3>${s.name}</h3>
-    <span class="meta">${s.verses} آية · ${s.type}</span>
-  `;
-  card.addEventListener('click', ()=>openSurah(s.n));
-  grid.appendChild(card);
-});
+function renderGrid(){
+  grid.innerHTML = '';
+  surahs.forEach((s,i)=>{
+    const card = document.createElement('div');
+    card.className='card' + (completed[s.n] ? ' completed' : '');
+    card.id='card-'+s.n;
+    card.style.setProperty('--c', cardColors[i % cardColors.length]);
+    card.innerHTML = `
+      <span class="done">✅</span>
+      <span class="num">سورة ${s.n}</span>
+      <span class="star-icon">${s.icon}</span>
+      <h3>${s.name}</h3>
+      <span class="meta">${s.verses} آية · ${s.type}</span>
+    `;
+    card.addEventListener('click', ()=>openSurah(s.n));
+    grid.appendChild(card);
+  });
+}
+renderGrid();
+
+function switchJuz(which){
+  activeJuz = which;
+  surahs = which === 'tabarak' ? surahsTabarak : surahsAmma;
+  document.querySelectorAll('.juz-choice').forEach(b=>b.classList.remove('active'));
+  document.getElementById('juzChoice-'+which).classList.add('active');
+  document.getElementById('gridSectionTitle').textContent =
+    which === 'tabarak' ? '📖 سور جزء تبارك' : '🌌 سور جزء عمّ';
+  playOpenSound();
+  renderGrid();
+}
+document.getElementById('juzChoice-amma').addEventListener('click', ()=>switchJuz('amma'));
+document.getElementById('juzChoice-tabarak').addEventListener('click', ()=>switchJuz('tabarak'));
 
 /* modal logic */
 const overlay = document.getElementById('overlay');
@@ -2242,7 +2311,7 @@ function openSurah(n){
     node.style.left = left + '%';
     node.style.top = top + '%';
     node.style.transform = 'translate(-50%,-50%)';
-    node.innerHTML = `<span class="em">${emojis[(idx+i+1) % emojis.length]}</span>${b}`;
+    node.textContent = b;
     orbitWrap.appendChild(node);
   });
 

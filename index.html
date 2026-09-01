@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>رحلة بين نجوم القرآن</title>
+
+<!-- إعدادات تثبيت التطبيق على الهاتف (PWA) -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0e3d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="نجوم القرآن">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -622,37 +632,37 @@
 
   /* --- Spot the difference game --- */
   .diff-status{display:flex; justify-content:space-between; align-items:center; margin:14px 0 6px; font-size:13px; color:var(--dim);}
-  .diff-boards{display:flex; flex-direction:column; gap:14px; align-items:center;}
+  .diff-boards{display:flex; flex-direction:column; gap:16px; align-items:center;}
   .diff-board{
-    display:grid; grid-template-columns:repeat(6,1fr); gap:5px; width:100%; max-width:340px;
+    display:grid; grid-template-columns:repeat(6,1fr); gap:7px; width:100%; max-width:460px;
   }
   .diff-cell{
     aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
-    font-size:20px; border-radius:10px; background:rgba(255,255,255,.07);
+    font-size:26px; border-radius:12px; background:rgba(255,255,255,.07);
     border:1px solid rgba(255,255,255,.14); cursor:pointer; user-select:none; position:relative;
   }
   .diff-board.left .diff-cell{cursor:default;}
   .diff-cell.found{background:rgba(110,231,183,.3); border-color:var(--mint);}
   .diff-cell.wrong{animation:shake .3s ease;}
-  .diff-board-label{font-size:11px; color:var(--dim); text-align:center; margin-bottom:-8px;}
+  .diff-board-label{font-size:12px; color:var(--dim); text-align:center; margin-bottom:-8px;}
   .diff-win{display:none; text-align:center; margin-top:14px;}
   .diff-win.show{display:block; animation:pop .4s ease;}
 
   /* --- Maze game --- */
   .maze-status{display:flex; justify-content:space-between; align-items:center; margin:14px 0 10px; font-size:13px; color:var(--dim);}
   .maze-grid{
-    display:grid; margin:0 auto; width:100%; max-width:340px; aspect-ratio:1/1;
+    display:grid; margin:0 auto; width:100%; max-width:440px; aspect-ratio:1/1;
     background:rgba(255,255,255,.04); border-radius:12px; overflow:hidden;
   }
   .maze-cell{position:relative; box-sizing:border-box;}
   .maze-cell .occ{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:14px; transition:transform .12s ease;
+    font-size:18px; transition:transform .12s ease;
   }
-  .dpad{display:grid; grid-template-columns:repeat(3,44px); grid-template-rows:repeat(3,44px); gap:4px; justify-content:center; margin:16px auto 4px;}
+  .dpad{display:grid; grid-template-columns:repeat(3,54px); grid-template-rows:repeat(3,54px); gap:6px; justify-content:center; margin:18px auto 4px;}
   .dpad button{
     border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:var(--ink);
-    border-radius:10px; font-size:18px; cursor:pointer;
+    border-radius:12px; font-size:24px; cursor:pointer;
   }
   .dpad button:hover{background:rgba(255,255,255,.18);}
   .maze-win{display:none; text-align:center; margin-top:14px;}
@@ -660,35 +670,36 @@
 
   /* --- Unscramble the surah name game --- */
   .unscramble-slots{
-    display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:20px 0 16px; direction:rtl;
+    display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:22px 0 18px; direction:rtl;
   }
   .unscramble-slot{
-    width:42px; height:48px; border-radius:10px; border:2px dashed rgba(255,255,255,.3);
+    width:54px; height:60px; border-radius:12px; border:2px dashed rgba(255,255,255,.3);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Lalezar',sans-serif; font-size:22px; color:var(--gold); cursor:pointer;
+    font-family:'Lalezar',sans-serif; font-size:28px; color:var(--gold); cursor:pointer;
     background:rgba(255,255,255,.04);
   }
   .unscramble-slot.filled{border-style:solid; border-color:var(--gold); background:rgba(255,201,76,.12);}
   .unscramble-tiles{
-    display:flex; justify-content:center; gap:8px; flex-wrap:wrap; direction:rtl;
+    display:flex; justify-content:center; gap:10px; flex-wrap:wrap; direction:rtl;
   }
   .unscramble-tile{
-    width:44px; height:50px; border-radius:10px; border:1px solid rgba(255,255,255,.25);
+    width:56px; height:62px; border-radius:12px; border:1px solid rgba(255,255,255,.25);
     background:linear-gradient(160deg,var(--purple),var(--pink));
-    font-family:'Lalezar',sans-serif; font-size:22px; color:#fff; cursor:pointer;
+    font-family:'Lalezar',sans-serif; font-size:28px; color:#fff; cursor:pointer;
   }
   .unscramble-tile.used{visibility:hidden;}
   .unscramble-tile:hover{transform:translateY(-2px);}
 
   /* --- Memory match game --- */
   .memory-grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:340px; margin:0 auto;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:520px; margin:0 auto;
   }
   .memory-card{
-    aspect-ratio:1/1; border-radius:12px; cursor:pointer; position:relative;
+    aspect-ratio:1/1; border-radius:16px; cursor:pointer; position:relative;
     background:linear-gradient(160deg,var(--purple),var(--pink));
-    display:flex; align-items:center; justify-content:center; font-size:22px;
+    display:flex; align-items:center; justify-content:center; font-size:44px;
     transition:transform .25s ease; user-select:none;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
   }
   .memory-card .face{display:none;}
   .memory-card.flipped .face, .memory-card.matched .face{display:block;}
@@ -696,12 +707,17 @@
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25);
   }
   .memory-card.matched{opacity:.55;}
-  .memory-card .back{font-size:18px; opacity:.8;}
+  .memory-card .back{font-size:34px; opacity:.8;}
   .memory-card.flipped .back, .memory-card.matched .back{display:none;}
+  .memory-card .card-num{
+    position:absolute; top:6px; right:8px; font-size:13px; font-weight:800;
+    color:rgba(255,255,255,.9); background:rgba(0,0,0,.3); border-radius:999px;
+    width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+  }
 
   /* --- Catch the stars game --- */
   .catch-field{
-    position:relative; width:100%; max-width:400px; height:320px; margin:14px auto 0;
+    position:relative; width:100%; max-width:480px; height:380px; margin:14px auto 0;
     background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.14); border-radius:16px;
     overflow:hidden;
   }
@@ -712,7 +728,7 @@
     background:linear-gradient(90deg,var(--gold),var(--pink));
   }
   .falling-item{
-    position:absolute; font-size:26px; cursor:pointer; user-select:none; will-change:top;
+    position:absolute; font-size:32px; cursor:pointer; user-select:none; will-change:top;
   }
   .score-pop{
     position:absolute; font-size:14px; font-weight:700; pointer-events:none;
@@ -2830,10 +2846,10 @@ function newMemoryGame(){
 function renderMemory(){
   const grid = document.getElementById('memoryGrid');
   grid.innerHTML = '';
-  memoryState.cards.forEach(card=>{
+  memoryState.cards.forEach((card,i)=>{
     const div = document.createElement('div');
     div.className = 'memory-card' + (card.flipped?' flipped':'') + (card.matched?' matched':'');
-    div.innerHTML = `<span class="face">${card.icon}</span><span class="back">✨</span>`;
+    div.innerHTML = `<span class="card-num">${i+1}</span><span class="face">${card.icon}</span><span class="back">✨</span>`;
     div.addEventListener('click', ()=>flipMemoryCard(card.id));
     grid.appendChild(div);
   });
@@ -3121,6 +3137,15 @@ document.getElementById('unscrambleOverlay').addEventListener('click', (e)=>{
 });
 document.getElementById('unscrambleSkipBtn').addEventListener('click', ()=>{ playClickTileSound(); newUnscrambleRound(); });
 document.getElementById('unscrambleNextBtn').addEventListener('click', ()=>{ playClickTileSound(); newUnscrambleRound(); });
+
+/* ---------------- تفعيل التثبيت على الهاتف (PWA) ---------------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{
+      // فشل التسجيل (مثلاً عند فتح الملف محلياً بدون خادم) — التطبيق يعمل عادياً بدون التثبيت
+    });
+  });
+}
 </script>
 </body>
 </html>

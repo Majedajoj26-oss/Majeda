@@ -75,6 +75,7 @@
     background:linear-gradient(90deg,var(--gold),var(--pink),var(--teal));
     -webkit-background-clip:text; background-clip:text; color:transparent;
     line-height:1.3;
+    filter:drop-shadow(0 0 18px rgba(255,201,76,.45)) drop-shadow(0 0 34px rgba(255,111,165,.25));
   }
   header p.sub{color:var(--dim); font-size:15px; margin-top:8px; max-width:520px; margin-inline:auto;}
 
@@ -254,16 +255,19 @@
     text-align:center; transition:transform .2s ease, box-shadow .2s ease;
     overflow:hidden;
   }
-  .card:hover{transform:translateY(-6px) scale(1.03);}
+  .card:hover{
+    transform:translateY(-6px) scale(1.03);
+    box-shadow:0 0 24px var(--c,var(--gold)), 0 10px 24px rgba(0,0,0,.35);
+  }
   .card::before{
-    content:''; position:absolute; inset:-40% -40% auto auto; width:80px; height:80px;
-    border-radius:50%; filter:blur(30px); opacity:.55; background:var(--c,var(--gold));
+    content:''; position:absolute; inset:-40% -40% auto auto; width:100px; height:100px;
+    border-radius:50%; filter:blur(34px); opacity:.65; background:var(--c,var(--gold));
   }
   .card .num{
     display:inline-block; font-size:11px; color:var(--dim); background:rgba(255,255,255,.08);
     border-radius:999px; padding:2px 9px; margin-bottom:8px;
   }
-  .card .star-icon{font-size:30px; display:block; margin-bottom:6px; filter:drop-shadow(0 0 8px var(--c,var(--gold)));}
+  .card .star-icon{font-size:30px; display:block; margin-bottom:6px; filter:drop-shadow(0 0 12px var(--c,var(--gold)));}
   .card h3{font-family:'Lalezar',sans-serif; font-weight:400; font-size:20px; color:var(--ink); margin-bottom:4px;}
   .card .meta{font-size:11px; color:var(--dim);}
   .card .done{
@@ -592,6 +596,7 @@
 
   /* --- Certificate of completion --- */
   .cert-panel{max-width:560px;}
+  .memory-panel{max-width:760px;}
   .certificate{
     background:linear-gradient(160deg,#fffaf0,#fff4dd);
     border-radius:14px; padding:6px; margin-top:10px;
@@ -653,6 +658,7 @@
   .maze-grid{
     display:grid; margin:0 auto; width:100%; max-width:440px; aspect-ratio:1/1;
     background:rgba(255,255,255,.04); border-radius:12px; overflow:hidden;
+    direction:ltr;
   }
   .maze-cell{position:relative; box-sizing:border-box;}
   .maze-cell .occ{
@@ -692,14 +698,14 @@
 
   /* --- Memory match game --- */
   .memory-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:520px; margin:0 auto;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:680px; margin:0 auto;
   }
   .memory-card{
-    aspect-ratio:1/1; border-radius:16px; cursor:pointer; position:relative;
+    aspect-ratio:1/1; border-radius:18px; cursor:pointer; position:relative;
     background:linear-gradient(160deg,var(--purple),var(--pink));
-    display:flex; align-items:center; justify-content:center; font-size:44px;
+    display:flex; align-items:center; justify-content:center; font-size:48px;
     transition:transform .25s ease; user-select:none;
-    box-shadow:0 4px 14px rgba(0,0,0,.25);
+    box-shadow:0 6px 18px rgba(0,0,0,.3);
   }
   .memory-card .face{display:none;}
   .memory-card.flipped .face, .memory-card.matched .face{display:block;}
@@ -707,12 +713,12 @@
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25);
   }
   .memory-card.matched{opacity:.55;}
-  .memory-card .back{font-size:34px; opacity:.8;}
+  .memory-card .back{font-size:38px; opacity:.8;}
   .memory-card.flipped .back, .memory-card.matched .back{display:none;}
   .memory-card .card-num{
-    position:absolute; top:6px; right:8px; font-size:13px; font-weight:800;
+    position:absolute; top:6px; right:8px; font-size:14px; font-weight:800;
     color:rgba(255,255,255,.9); background:rgba(0,0,0,.3); border-radius:999px;
-    width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+    width:26px; height:26px; display:flex; align-items:center; justify-content:center;
   }
 
   /* --- Catch the stars game --- */
@@ -966,9 +972,9 @@
       <div></div>
       <button id="mazeUp">⬆️</button>
       <div></div>
-      <button id="mazeLeft">➡️</button>
+      <button id="mazeLeft">⬅️</button>
       <div></div>
-      <button id="mazeRight">⬅️</button>
+      <button id="mazeRight">➡️</button>
       <div></div>
       <button id="mazeDown">⬇️</button>
       <div></div>
@@ -987,7 +993,7 @@
 
 <!-- Memory Match Game -->
 <div class="overlay" id="memoryOverlay">
-  <div class="panel">
+  <div class="panel memory-panel">
     <button class="close" id="memoryCloseBtn">✕</button>
     <div class="panel-head">
       <h2>🧠 لعبة الذاكرة</h2>
@@ -2824,7 +2830,7 @@ document.getElementById('mazeRight').addEventListener('click', ()=>moveMazePlaye
 
 document.addEventListener('keydown', (e)=>{
   if(!document.getElementById('mazeOverlay').classList.contains('open')) return;
-  const map = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'right', ArrowRight:'left' }; // RTL: flip left/right
+  const map = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right' };
   if(map[e.key]){ e.preventDefault(); moveMazePlayer(map[e.key]); }
 });
 
@@ -3004,14 +3010,15 @@ function endCatchGame(){
   if(catchState.score >= 8) celebrate();
 }
 
-document.getElementById('catchStartBtn').addEventListener('click', startCatchGame);
+document.getElementById('catchField').addEventListener('click', (e)=>{
+  if(e.target && e.target.id === 'catchStartBtn') startCatchGame();
+});
 document.getElementById('openCatchGame').addEventListener('click', ()=>{
   playOpenSound();
   document.getElementById('catchOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   const field = document.getElementById('catchField');
   field.innerHTML = '<button class="catch-start-btn" id="catchStartBtn">▶ ابدأ اللعبة</button>';
-  document.getElementById('catchStartBtn').addEventListener('click', startCatchGame);
   document.getElementById('catchWin').classList.remove('show');
 });
 function closeCatchGame(){

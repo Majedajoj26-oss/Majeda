@@ -266,6 +266,27 @@
 
   /* --- Printable progress report --- */
   .report-panel{max-width:600px;}
+
+  /* --- Teacher's editable session report --- */
+  .session-report-panel{max-width:520px;}
+  .sr-form-title{font-family:'Lalezar',sans-serif; color:var(--gold); font-size:20px; margin-bottom:10px; text-align:center;}
+  .sr-label{display:block; font-size:12px; color:var(--dim); margin:10px 0 4px;}
+  .sr-input{
+    width:100%; padding:9px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.06); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:14px;
+  }
+  .sr-textarea{resize:vertical; line-height:1.6;}
+  .sr-star-picker{display:flex; gap:6px; font-size:26px; justify-content:center; margin-top:4px;}
+  .sr-star-picker span{cursor:pointer; opacity:.3; transition:opacity .15s;}
+  .sr-star-picker span.on{opacity:1;}
+  .sr-preview-wrap{margin-top:18px;}
+  .sr-preview-card{
+    background:linear-gradient(160deg,#fffaf0,#fff4dd); border-radius:16px; padding:20px;
+    color:#3a2f10; border:2px solid #c9971f;
+  }
+  .sr-preview-header{text-align:center; font-size:22px; margin-bottom:10px;}
+  .sr-preview-body{font-size:15px; line-height:2.1; text-align:center; white-space:pre-wrap;}
+  .sr-preview-footer{text-align:center; font-size:11px; color:#8a6a12; margin-top:14px; border-top:1px dashed #c9971f; padding-top:8px;}
   .progress-report{
     background:linear-gradient(160deg,#fffaf0,#fff4dd); border-radius:14px; padding:6px; margin-top:10px;
   }
@@ -643,21 +664,13 @@
     line-height:2; margin-bottom:4px;
   }
   .ayah-speak-btn{
-    display:inline-flex; align-items:center; gap:4px;
-    padding:5px 12px; border-radius:999px; border:1px solid rgba(72,216,200,.4);
-    background:rgba(72,216,200,.12); color:var(--teal); font-family:'Tajawal',sans-serif;
-    font-size:12px; font-weight:700; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px; border-radius:50%; border:1px solid rgba(72,216,200,.4);
+    background:rgba(72,216,200,.14); color:var(--teal);
+    font-size:14px; cursor:pointer;
   }
-  .ayah-speak-btn:hover{background:rgba(72,216,200,.22);}
+  .ayah-speak-btn:hover{background:rgba(72,216,200,.24);}
   .ayah-speak-btn:disabled{opacity:.7; cursor:default;}
-  .ayah-reciter-btn{
-    display:inline-flex; align-items:center; gap:4px;
-    padding:5px 12px; border-radius:999px; border:1px solid rgba(255,201,76,.45);
-    background:rgba(255,201,76,.12); color:var(--gold); font-family:'Tajawal',sans-serif;
-    font-size:12px; font-weight:700; cursor:pointer;
-  }
-  .ayah-reciter-btn:hover{background:rgba(255,201,76,.22);}
-  .ayah-reciter-btn:disabled{opacity:.7; cursor:default;}
   .ayah-audio-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
   .ayah-explain{font-size:12.5px; color:var(--ink); opacity:.92;}
   .tafsir-loading{text-align:center; font-size:12.5px; color:var(--dim); padding:10px;}
@@ -734,6 +747,8 @@
     #certificateBody{ position:fixed; inset:0; margin:0; padding:20px; }
     #progressReportBody, #progressReportBody *{ visibility:visible; }
     #progressReportBody{ position:fixed; inset:0; margin:0; padding:20px; }
+    #srPreviewCard, #srPreviewCard *{ visibility:visible; }
+    #srPreviewCard{ position:fixed; inset:0; margin:0; padding:24px; }
     .no-print{ display:none !important; }
   }
 
@@ -958,6 +973,12 @@
     <p class="cert-empty" id="leaderboardEmpty">لا توجد نتائج محفوظة بعد. اجمع نجوماً ليظهر اسمك هنا!</p>
     <div class="leaderboard-list" id="leaderboardList"></div>
     <button class="report-btn" id="openReportBtn">📊 تقرير التقدّم القابل للطباعة</button>
+  </div>
+
+  <h2 class="section-title">📝 تقرير الحصة للمعلمة</h2>
+  <div class="leaderboard-wrap">
+    <p class="leaderboard-note">اكتبي تقريراً مخصصاً عن حصة اليوم، وحمّليه كصورة لإرساله لولي الأمر مباشرة 💌</p>
+    <button class="report-btn" id="openSessionReportBtn">📝 إنشاء تقرير حصة</button>
   </div>
 
   <h2 class="section-title">🔗 مصادر إضافية موثوقة</h2>
@@ -1214,6 +1235,43 @@
     <div class="result-btns no-print" style="margin-top:16px;">
       <button class="ghost-btn" id="reportPrintBtn">🖨️ طباعة / حفظ كـ PDF</button>
       <button class="ghost-btn" id="reportCloseBtn2">✨ إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- Editable Session Report for the teacher, downloadable to send to parents -->
+<div class="overlay" id="sessionReportOverlay">
+  <div class="panel session-report-panel" id="sessionReportPanel">
+    <button class="close no-print" id="sessionReportCloseBtn">✕</button>
+    <div class="sr-layout no-print">
+      <h3 class="sr-form-title">📝 بيانات التقرير</h3>
+      <label class="sr-label">اسم الطالب/ـة</label>
+      <input type="text" class="sr-input" id="srStudentName" placeholder="مثال: الأميرة لمى">
+      <label class="sr-label">رقم اللقاء</label>
+      <input type="number" class="sr-input" id="srSessionNum" placeholder="مثال: 5" min="1">
+      <label class="sr-label">ماذا تم تسميعه</label>
+      <input type="text" class="sr-input" id="srRecited" placeholder="مثال: سورة المعارج - 28">
+      <label class="sr-label">تكملة الحفظ من</label>
+      <input type="text" class="sr-input" id="srContinueFrom" placeholder="مثال: سورة المعارج - 35">
+      <label class="sr-label">التقييم</label>
+      <div class="sr-star-picker" id="srStarPicker">
+        <span data-v="1">⭐</span><span data-v="2">⭐</span><span data-v="3">⭐</span><span data-v="4">⭐</span><span data-v="5">⭐</span>
+      </div>
+      <label class="sr-label">ملاحظة ختامية</label>
+      <textarea class="sr-input sr-textarea" id="srNote" rows="3">أرجو متابعة الحفظ وتكرار الآيات بشكل ممتاز ومستمر حتى الحصة القادمة بإذن الله 🤩</textarea>
+    </div>
+
+    <div class="sr-preview-wrap">
+      <div class="sr-preview-card" id="srPreviewCard">
+        <div class="sr-preview-header">🌙⭐</div>
+        <div class="sr-preview-body" id="srPreviewBody"></div>
+        <div class="sr-preview-footer">رحلة بين نجوم القرآن</div>
+      </div>
+    </div>
+
+    <div class="result-btns no-print" style="margin-top:16px;">
+      <button class="ghost-btn" id="sessionReportPrintBtn">📥 تنزيل كصورة</button>
+      <button class="ghost-btn" id="sessionReportCloseBtn2">✨ إغلاق</button>
     </div>
   </div>
 </div>
@@ -1752,6 +1810,201 @@ document.getElementById('reportPrintBtn').addEventListener('click', ()=>{
   window.print();
 });
 
+/* ---------------- Teacher's editable, printable session report ---------------- */
+let srStars = 5;
+function buildSessionReportLines(){
+  const student = document.getElementById('srStudentName').value.trim() || 'الطالب/ـة';
+  const session = document.getElementById('srSessionNum').value.trim();
+  const recited = document.getElementById('srRecited').value.trim();
+  const continueFrom = document.getElementById('srContinueFrom').value.trim();
+  const note = document.getElementById('srNote').value.trim();
+  const starsLine = '⭐'.repeat(srStars) + '☆'.repeat(5 - srStars);
+
+  const lines = [];
+  if(session) lines.push(`تم اللقاء ${session}`);
+  lines.push(`مع *${student}* 🌹🌹`);
+  lines.push('');
+  if(recited) lines.push(`تم تسميع *${recited}*`);
+  if(continueFrom) lines.push(`وتكملة الحفظ من *${continueFrom}*`);
+  lines.push('');
+  lines.push(`التقييم: ${starsLine}`);
+  lines.push('');
+  lines.push('😍😍 👏🏻👏🏻');
+  lines.push('💪🏻💪🏻💪🏻 🤩 🤩 🤩');
+  if(note){ lines.push(''); lines.push(note); }
+  return lines;
+}
+function renderSessionReportPreview(){
+  document.getElementById('srPreviewBody').textContent = buildSessionReportLines().join('\n');
+}
+document.querySelectorAll('#sessionReportOverlay .sr-input').forEach(el=>{
+  el.addEventListener('input', renderSessionReportPreview);
+});
+document.querySelectorAll('#srStarPicker span').forEach(star=>{
+  star.addEventListener('click', ()=>{
+    srStars = Number(star.dataset.v);
+    document.querySelectorAll('#srStarPicker span').forEach(s=>{
+      s.classList.toggle('on', Number(s.dataset.v) <= srStars);
+    });
+    playClickTileSound();
+    renderSessionReportPreview();
+  });
+});
+document.getElementById('openSessionReportBtn').addEventListener('click', ()=>{
+  document.getElementById('srStudentName').value = playerName || '';
+  document.getElementById('srSessionNum').value = '';
+  document.getElementById('srRecited').value = '';
+  document.getElementById('srContinueFrom').value = '';
+  document.getElementById('srNote').value = 'أرجو متابعة الحفظ وتكرار الآيات بشكل ممتاز ومستمر حتى الحصة القادمة بإذن الله 🤩';
+  srStars = 5;
+  document.querySelectorAll('#srStarPicker span').forEach(s=>s.classList.add('on'));
+  renderSessionReportPreview();
+  document.getElementById('sessionReportOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+});
+function closeSessionReport(){
+  document.getElementById('sessionReportOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('sessionReportCloseBtn').addEventListener('click', closeSessionReport);
+document.getElementById('sessionReportCloseBtn2').addEventListener('click', closeSessionReport);
+document.getElementById('sessionReportOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='sessionReportOverlay') closeSessionReport();
+});
+document.getElementById('sessionReportPrintBtn').addEventListener('click', downloadSessionReportImage);
+
+/* Render the session report onto a canvas and trigger a real image download (no print dialog needed) */
+async function downloadSessionReportImage(){
+  const btn = document.getElementById('sessionReportPrintBtn');
+  const originalLabel = btn.textContent;
+  btn.textContent = '⏳ جاري إنشاء الصورة...';
+  btn.disabled = true;
+  try{
+    if(document.fonts && document.fonts.ready){
+      try{
+        await document.fonts.load('700 20px Tajawal');
+        await document.fonts.load('400 18px Tajawal');
+        await document.fonts.load('400 13px Tajawal');
+        await document.fonts.ready;
+      } catch(e){ /* fonts API not fully supported — proceed with fallback font */ }
+    }
+
+    const rawLines = buildSessionReportLines();
+    const width = 800;
+    const padding = 46;
+    const lineHeight = 34;
+    const maxTextWidth = width - padding*2;
+
+    const measureCanvas = document.createElement('canvas');
+    const mctx = measureCanvas.getContext('2d');
+
+    function wrapLine(text, font){
+      mctx.font = font;
+      const words = text.split(' ');
+      const wrapped = [];
+      let current = '';
+      for(const w of words){
+        const test = current ? current + ' ' + w : w;
+        if(mctx.measureText(test).width > maxTextWidth && current){
+          wrapped.push(current);
+          current = w;
+        } else {
+          current = test;
+        }
+      }
+      if(current) wrapped.push(current);
+      return wrapped;
+    }
+
+    // Build final render lines: {text, bold} — strip *asterisks*, mark bold lines gold
+    const renderLines = [];
+    rawLines.forEach(raw=>{
+      if(raw === ''){ renderLines.push({ text:'', blank:true }); return; }
+      const isBold = raw.includes('*');
+      const clean = raw.replace(/\*/g, '');
+      const font = isBold ? '700 19px Tajawal, sans-serif' : '400 18px Tajawal, sans-serif';
+      const wrapped = wrapLine(clean, font);
+      wrapped.forEach(w=>renderLines.push({ text:w, bold:isBold }));
+    });
+
+    const headerHeight = 70;
+    const footerHeight = 60;
+    let bodyHeight = 0;
+    renderLines.forEach(l=> bodyHeight += l.blank ? lineHeight*0.5 : lineHeight);
+    const totalHeight = Math.round(headerHeight + bodyHeight + footerHeight + padding*2);
+
+    const canvas = document.createElement('canvas');
+    const scale = 2; // sharper output
+    canvas.width = width*scale;
+    canvas.height = totalHeight*scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+
+    const grad = ctx.createLinearGradient(0,0,0,totalHeight);
+    grad.addColorStop(0, '#fffaf0');
+    grad.addColorStop(1, '#fff4dd');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,width,totalHeight);
+
+    ctx.strokeStyle = '#c9971f';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(9,9,width-18,totalHeight-18);
+
+    ctx.direction = 'rtl';
+    ctx.textAlign = 'center';
+
+    let y = padding + 26;
+    ctx.font = '32px sans-serif';
+    ctx.fillStyle = '#3a2f10';
+    ctx.fillText('🌙⭐', width/2, y);
+    y += 44;
+
+    renderLines.forEach(l=>{
+      if(l.blank){ y += lineHeight*0.5; return; }
+      ctx.font = l.bold ? '700 19px Tajawal, sans-serif' : '400 18px Tajawal, sans-serif';
+      ctx.fillStyle = l.bold ? '#8a6a12' : '#3a2f10';
+      ctx.fillText(l.text, width/2, y);
+      y += lineHeight;
+    });
+
+    y += 6;
+    ctx.setLineDash([5,5]);
+    ctx.strokeStyle = '#c9971f';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(width-padding, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    y += 28;
+    ctx.font = '400 13px Tajawal, sans-serif';
+    ctx.fillStyle = '#8a6a12';
+    ctx.fillText('رحلة بين نجوم القرآن', width/2, y);
+
+    canvas.toBlob(blob=>{
+      if(!blob){
+        btn.textContent = '⚠️ تعذّر إنشاء الصورة';
+        setTimeout(()=>{ btn.textContent = originalLabel; btn.disabled = false; }, 2200);
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'تقرير_الحصة.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+      btn.textContent = originalLabel;
+      btn.disabled = false;
+    }, 'image/png');
+  } catch(e){
+    btn.textContent = '⚠️ تعذّر إنشاء الصورة';
+    setTimeout(()=>{ btn.textContent = originalLabel; btn.disabled = false; }, 2200);
+  }
+}
+
 const nameInput = document.getElementById('playerNameInput');
 nameInput.addEventListener('input', ()=>{
   playerName = nameInput.value.trim();
@@ -2001,29 +2254,25 @@ async function renderTafsir(){
     item.className = 'tafsir-item';
     const arabicText = verseTexts ? (verseTexts[i] || '') : '';
     const arabic = verseTexts ? `<div class="ayah-text">${arabicText}</div>` : '';
-    const speakBtn = arabicText ? `<button class="ayah-speak-btn" data-text="${arabicText.replace(/"/g,'&quot;')}" title="استمع للآية ببطء (صوت الجهاز)">🔊 قراءة آلية بطيئة</button>` : '';
-    const reciterBtn = `<button class="ayah-reciter-btn" data-surah="${s.n}" data-ayah="${i+1}" title="استمع بصوت الشيخ أحمد العجمي">🎙️ صوت الشيخ العجمي</button>`;
-    item.innerHTML = `<span class="vnum">${i+1}</span><div>${arabic}<div class="ayah-audio-row">${speakBtn}${reciterBtn}</div><div class="ayah-explain">${text}</div></div>`;
+    const speakBtn = arabicText ? `<button class="ayah-speak-btn" data-text="${arabicText.replace(/"/g,'&quot;')}" title="استمع للآية">🔊</button>` : '';
+    item.innerHTML = `<span class="vnum">${i+1}</span><div>${arabic}<div class="ayah-audio-row">${speakBtn}</div><div class="ayah-explain">${text}</div></div>`;
     list.appendChild(item);
-  });
-  list.querySelectorAll('.ayah-reciter-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>playReciterAyah(btn.dataset.surah, btn.dataset.ayah, btn));
   });
   list.querySelectorAll('.ayah-speak-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>speakAyahSlowly(btn.dataset.text, btn));
   });
 }
 
-/* ---------------- Slow, child-friendly read-aloud for ayahs (uses the browser's built-in voice) ---------------- */
+/* ---------------- Simple, reliable read-aloud using the browser's built-in voice (no internet needed) ---------------- */
 function speakAyahSlowly(text, btn){
   if(!('speechSynthesis' in window)){
-    if(btn) btn.textContent = '⚠️ غير مدعوم في هذا المتصفح';
+    if(btn) btn.textContent = '⚠️';
     return;
   }
   window.speechSynthesis.cancel(); // stop any currently playing speech first
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ar-SA';
-  utterance.rate = 0.6;   // slow pace suitable for kids
+  utterance.rate = 0.7;
   utterance.pitch = 1.05;
   const voices = window.speechSynthesis.getVoices();
   const arabicVoice = voices.find(v => v.lang && v.lang.startsWith('ar'));
@@ -2031,45 +2280,12 @@ function speakAyahSlowly(text, btn){
 
   if(btn){
     const original = btn.textContent;
-    btn.textContent = '⏸️ جاري القراءة...';
+    btn.textContent = '⏸️';
     btn.disabled = true;
     utterance.onend = ()=>{ btn.textContent = original; btn.disabled = false; };
     utterance.onerror = ()=>{ btn.textContent = original; btn.disabled = false; };
   }
   window.speechSynthesis.speak(utterance);
-}
-
-/* ---------------- Real reciter audio per ayah (Sheikh Ahmed Al-Ajmi, via a public Quran audio CDN) ---------------- */
-let currentReciterAudio = null;
-async function playReciterAyah(surahNum, ayahNum, btn){
-  if(currentReciterAudio){ currentReciterAudio.pause(); currentReciterAudio = null; }
-  const original = btn.textContent;
-  btn.textContent = '⏳ جاري التحميل...';
-  btn.disabled = true;
-  try{
-    const controller = new AbortController();
-    const timeoutId = setTimeout(()=>controller.abort(), 8000);
-    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${surahNum}:${ayahNum}/ar.ajamy`, { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if(!res.ok) throw new Error('network');
-    const json = await res.json();
-    const audioUrl = json.data && (json.data.audio || (json.data.audioSecondary && json.data.audioSecondary[0]));
-    if(!audioUrl) throw new Error('no audio url');
-
-    const audio = new Audio(audioUrl);
-    audio.playbackRate = 0.8; // slightly slower, more suitable for children
-    currentReciterAudio = audio;
-    btn.textContent = '⏸️ جاري القراءة...';
-    audio.play().catch(()=>{ throw new Error('play failed'); });
-    audio.onended = ()=>{ btn.textContent = original; btn.disabled = false; currentReciterAudio = null; };
-    audio.onerror = ()=>{
-      btn.textContent = '⚠️ تعذّر تشغيل الصوت';
-      setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 2000);
-    };
-  } catch(e){
-    btn.textContent = '⚠️ تعذّر الاتصال بالإنترنت';
-    setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 2000);
-  }
 }
 document.getElementById('tafsirBtn').addEventListener('click', ()=>{
   const panel = document.getElementById('tafsirPanel');

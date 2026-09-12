@@ -2272,8 +2272,7 @@ function speakAyahSlowly(text, btn){
   window.speechSynthesis.cancel(); // stop any currently playing speech first
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ar-SA';
-  utterance.rate = 0.7;
-  utterance.pitch = 1.05;
+  // rate and pitch left at their default (1.0) — plays exactly as the voice normally reads, unmodified
   const voices = window.speechSynthesis.getVoices();
   const arabicVoice = voices.find(v => v.lang && v.lang.startsWith('ar'));
   if(arabicVoice) utterance.voice = arabicVoice;

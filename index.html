@@ -15,6 +15,7 @@
 <link rel="icon" href="icon-192.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://cdn.islamic.network" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -2271,9 +2272,10 @@ function globalAyahNumber(surahNum, ayahNum){
   return offset + ayahNum;
 }
 let currentReciterAudio = null;
-async function playReciterAyah(surahNum, ayahNum, btn){
+async function playReciterAyah(surahNum, ayahNum, btn, isRetry){
   if(currentReciterAudio){ currentReciterAudio.pause(); currentReciterAudio = null; }
-  const original = btn.textContent;
+  const original = btn.dataset.originalIcon || btn.textContent;
+  btn.dataset.originalIcon = original;
   btn.textContent = '⏳';
   btn.disabled = true;
   try{
@@ -2282,23 +2284,25 @@ async function playReciterAyah(surahNum, ayahNum, btn){
     const audio = new Audio(audioUrl);
     currentReciterAudio = audio;
 
-    await new Promise((resolve, reject)=>{
-      const timeoutId = setTimeout(()=>reject(new Error('timeout')), 15000);
-      audio.addEventListener('canplaythrough', ()=>{ clearTimeout(timeoutId); resolve(); }, { once:true });
-      audio.addEventListener('error', ()=>{ clearTimeout(timeoutId); reject(new Error('load failed')); }, { once:true });
-      audio.load();
-    });
+    audio.onended = ()=>{ btn.textContent = original; btn.disabled = false; currentReciterAudio = null; };
+    audio.onerror = ()=>{
+      if(!isRetry){
+        playReciterAyah(surahNum, ayahNum, btn, true); // one silent retry — handles cold-start hiccups
+      } else {
+        btn.textContent = '⚠️';
+        setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 2200);
+      }
+    };
 
     btn.textContent = '⏸️';
     await audio.play();
-    audio.onended = ()=>{ btn.textContent = original; btn.disabled = false; currentReciterAudio = null; };
-    audio.onerror = ()=>{
+  } catch(e){
+    if(!isRetry){
+      playReciterAyah(surahNum, ayahNum, btn, true);
+    } else {
       btn.textContent = '⚠️';
       setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 2200);
-    };
-  } catch(e){
-    btn.textContent = '⚠️';
-    setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 2200);
+    }
   }
 }
 document.getElementById('tafsirBtn').addEventListener('click', ()=>{

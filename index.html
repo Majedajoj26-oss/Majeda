@@ -76,7 +76,7 @@
   }
   .medal-3d-centerpiece{
     position:fixed; top:38%; left:50%; z-index:10000; pointer-events:none;
-    font-size:110px; filter:drop-shadow(0 10px 30px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(255,201,76,.6));
+    font-size:110px; text-shadow:0 0 30px rgba(255,201,76,.9);
     animation:medal-3d-spin 2.2s cubic-bezier(.34,1.56,.64,1) forwards;
   }
   @keyframes flash-fade{
@@ -92,17 +92,25 @@
   }
   header .badge{
     display:inline-block; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
-    padding:6px 18px; border-radius:999px; font-size:13px; color:var(--gold); letter-spacing:1px;
+    padding:8px 22px; border-radius:999px; font-size:16px; color:var(--gold); letter-spacing:1px;
     margin-bottom:14px;
   }
+  .hero-title-wrap{position:relative; display:inline-block; padding:6px 10px; max-width:100%;}
+  .hero-moon{font-size:clamp(54px,14vw,96px); line-height:1; display:block; margin:0 auto 4px; animation:hero-float 3.2s ease-in-out infinite; filter:drop-shadow(0 0 22px rgba(255,201,76,.7));}
+  .hero-deco{position:absolute; font-size:clamp(20px,5vw,34px); animation:hero-twinkle 2.4s ease-in-out infinite; pointer-events:none;}
+  @keyframes hero-float{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+  @keyframes hero-twinkle{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.25);}}
+  @keyframes hero-shine{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+  header{background:radial-gradient(ellipse at 50% 0%, rgba(155,123,255,.35), transparent 70%); border-bottom:2px solid rgba(255,201,76,.25);}
   h1{
-    font-family:'Lalezar',sans-serif; font-size:clamp(32px,6vw,58px); font-weight:400;
-    background:linear-gradient(90deg,var(--gold),var(--pink),var(--teal));
+    font-family:'Lalezar',sans-serif; font-size:clamp(46px,12vw,92px); font-weight:400;
+    background-size:200% auto; animation:hero-shine 5s linear infinite;
+    background-image:linear-gradient(90deg,var(--gold),var(--pink),var(--teal),var(--gold));
     -webkit-background-clip:text; background-clip:text; color:transparent;
-    line-height:1.3;
-    filter:drop-shadow(0 0 18px rgba(255,201,76,.45)) drop-shadow(0 0 34px rgba(255,111,165,.25));
+    line-height:1.25;
+    filter:drop-shadow(0 0 18px rgba(255,201,76,.45));
   }
-  header p.sub{color:var(--dim); font-size:15px; margin-top:8px; max-width:520px; margin-inline:auto;}
+  header p.sub{color:var(--dim); font-size:17px; margin-top:8px; max-width:520px; margin-inline:auto;}
 
   .name-row{
     display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px; flex-wrap:wrap;
@@ -180,6 +188,43 @@
   .juz-choice .juz-icon{font-size:34px;}
   .juz-choice .juz-name{font-family:'Lalezar',sans-serif; font-size:24px; color:var(--gold);}
   .juz-choice .juz-sub{font-size:11px; color:var(--dim); text-align:center;}
+
+
+  /* ===== Eye-catching front page ===== */
+  header{overflow:hidden; padding:34px 16px 70px;}
+  header::before{content:""; position:absolute; top:-80px; left:50%; width:420px; height:420px; margin-left:-210px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,201,76,.28), transparent 65%); animation:hero-pulse 4s ease-in-out infinite; z-index:-1;}
+  @keyframes hero-pulse{0%,100%{transform:scale(.9); opacity:.7;}50%{transform:scale(1.15); opacity:1;}}
+  .hero-skyline{position:absolute; left:0; right:0; bottom:0; width:100%; height:70px; z-index:0; display:block; filter:drop-shadow(0 -4px 10px rgba(255,201,76,.35));}
+  .shoot{position:absolute; top:0; width:110px; height:3px; border-radius:3px; z-index:-1;
+    background:linear-gradient(90deg, transparent, #fff); opacity:0; transform:rotate(35deg);}
+  .shoot.s1{right:10%; animation:shoot 5s linear infinite 1s;}
+  .shoot.s2{right:55%; top:30px; animation:shoot 6.5s linear infinite 3s;}
+  @keyframes shoot{0%{opacity:0; transform:translate(0,0) rotate(35deg);}4%{opacity:1;}22%{opacity:0; transform:translate(-260px,190px) rotate(35deg);}100%{opacity:0;}}
+  .designer-top-credit{font-size:15px; font-weight:700;}
+  header .badge{animation:badge-glow 2.6s ease-in-out infinite;}
+  @keyframes badge-glow{0%,100%{box-shadow:0 0 0 rgba(255,201,76,0);}50%{box-shadow:0 0 22px rgba(255,201,76,.55);}}
+  .mascot{font-size:56px; animation:hero-float 2.6s ease-in-out infinite;}
+  .speech{font-size:16px; border:2px solid rgba(255,201,76,.5);}
+  .name-row input{font-size:17px; padding:11px 20px; width:230px; border:2px solid rgba(255,201,76,.5);}
+  .name-row label{font-size:17px; color:var(--gold); font-weight:700;}
+
+  .juz-selector{gap:16px; max-width:640px;}
+  .juz-choice{padding:22px 12px; border-radius:24px; border:2px solid rgba(255,255,255,.25); position:relative; overflow:hidden;
+    background:linear-gradient(160deg, var(--c1,rgba(255,255,255,.1)), var(--c2,rgba(255,255,255,.03)));}
+  .juz-choice:hover{transform:translateY(-4px) scale(1.03);}
+  .juz-choice .juz-icon{font-size:52px; animation:hero-float 3s ease-in-out infinite;}
+  .juz-choice .juz-name{font-size:34px; text-shadow:0 0 14px rgba(255,201,76,.5);}
+  .juz-choice .juz-sub{font-size:13px;}
+  #juzChoice-amma{--c1:rgba(255,201,76,.28); --c2:rgba(255,111,165,.12);}
+  #juzChoice-tabarak{--c1:rgba(72,216,200,.28); --c2:rgba(155,123,255,.12);}
+  #juzChoice-juz27{--c1:rgba(155,123,255,.3); --c2:rgba(255,111,165,.12);}
+  #juzChoice-juz26{--c1:rgba(255,201,76,.3); --c2:rgba(155,123,255,.12);}
+  #juzChoice-juz25{--c1:rgba(110,231,183,.3); --c2:rgba(255,159,90,.12);}
+  #juzChoice-juz28{--c1:rgba(255,159,90,.28); --c2:rgba(72,216,200,.12);}
+  .juz-choice.active{border-color:var(--gold); box-shadow:0 0 28px rgba(255,201,76,.55); animation:active-pulse 2.2s ease-in-out infinite;}
+  @keyframes active-pulse{0%,100%{box-shadow:0 0 16px rgba(255,201,76,.35);}50%{box-shadow:0 0 36px rgba(255,201,76,.8);}}
+  @media (prefers-reduced-motion:reduce){ *{animation-duration:.01s !important; animation-iteration-count:1 !important;} }
 
   .section-title{
     font-family:'Lalezar',sans-serif; font-weight:400; font-size:26px; text-align:center;
@@ -367,6 +412,47 @@
   .card.completed{border-color:var(--gold);}
 
   /* Modal */
+
+  /* ===== Garden + companion ===== */
+  .garden-open-btn{display:block; margin:16px auto 0; padding:14px 30px; border:none; border-radius:999px; cursor:pointer;
+    font-family:'Lalezar',sans-serif; font-size:24px; color:#06301f; background:linear-gradient(90deg,#6ee7b7,#ffc94c);
+    box-shadow:0 0 24px rgba(110,231,183,.6); animation:active-pulse 2.4s ease-in-out infinite;}
+  .garden-sky{border-radius:22px; padding:14px 10px 16px; margin-bottom:14px; position:relative; overflow:hidden;
+    background:linear-gradient(180deg,#2b6cb0 0%,#7ed0ff 55%,#9be58f 56%,#4cae5a 100%); border:2px solid rgba(255,255,255,.3);}
+  .garden-sky.night{background:linear-gradient(180deg,#0b1040 0%,#2a1f8f 55%,#2f8f4a 56%,#1d5e33 100%);}
+  .garden-deco{display:flex; justify-content:center; gap:14px; font-size:30px; min-height:38px; flex-wrap:wrap;}
+  .garden-deco span{animation:hero-float 3s ease-in-out infinite;}
+  .companion-box{text-align:center; margin:6px 0 4px; position:relative;}
+  .comp-acc{font-size:34px; height:36px; line-height:36px;}
+  .comp-body{font-size:96px; line-height:1; cursor:pointer; display:inline-block; filter:drop-shadow(0 6px 8px rgba(0,0,0,.3)); transition:transform .2s;}
+  .comp-body.bounce{animation:comp-bounce .6s;}
+  @keyframes comp-bounce{0%,100%{transform:translateY(0) scale(1);}30%{transform:translateY(-26px) scale(1.12) rotate(-6deg);}60%{transform:translateY(0) scale(.95) rotate(5deg);}}
+  .comp-name{font-family:'Lalezar',sans-serif; font-size:22px; color:#fff; text-shadow:0 2px 6px rgba(0,0,0,.5);}
+  .comp-level{font-size:13px; color:#fff; background:rgba(0,0,0,.35); display:inline-block; padding:3px 12px; border-radius:999px;}
+  .comp-speech{background:#fff; color:#2a1f5e; border-radius:16px; padding:10px 14px; margin:8px auto 0; max-width:330px; font-size:14px; font-weight:700; line-height:1.6; position:relative;}
+  .comp-heart{position:absolute; font-size:24px; pointer-events:none; animation:heart-up 1s ease-out forwards;}
+  @keyframes heart-up{0%{opacity:1; transform:translateY(0) scale(.6);}100%{opacity:0; transform:translateY(-80px) scale(1.2);}}
+  .gd-xp{height:12px; border-radius:999px; background:rgba(0,0,0,.3); max-width:300px; margin:8px auto 0; overflow:hidden;}
+  .gd-xp i{display:block; height:100%; background:linear-gradient(90deg,var(--gold),var(--pink)); width:0; transition:width .6s;}
+  .gd-juz{font-family:'Lalezar',sans-serif; color:var(--gold); font-size:20px; margin:14px 0 8px; text-align:center;}
+  .gd-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(66px,1fr)); gap:8px;}
+  .gd-plot{background:linear-gradient(180deg,#6b4a2b,#4d321b); border-radius:12px; padding:6px 2px 4px; text-align:center; cursor:pointer; border:2px solid rgba(255,255,255,.12); color:#fff;}
+  .gd-plot .pl{font-size:34px; line-height:1.2; display:block;}
+  .gd-plot .pl.g3{animation:hero-float 3s ease-in-out infinite;}
+  .gd-plot .nm{font-size:10px; display:block; line-height:1.3; min-height:26px; padding:0 2px;}
+  .gd-plot.full{border-color:var(--gold); box-shadow:0 0 14px rgba(255,201,76,.6);}
+  .gd-info{min-height:24px; text-align:center; font-size:14px; font-weight:700; color:var(--gold); margin-top:10px;}
+  .wardrobe{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:10px 0;}
+  .wardrobe button{width:56px; height:56px; font-size:28px; border-radius:14px; border:2px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); cursor:pointer; position:relative;}
+  .wardrobe button.on{border-color:var(--gold); background:rgba(255,201,76,.25);}
+  .wardrobe button.lock{opacity:.4; filter:grayscale(1);}
+  .wardrobe button small{position:absolute; bottom:-2px; left:0; right:0; font-size:9px; color:#fff;}
+  .pick-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:12px 0;}
+  .pick-grid button{font-size:52px; padding:10px 0; border-radius:16px; border:2px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); cursor:pointer;}
+  .pick-grid button.on{border-color:var(--gold); background:rgba(255,201,76,.25); box-shadow:0 0 16px rgba(255,201,76,.6);}
+  .pick-name{display:block; margin:0 auto 12px; padding:12px 18px; width:80%; max-width:280px; border-radius:999px; text-align:center;
+    background:rgba(255,255,255,.1); border:2px solid rgba(255,201,76,.5); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:18px; outline:none;}
+
   .overlay{
     position:fixed; inset:0; background:rgba(6,8,32,.88); backdrop-filter:blur(6px);
     z-index:100; display:none; align-items:flex-start; justify-content:center;
@@ -547,6 +633,114 @@
     .t-ayah-text{font-size:18px;}
     .t-ayah-tafsir{font-size:14px;}
   }
+
+
+  /* ===== Treasure hunt ===== */
+  .treasure-btn{display:block; width:100%; max-width:280px; margin:10px auto 0; padding:11px 18px; border-radius:999px; cursor:pointer;
+    font-family:'Tajawal',sans-serif; font-weight:800; font-size:15px; color:#2a1500; border:none;
+    background:linear-gradient(90deg,#ffc94c,#ff9f5a); box-shadow:0 0 18px rgba(255,201,76,.5); animation:active-pulse 2.4s ease-in-out infinite;}
+  .treasure-panel{display:none; margin-top:16px;}
+  .treasure-panel.open{display:block; animation:pop .3s ease;}
+  .tq-map{display:flex; justify-content:center; align-items:center; gap:4px; flex-wrap:nowrap; margin-bottom:14px; direction:rtl;}
+  .tq-node{width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; cursor:pointer;
+    background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.25); flex-shrink:0; position:relative;}
+  .tq-node.done{background:linear-gradient(160deg,var(--teal),var(--mint)); border-color:#fff;}
+  .tq-node.current{border-color:var(--gold); box-shadow:0 0 18px rgba(255,201,76,.8); animation:active-pulse 1.8s ease-in-out infinite;}
+  .tq-node.locked{opacity:.4; cursor:not-allowed; filter:grayscale(.8);}
+  @media (max-width:420px){ .tq-node{width:38px; height:38px; font-size:18px;} .tq-link{width:8px !important;} }
+  .tq-link{width:12px; height:4px; border-radius:2px; background:rgba(255,255,255,.2); flex-shrink:0;}
+  .tq-link.done{background:var(--mint);}
+  .tq-title{font-family:'Lalezar',sans-serif; font-size:24px; color:var(--gold); text-align:center;}
+  .tq-hint{font-size:14px; color:var(--dim); text-align:center; margin:4px 0 14px;}
+  .tq-q{font-size:18px; text-align:center; margin:8px 0 12px; line-height:1.8;}
+  .tq-q b{color:var(--gold); font-family:'Lalezar',sans-serif; font-size:26px;}
+  .tq-opts{display:grid; gap:10px;}
+  .tq-opt{padding:14px 12px; border-radius:14px; border:2px solid rgba(255,255,255,.22); background:rgba(255,255,255,.07); color:var(--ink);
+    font-family:'Tajawal',sans-serif; font-size:16px; cursor:pointer; line-height:1.6;}
+  .tq-opt:hover{background:rgba(255,255,255,.15);}
+  .tq-opt.ok{background:rgba(110,231,183,.3); border-color:var(--mint);}
+  .tq-opt.bad{background:rgba(255,90,110,.25); border-color:#ff5a6e; animation:tq-shake .4s;}
+  .tq-opt.sel{border-color:var(--gold); background:rgba(255,201,76,.2);}
+  @keyframes tq-shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+  .tq-msg{min-height:26px; text-align:center; font-size:15px; font-weight:700; margin-top:10px;}
+  .tq-dots{text-align:center; font-size:20px; letter-spacing:6px; margin-bottom:6px;}
+  .tq-tf{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .tq-chips{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; direction:rtl; margin:10px 0;}
+  .tq-chips .tq-opt{padding:10px 14px; font-size:15px;}
+  .tq-mem{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; direction:ltr;}
+  .tq-card{min-height:96px; border-radius:14px; border:2px solid rgba(255,255,255,.3); cursor:pointer; padding:6px; font-family:'Tajawal',sans-serif;
+    font-size:13px; line-height:1.5; color:var(--ink); background:linear-gradient(160deg,var(--purple),var(--pink)); direction:rtl;
+    display:flex; align-items:center; justify-content:center; text-align:center; transition:transform .25s;}
+  .tq-card.up.word{background:linear-gradient(160deg,#ffc94c,#ff9f5a); color:#2a1500; font-size:18px; font-weight:800;}
+  .tq-card.up.mean{background:linear-gradient(160deg,var(--teal),var(--mint)); color:#10303a;}
+  .tq-card.matched{box-shadow:0 0 16px rgba(110,231,183,.8); border-color:#fff;}
+  .tq-card.down{font-size:34px;}
+  .tq-answer{min-height:58px; border:2px dashed rgba(255,201,76,.6); border-radius:14px; padding:8px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; direction:rtl;}
+  .tq-chest{font-size:110px; text-align:center; cursor:pointer; animation:hero-float 2.2s ease-in-out infinite; filter:drop-shadow(0 0 24px rgba(255,201,76,.8));}
+  .tq-chest.open{animation:none; transform:scale(1.2);}
+  .tq-loot{font-size:44px; text-align:center; letter-spacing:8px;}
+
+
+  /* ===== Journey map (5 stations) ===== */
+  .jy-wrap{margin:18px 0 6px; padding:14px 10px 16px; border-radius:22px; border:2px solid rgba(255,201,76,.55);
+    background:linear-gradient(170deg,rgba(255,201,76,.14),rgba(155,123,255,.12));}
+  .jy-title{font-family:'Lalezar',sans-serif; font-size:26px; color:var(--gold); text-align:center;}
+  .jy-sub{font-size:13px; color:var(--dim); text-align:center; margin-bottom:12px;}
+  .jy-path{display:flex; align-items:flex-start; justify-content:center; direction:rtl; margin-bottom:14px;}
+  .jy-st{display:flex; flex-direction:column; align-items:center; width:62px; cursor:pointer; flex-shrink:0;}
+  .jy-dot{width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px;
+    background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.25);}
+  .jy-st small{font-size:11px; color:var(--dim); margin-top:4px; text-align:center; line-height:1.3;}
+  .jy-st.done .jy-dot{background:linear-gradient(160deg,var(--teal),var(--mint)); border-color:#fff;}
+  .jy-st.cur .jy-dot{border-color:var(--gold); box-shadow:0 0 18px rgba(255,201,76,.9); animation:active-pulse 1.8s ease-in-out infinite;}
+  .jy-st.cur small{color:var(--gold); font-weight:700;}
+  .jy-st.lock{opacity:.4; cursor:not-allowed; filter:grayscale(.8);}
+  .jy-line{width:12px; height:4px; border-radius:2px; background:rgba(255,255,255,.2); margin-top:22px; flex-shrink:0;}
+  .jy-line.done{background:var(--mint);}
+  .jy-body{background:rgba(0,0,0,.2); border-radius:16px; padding:14px 12px;}
+  .jy-h{font-family:'Lalezar',sans-serif; font-size:22px; color:var(--gold); text-align:center; margin-bottom:4px;}
+  .jy-p{font-size:15px; line-height:1.9; text-align:center; margin-bottom:10px;}
+  .jy-cards{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0;}
+  .jy-card{min-height:76px; border-radius:14px; padding:8px; border:2px solid rgba(255,255,255,.28); cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-size:14px; line-height:1.6; color:var(--ink); background:linear-gradient(160deg,var(--purple),var(--pink)); display:flex; align-items:center; justify-content:center; text-align:center;}
+  .jy-card.open{background:linear-gradient(160deg,var(--teal),var(--mint)); color:#10303a; font-weight:700;}
+  .jy-card.word{font-size:20px; font-family:'Lalezar',sans-serif;}
+  .jy-ayah{display:flex; gap:10px; align-items:center; padding:8px 4px; border-bottom:1px dashed rgba(255,255,255,.15);}
+  .jy-ayah .tx{flex:1; font-family:'Amiri',serif; font-size:20px; line-height:2; text-align:center; direction:rtl;}
+  .jy-ayah .vn{width:28px; height:28px; border-radius:50%; background:var(--gold); color:#2a1500; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0;}
+  .jy-ayah .ayah-speak-btn{flex-shrink:0;}
+  .jy-go{display:block; margin:12px auto 0; padding:12px 28px; border:none; border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:800; font-size:17px;
+    color:#2a1500; background:linear-gradient(90deg,#ffc94c,#ff9f5a);}
+  .jy-go[disabled]{opacity:.4; cursor:not-allowed;}
+  .jy-gold{font-size:90px; text-align:center; animation:hero-float 2.4s ease-in-out infinite; filter:drop-shadow(0 0 24px rgba(255,201,76,.9));}
+  .gold-star-badge{position:absolute; top:6px; right:8px; font-size:22px; filter:drop-shadow(0 0 6px rgba(255,201,76,.9));}
+  .free-toggle{display:block; margin:14px auto 0; padding:9px 20px; border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:700; font-size:13px;
+    color:var(--ink); background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.3);}
+  .free-acts{display:block;}
+  #tafsirBtn,#treasureBtn,#surahGamesBtn,#playBtn{display:none !important;}
+  .jy-body-written{font-family:'Amiri',serif; font-size:26px; line-height:2.3; text-align:justify; text-align-last:center; direction:rtl; padding:6px 4px;}
+  .jy-body-written .an{display:inline-block; color:var(--gold); font-size:18px; margin:0 4px;}
+  .jy-sec-h{font-family:'Lalezar',sans-serif; font-size:24px; color:#2a1500; text-align:center; margin:26px 0 10px; padding:8px 12px; border-radius:14px; background:linear-gradient(90deg,#ffc94c,#ff9f5a); box-shadow:0 0 16px rgba(255,201,76,.4);}
+
+
+  .journey-start-btn{display:block; width:100%; max-width:280px; margin:14px auto 0; padding:12px 18px; border:none; border-radius:999px; cursor:pointer;
+    font-family:'Tajawal',sans-serif; font-weight:800; font-size:17px; color:#2a1500; background:linear-gradient(90deg,#ffc94c,#ff9f5a);
+    box-shadow:0 0 20px rgba(255,201,76,.55); animation:active-pulse 2.4s ease-in-out infinite;}
+  #panel:not(.jy-mode) #journeyPanel, #panel:not(.jy-mode) .jy-sec-h{display:none;}
+  #panel.jy-mode .mindmap-note, #panel.jy-mode .orbit-wrap, #panel.jy-mode #celebrateInlineBtn, #panel.jy-mode #journeyStartBtn, #panel.jy-mode #teacherModeBtn{display:none;}
+  .jy-back{display:block; margin:0 auto 10px; padding:8px 18px; border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:700; font-size:14px;
+    color:var(--ink); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3);}
+  #panel.jy-mode:not(.jy-s1) #jyH1, #panel.jy-mode:not(.jy-s1) #jyBody{display:none !important;}
+  #panel.jy-mode:not(.jy-s2) #jyH2, #panel.jy-mode:not(.jy-s2) #tafsirPanel{display:none !important;}
+  #panel.jy-mode:not(.jy-s3) #jyH3, #panel.jy-mode:not(.jy-s3) #treasurePanel{display:none !important;}
+  #panel.jy-mode:not(.jy-s4) #jyH4, #panel.jy-mode:not(.jy-s4) #surahGamesPanel{display:none !important;}
+  #panel.jy-mode:not(.jy-s5) #jyH5, #panel.jy-mode:not(.jy-s5) #quiz{display:none !important;}
+  .jy-nav{display:none; justify-content:center; gap:12px; margin:14px 0 4px;}
+  #panel.jy-mode .jy-nav{display:flex;}
+  .jy-nav button{padding:11px 22px; border:none; border-radius:999px; cursor:pointer; font-family:'Tajawal',sans-serif; font-weight:800; font-size:16px; color:#2a1500; background:linear-gradient(90deg,#ffc94c,#ff9f5a);}
+  .jy-nav button.sec{background:rgba(255,255,255,.12); color:var(--ink); border:1px solid rgba(255,255,255,.3);}
+  .jy-nav button[disabled]{opacity:.35; cursor:not-allowed;}
+  .jy-station-note{text-align:center; font-size:12px; color:var(--dim); margin-top:6px;}
 
   .surahgames-panel{display:none; margin-top:16px;}
   .surahgames-panel.open{display:block; animation:pop .3s ease;}
@@ -756,21 +950,23 @@
   footer{position:relative; z-index:2; text-align:center; padding:30px 16px; color:var(--dim); font-size:13px;}
   .designer-credit{display:inline-block; margin-top:6px; font-size:12px; color:var(--gold); opacity:.85;}
 
-  /* --- Spot the difference game --- */
+  /* --- Spot the difference game (original illustrated scene) --- */
+  .diff-panel{max-width:820px;}
   .diff-status{display:flex; justify-content:space-between; align-items:center; margin:14px 0 6px; font-size:13px; color:var(--dim);}
-  .diff-boards{display:flex; flex-direction:column; gap:16px; align-items:center;}
-  .diff-board{
-    display:grid; grid-template-columns:repeat(6,1fr); gap:7px; width:100%; max-width:460px;
+  .diff-scene-boards{display:flex; flex-wrap:wrap; gap:16px; justify-content:center;}
+  .diff-scene-wrap{
+    width:100%; max-width:320px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.16);
+    background:#0a0e3d; position:relative; cursor:pointer; touch-action:manipulation;
   }
-  .diff-cell{
-    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
-    font-size:26px; border-radius:12px; background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.14); cursor:pointer; user-select:none; position:relative;
+  .diff-scene-wrap svg{display:block; width:100%; height:auto;}
+  .diff-board-label{font-size:12px; color:var(--dim); text-align:center; margin-bottom:6px;}
+  .diff-hit-marker{
+    position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%;
+    border:3px solid #6ee7b7; box-shadow:0 0 12px rgba(110,231,183,.7); pointer-events:none;
+    animation:pop .3s ease;
   }
-  .diff-board.left .diff-cell{cursor:default;}
-  .diff-cell.found{background:rgba(110,231,183,.3); border-color:var(--mint);}
-  .diff-cell.wrong{animation:shake .3s ease;}
-  .diff-board-label{font-size:12px; color:var(--dim); text-align:center; margin-bottom:-8px;}
+  .diff-wrong-flash{position:absolute; inset:0; background:rgba(255,111,165,.25); animation:diff-flash .3s ease; pointer-events:none;}
+  @keyframes diff-flash{0%{opacity:1;} 100%{opacity:0;}}
   .diff-win{display:none; text-align:center; margin-top:14px;}
   .diff-win.show{display:block; animation:pop .4s ease;}
 
@@ -886,9 +1082,19 @@
 <button class="fireworks-fab" id="fireworksBtn">🎆 احتفال!</button>
 
 <header>
+  <svg class="hero-skyline" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#2a1f8f" stroke="#ffc94c" stroke-opacity=".6" stroke-width="1.2" d="M0 64V48h30V40q10-16 20 0v8h20V30h4V18q4-8 8 0v12h4v18h24V38q18-26 36 0v10h30V44h10V30l6-12 6 12v14h14v-6q14-20 28 0v6h26V34h4V14q4-10 8 0v20h4v14h22V40q10-14 20 0v8h28v16z"/>
+  </svg>
+  <span class="shoot s1"></span><span class="shoot s2"></span>
   <p class="designer-top-credit">تصميم: ماجدة علي 💫</p>
   <span class="badge">✨ رحلة تعليمية للأطفال</span>
-  <h1>رحلة بين نجوم القرآن 🌌</h1>
+  <span class="hero-moon">🌙</span>
+  <div class="hero-title-wrap">
+    <span class="hero-deco" style="top:-6px; right:-4px;">⭐</span>
+    <span class="hero-deco" style="top:30%; left:-8px; animation-delay:.6s;">✨</span>
+    <span class="hero-deco" style="bottom:-8px; right:12%; animation-delay:1.2s;">🌟</span>
+    <h1>رحلة بين نجوم القرآن</h1>
+  </div>
   <p class="sub">رحلة تفاعلية عبر أجزاء القرآن الكريم! اختاري الجزء، اضغطي على أي نجمة لتكتشفي خريطتها الذهنية، ثم العبي لتجمعي نجومك ⭐</p>
   <div class="mascot-row">
     <div class="mascot">⭐😊</div>
@@ -921,12 +1127,22 @@
     <button class="juz-choice" id="juzChoice-juz27">
       <span class="juz-icon">⚡</span>
       <span class="juz-name">جزء 27</span>
-      <span class="juz-sub">إن الله يأمر — 7 سور</span>
+      <span class="juz-sub">قال فما خطبكم — 7 سور</span>
     </button>
     <button class="juz-choice" id="juzChoice-juz28">
       <span class="juz-icon">🗣️</span>
       <span class="juz-name">جزء 28</span>
       <span class="juz-sub">قد سمع — 9 سور</span>
+    </button>
+    <button class="juz-choice" id="juzChoice-juz26">
+      <span class="juz-icon">🏜️</span>
+      <span class="juz-name">جزء 26</span>
+      <span class="juz-sub">حم — 5 سور</span>
+    </button>
+    <button class="juz-choice" id="juzChoice-juz25">
+      <span class="juz-icon">✨</span>
+      <span class="juz-name">جزء 25</span>
+      <span class="juz-sub">علم الساعة — 5 سور</span>
     </button>
   </div>
 
@@ -1022,17 +1238,26 @@
       <div class="center-node" id="centerNode"></div>
     </div>
 
+    <div class="jy-wrap" id="journeyPanel"></div>
+    <div class="free-acts" id="freeActs">
+    <button class="journey-start-btn" id="journeyStartBtn">🧭 ابدأ الرحلة</button>
     <button class="celebrate-inline-btn" id="celebrateInlineBtn">🎆 احتفل الآن</button>
     <button class="tafsir-btn" id="tafsirBtn">📖 تفسير كل آية للأطفال</button>
+    <button class="treasure-btn" id="treasureBtn">🗺️ رحلة البحث عن الكنز</button>
     <button class="surahgames-btn" id="surahGamesBtn">🎲 ألعاب عن هذه السورة</button>
     <button class="teacher-mode-btn" id="teacherModeBtn">🖥️ وضع المعلمة</button>
     <button class="play-btn" id="playBtn">🎮 ابدأ اللعبة واجمع النجوم</button>
 
+    <div class="jy-sec-h" id="jyH2">📖 المحطة 2: تفسير الآيات</div>
     <div class="tafsir-panel" id="tafsirPanel">
       <p class="tafsir-note">النص القرآني يُحمَّل مباشرة من مصدر موثوق، والتفسير المبسط بأسلوب سهل للأطفال — للمعنى الدقيق يُفضّل الرجوع إلى المصحف مع أحد الوالدين أو المعلم 🌙</p>
       <div class="tafsir-list" id="tafsirList"></div>
     </div>
 
+    <div class="jy-sec-h" id="jyH3">🗺️ المحطة 3: البحث عن الكنز</div>
+    <div class="treasure-panel" id="treasurePanel"></div>
+
+    <div class="jy-sec-h" id="jyH4">🎮 المحطة 4: العب وتدرّب</div>
     <div class="surahgames-panel" id="surahGamesPanel">
       <button class="sg-wheel-trigger-btn" id="sgWheelTriggerBtn">🎡 دوّري العجلة لاختيار عشوائي</button>
       <div class="surahgames-menu" id="surahGamesMenu">
@@ -1045,6 +1270,9 @@
       <div class="surahgames-play" id="surahGamesPlay"></div>
     </div>
 
+    </div>
+
+    <div class="jy-sec-h" id="jyH5">⭐ المحطة 5: اختبر نفسك وافتح النجمة الذهبية</div>
     <div class="quiz" id="quiz">
       <div class="qprog" id="qProg"></div>
       <div class="qtext" id="qText"></div>
@@ -1062,29 +1290,30 @@
         </div>
       </div>
     </div>
+    <div class="jy-nav" id="jyNavBottom"></div>
   </div>
 </div>
 
 <!-- Spot the Difference Game -->
 <div class="overlay" id="diffOverlay">
-  <div class="panel">
+  <div class="panel diff-panel">
     <button class="close" id="diffCloseBtn">✕</button>
     <div class="panel-head">
       <h2>🔍 لعبة الاختلافات</h2>
-      <p style="color:var(--dim); font-size:13px; margin-top:6px;">اضغط على الرموز في الشبكة اليمنى التي تختلف عن الشبكة اليسرى</p>
+      <p style="color:var(--dim); font-size:13px; margin-top:6px;">ابحث عن الاختلافات بين الصورتين واضغط عليها في الصورة اليمنى</p>
     </div>
     <div class="diff-status">
-      <span>🔎 وُجد: <b id="diffFound">0</b> / <span id="diffTotal">0</span></span>
-      <button class="ghost-btn" id="diffNewBtn" style="padding:6px 14px; font-size:12px;">🔁 لعبة جديدة</button>
+      <span>🔎 وُجد: <b id="diffFound">0</b> / <span id="diffTotal">5</span></span>
+      <button class="ghost-btn" id="diffNewBtn" style="padding:6px 14px; font-size:12px;">🔁 من جديد</button>
     </div>
-    <div class="diff-boards">
+    <div class="diff-scene-boards">
       <div>
-        <div class="diff-board-label">الشبكة الأصلية</div>
-        <div class="diff-board left" id="diffBoardLeft"></div>
+        <div class="diff-board-label">الصورة الأصلية</div>
+        <div class="diff-scene-wrap" id="diffSceneLeftWrap"></div>
       </div>
       <div>
         <div class="diff-board-label">ابحث عن الاختلافات هنا</div>
-        <div class="diff-board right" id="diffBoardRight"></div>
+        <div class="diff-scene-wrap" id="diffSceneRightWrap"></div>
       </div>
     </div>
     <div class="diff-win" id="diffWin">
@@ -1655,7 +1884,63 @@ const surahsJuz27 = [
   benefits:["الإنفاق في سبيل الله من أعظم القربات", "لين القلب بذكر الله يمنع قسوته", "استباق الخيرات سبب لمغفرة الله ورحمته"]},
 ];
 
-const ALL_SURAHS = surahsAmma.concat(surahsTabarak).concat(surahsJuz28).concat(surahsJuz27);
+const surahsJuz26 = [
+{n:46,icon:"🏜️",name:"الأحقاف",verses:35,type:"مكية",theme:"القرآن حق، والإحسان إلى الوالدين، وقصة هود مع قوم عاد، وإيمان الجن بالقرآن",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "هذا القرآن نزل من الله العزيز الحكيم", "ما خلق الله السماوات والأرض إلا بالحق ولوقت محدد، والكافرون معرضون عمّا يُنذَرون", "قل لهم: أروني ماذا خلقت آلهتكم من الأرض؟ هل شاركت في خلق السماء؟ أحضروا دليلاً إن كنتم صادقين", "لا أحد أضلّ ممن يدعو غير الله، فهو لا يجيبه إلى يوم القيامة وهو غافل عن دعائه", "وإذا جُمع الناس يوم القيامة صارت معبوداتهم أعداءً لهم وأنكرت عبادتهم", "وإذا قُرئت عليهم آياتنا قال الكافرون: هذا سحر واضح", "بل قالوا: افتراه محمد! قل: لو افتريته لن تنفعوني من الله، والله شاهد بيني وبينكم وهو الغفور الرحيم", "قل: لست أول رسول، ولا أعلم الغيب، أتبع ما يوحى إليّ وأنا نذير واضح", "ماذا لو كان القرآن من عند الله وكفرتم به، وآمن به عالم من بني إسرائيل وتكبرتم؟ إن الله لا يهدي الظالمين", "وقال الكافرون عن المؤمنين: لو كان خيراً ما سبقونا إليه! وحين لم يهتدوا قالوا: هذا كذب قديم", "ومن قبله كتاب موسى إماماً ورحمة، وهذا القرآن يصدّقه بلسان عربي، ينذر الظالمين ويبشّر المحسنين", "إن الذين قالوا ربنا الله ثم استقاموا على طاعته فلا خوف عليهم ولا هم يحزنون", "أولئك أهل الجنة ماكثين فيها جزاءً بأعمالهم الطيبة", "وأوصينا الإنسان بوالديه إحساناً: حملته أمه بتعب وولدته بتعب، ثم إذا كبر دعا ربه أن يرزقه شكر النعمة وصلاح الذرية ويتوب إليه", "هؤلاء نتقبّل أحسن أعمالهم ونتجاوز عن سيئاتهم وهم من أهل الجنة، وعد الله الصادق", "والذي يقول لوالديه: أُفٍّ لكما (ضجراً)! أتعدانني أن أُبعث؟ وهما يستغيثان بالله: ويلك آمن! فيقول: هذه حكايات الأولين", "هؤلاء حقّ عليهم العذاب مع أمم من الجن والإنس قبلهم، إنهم كانوا خاسرين", "ولكل واحد درجات بحسب عمله، ويوفّيهم الله أعمالهم وهم لا يُظلمون", "ويوم يُعرض الكافرون على النار يقال لهم: أخذتم طيباتكم في الدنيا واستمتعتم بها، فاليوم عذاب الهوان بتكبّركم وفسقكم", "واذكر هوداً أخا عاد حين أنذر قومه عند الأحقاف (الرمال): لا تعبدوا إلا الله، إني أخاف عليكم عذاب يوم عظيم", "قالوا: أجئتنا لتصرفنا عن آلهتنا؟ فأتنا بما تهددنا به إن كنت صادقاً", "قال: العلم عند الله، وأنا أبلّغكم رسالة ربي، لكني أراكم قوماً تجهلون", "فلما رأوا سحاباً متجهاً إلى أوديتهم فرحوا: هذا مطر! فقال هود: بل هو العذاب الذي استعجلتموه، ريح فيها عذاب مؤلم", "تدمّر كل شيء بأمر ربها، فأصبحوا لا يُرى إلا مساكنهم، هكذا نجزي المجرمين", "وكنا قد مكّنّاهم أكثر منكم، وأعطيناهم سمعاً وأبصاراً وقلوباً، فما نفعتهم حين جحدوا آيات الله، ونزل بهم ما كانوا يسخرون منه", "ولقد أهلكنا القرى حولكم وبيّنا لهم الآيات لعلهم يرجعون", "فهلّا نصرهم الذين عبدوهم من دون الله؟ بل غابوا عنهم، وذلك كذبهم وافتراؤهم", "واذكر حين أرسلنا إليك جماعة من الجن يستمعون القرآن، فلما حضروا قالوا: اسكتوا لنسمع! فلما انتهى رجعوا إلى قومهم منذرين", "قالوا: يا قومنا سمعنا كتاباً نزل بعد موسى يصدّق ما قبله ويهدي إلى الحق وإلى طريق مستقيم", "يا قومنا أجيبوا داعي الله وآمنوا به يغفر لكم من ذنوبكم ويحميكم من عذاب مؤلم", "ومن لا يستجب لداعي الله فلن يفلت منه في الأرض، وليس له ناصر من دونه، أولئك في ضلال واضح", "أولم يعلموا أن الله الذي خلق السماوات والأرض ولم يتعب بخلقهن قادر على إحياء الموتى؟ بلى إنه على كل شيء قدير", "ويوم يُعرض الكافرون على النار: أليس هذا حقاً؟ قالوا: بلى وربنا! قال: فذوقوا العذاب بكفركم", "فاصبر يا محمد كما صبر أولو العزم من الرسل ولا تستعجل لهم، فكأنهم يوم يرون العذاب لم يمكثوا في الدنيا إلا ساعة من نهار، هذا بلاغ، فلا يهلك إلا القوم الفاسقون"],
+  branches:["القرآن حق من الله","الدعوة لعبادة الله وحده","الإحسان إلى الوالدين","قصة هود وقوم عاد","إسلام الجن واستماعهم للقرآن","الصبر كأولي العزم من الرسل"],
+  vocab:[["الأحقاف","الرمال الكبيرة التي كان يسكنها قوم عاد"], ["أفٍّ","كلمة تضجّر وضيق لا يجوز قولها للوالدين"], ["أولو العزم","الرسل أصحاب الصبر والثبات الكبير"], ["عارض","سحاب يظهر في السماء"]],
+  benefits:["الإحسان إلى الوالدين وبرّهما من أعظم الأعمال", "الاستقامة على طاعة الله طريق الأمان والجنة", "الصبر على الدعوة كما صبر الأنبياء"]},
+{n:47,icon:"⚔️",name:"محمد",verses:38,type:"مدنية",theme:"نصرة الدين، وجزاء المؤمنين والكافرين، وتدبّر القرآن، والثبات والإنفاق في سبيل الله",
+  ayahs:["الذين كفروا وصدّوا الناس عن طريق الله أبطل الله أعمالهم", "والذين آمنوا وعملوا الصالحات وآمنوا بما نزل على محمد وهو الحق، محا الله ذنوبهم وأصلح أحوالهم", "ذلك لأن الكافرين اتبعوا الباطل، والمؤمنين اتبعوا الحق من ربهم، هكذا يضرب الله الأمثال", "فإذا لقيتم الكافرين في الحرب فاضربوا الأعناق، ثم إذا انتهت المعركة فأحسنوا معاملة الأسرى حتى تضع الحرب أوزارها، ولو شاء الله لانتصر منهم لكن ليختبركم، والذين قُتلوا في سبيل الله فلن تضيع أعمالهم", "سيهديهم الله ويصلح حالهم", "ويدخلهم الجنة عرّفها لهم", "يا أيها الذين آمنوا إن تنصروا الله ينصركم ويثبّت أقدامكم", "والذين كفروا فهلاك لهم وأبطل الله أعمالهم", "ذلك لأنهم كرهوا القرآن فأبطل الله أعمالهم", "أفلم يسيروا في الأرض فينظروا كيف كان عاقبة من قبلهم؟ دمّر الله عليهم ولهؤلاء أمثالها", "ذلك بأن الله ناصر المؤمنين، وأن الكافرين لا ناصر لهم", "إن الله يدخل المؤمنين الصالحين جنات تجري من تحتها الأنهار، والكافرون يستمتعون ويأكلون كالأنعام والنار مأواهم", "وكم من قرية أهلكناها كانت أقوى من قريتك التي أخرجتك، فلا ناصر لهم", "أفمن كان على دليل واضح من ربه كمن زُيّن له سوء عمله واتبع هواه؟", "صفة الجنة: أنهار من ماء غير متغير، وأنهار من لبن لا يتغير طعمه، وأنهار من خمر لذة للشاربين، وأنهار من عسل صافٍ، ولهم فيها من كل الثمرات ومغفرة من ربهم، أمثل هؤلاء كمن هو في النار يُسقى ماءً حاراً يقطّع أمعاءهم؟", "ومنهم من يستمع إليك حتى إذا خرجوا قالوا للعلماء: ماذا قال الآن؟ أولئك طبع الله على قلوبهم واتبعوا أهواءهم", "والذين اهتدوا زادهم الله هدى وأعطاهم تقواهم", "فهل ينتظرون إلا أن تأتيهم الساعة فجأة؟ فقد جاءت علاماتها، فكيف تنفعهم التذكرة إذا جاءتهم؟", "فاعلم أنه لا إله إلا الله، واستغفر لذنبك وللمؤمنين والمؤمنات، والله يعلم تنقلكم ومستقركم", "ويقول المؤمنون: لولا نزلت سورة (فيها قتال)! فإذا نزلت ورأيتَ المنافقين ينظرون إليك نظر المغشيّ عليه من الموت، فالأولى لهم", "طاعة وقول حسن، فإذا اشتد الأمر فلو صدقوا الله لكان خيراً لهم", "فهل عسيتم إن توليتم أن تفسدوا في الأرض وتقطّعوا أرحامكم؟", "أولئك الذين لعنهم الله فأصمّهم وأعمى أبصارهم", "أفلا يتدبرون القرآن أم على قلوب أقفالها؟", "إن الذين رجعوا إلى الكفر من بعد ما تبين لهم الهدى، الشيطان زيّن لهم وأمهلهم", "ذلك بأنهم قالوا للذين كرهوا ما أنزل الله: سنطيعكم في بعض الأمر، والله يعلم سرّهم", "فكيف إذا توفتهم الملائكة تضرب وجوههم وظهورهم؟", "ذلك بأنهم اتبعوا ما أغضب الله وكرهوا رضوانه فأبطل أعمالهم", "أم ظن الذين في قلوبهم مرض أن لن يكشف الله أحقادهم؟", "ولو نشاء لأريناكهم فلعرفتهم بعلاماتهم، ولتعرفنهم في أسلوب كلامهم، والله يعلم أعمالكم", "ولنختبرنّكم حتى نعلم المجاهدين منكم والصابرين ونكشف أخباركم", "إن الذين كفروا وصدّوا عن سبيل الله وعادوا الرسول من بعد ما تبين لهم الهدى لن يضرّوا الله شيئاً وسيُبطل أعمالهم", "يا أيها الذين آمنوا أطيعوا الله وأطيعوا الرسول ولا تبطلوا أعمالكم", "إن الذين كفروا وصدّوا عن سبيل الله ثم ماتوا وهم كفار فلن يغفر الله لهم", "فلا تضعفوا وتدعوا إلى الصلح وأنتم الأعلون والله معكم ولن ينقص أعمالكم", "إنما الحياة الدنيا لعب ولهو، وإن تؤمنوا وتتقوا يعطكم أجوركم ولا يطلب منكم أموالكم كلها", "إن يطلب منكم أموالكم كلها فيُلحّ عليكم تبخلوا ويُظهر أحقادكم", "ها أنتم تُدعون لتنفقوا في سبيل الله فمنكم من يبخل، ومن يبخل فإنما يبخل على نفسه، والله الغني وأنتم الفقراء، وإن تتولوا يستبدل قوماً غيركم ثم لا يكونوا أمثالكم"],
+  branches:["نصر الله للمؤمنين","جزاء الكافرين وأعمالهم الباطلة","وصف الجنة وأنهارها الأربعة","صفات المنافقين","تدبّر القرآن","الإنفاق في سبيل الله وعدم البخل"],
+  vocab:[["أوزارها","أثقالها وأسلحتها، أي حتى تنتهي الحرب"], ["آسن","ماء متغيّر الرائحة والطعم"], ["أقفالها","أغلاق القلوب التي تمنع فهم القرآن"], ["أضغانهم","الأحقاد المخبّأة في القلوب"]],
+  benefits:["من ينصر دين الله ينصره الله ويثبّت قدميه", "تدبّر القرآن يفتح القلوب ويزيدها هدى", "البخل يضرّ صاحبه، والإنفاق في سبيل الله خير"]},
+{n:48,icon:"🏆",name:"الفتح",verses:29,type:"مدنية",theme:"صلح الحديبية والفتح المبين، ورضا الله عن أصحاب بيعة الرضوان، وصفات المؤمنين",
+  ayahs:["إنا فتحنا لك يا محمد فتحاً واضحاً (صلح الحديبية)", "ليغفر الله لك ما تقدم من ذنبك وما تأخر، ويتم نعمته عليك ويهديك طريقاً مستقيماً", "وينصرك الله نصراً عزيزاً", "هو الذي أنزل السكينة (الطمأنينة) في قلوب المؤمنين ليزدادوا إيماناً، ولله جنود السماوات والأرض", "ليدخل المؤمنين والمؤمنات جنات تجري من تحتها الأنهار، ويمحو سيئاتهم، وذلك فوز عظيم", "ويعذّب المنافقين والمشركين الذين ظنوا بالله ظن السوء", "ولله جنود السماوات والأرض وكان الله عزيزاً حكيماً", "إنا أرسلناك شاهداً ومبشراً ونذيراً", "لتؤمنوا بالله ورسوله وتنصروه وتعظّموه وتسبّحوه صباحاً ومساءً", "إن الذين يبايعونك (بيعة الرضوان) إنما يبايعون الله، يد الله فوق أيديهم، فمن نكث فعلى نفسه، ومن وفّى فسيؤتيه الله أجراً عظيماً", "سيقول المتخلفون من الأعراب: شغلتنا أموالنا وأهلونا فاستغفر لنا، يقولون بألسنتهم ما ليس في قلوبهم", "بل ظننتم أن الرسول والمؤمنين لن يرجعوا إلى أهليهم أبداً وزُيّن هذا في قلوبكم، وكنتم قوماً هالكين", "ومن لم يؤمن بالله ورسوله فإنا أعتدنا للكافرين ناراً مشتعلة", "ولله ملك السماوات والأرض يغفر لمن يشاء ويعذب من يشاء وكان غفوراً رحيماً", "سيقول المتخلفون إذا انطلقتم لغنائم: اتركونا نتبعكم، يريدون تبديل كلام الله، قل: لن تتبعونا", "قل للمتخلفين: ستُدعون إلى قوم أصحاب قوة شديدة، فإن تطيعوا يؤتكم الله أجراً حسناً وإن تتولوا يعذبكم عذاباً مؤلماً", "ليس على الأعمى ولا الأعرج ولا المريض حرج في ترك القتال، ومن يطع الله ورسوله يدخله جنات", "لقد رضي الله عن المؤمنين إذ يبايعونك تحت الشجرة، فعلم ما في قلوبهم فأنزل السكينة عليهم وأثابهم فتحاً قريباً", "ومغانم كثيرة يأخذونها، وكان الله عزيزاً حكيماً", "وعدكم الله مغانم كثيرة تأخذونها فعجّل لكم هذه، وكفّ أيدي الناس عنكم، ولتكون آية للمؤمنين ويهديكم صراطاً مستقيماً", "وأخرى لم تقدروا عليها قد أحاط الله بها، وكان الله على كل شيء قديراً", "ولو قاتلكم الكافرون لولّوا الأدبار ثم لا يجدون ولياً ولا نصيراً", "سنّة الله التي مضت من قبل ولن تجد لسنة الله تبديلاً", "وهو الذي كفّ أيديهم عنكم وأيديكم عنهم ببطن مكة من بعد أن أظفركم عليهم، وكان الله بما تعملون بصيراً", "هم الذين كفروا وصدّوكم عن المسجد الحرام ومنعوا الهدي أن يبلغ محله، ولولا رجال مؤمنون ونساء مؤمنات مستضعفون في مكة لم تعلموهم لسلّطكم عليهم، ليُدخل الله في رحمته من يشاء", "إذ جعل الذين كفروا في قلوبهم الحمية (التعصب) حمية الجاهلية، فأنزل الله سكينته على رسوله وعلى المؤمنين وألزمهم كلمة التقوى وكانوا أحق بها وأهلها", "لقد صدق الله رسوله الرؤيا بالحق: لتدخلن المسجد الحرام إن شاء الله آمنين محلّقين رؤوسكم ومقصّرين لا تخافون، فعلم ما لم تعلموا فجعل من دون ذلك فتحاً قريباً", "هو الذي أرسل رسوله بالهدى ودين الحق ليظهره على الدين كله وكفى بالله شهيداً", "محمد رسول الله والذين معه أشدّاء على الكفار رحماء بينهم، تراهم ركّعاً سجّداً يبتغون فضلاً من الله ورضواناً، علامتهم في وجوههم من أثر السجود، هذا وصفهم في التوراة، ووصفهم في الإنجيل كزرع أخرج فراخه فقوّاه فاستوى على ساقه يعجب الزراع ليغيظ بهم الكفار، وعد الله الذين آمنوا وعملوا الصالحات منهم مغفرة وأجراً عظيماً"],
+  branches:["صلح الحديبية والفتح المبين","بيعة الرضوان تحت الشجرة","نزول السكينة على المؤمنين","المتخلفون عن الرحلة والمنافقون","رؤيا النبي بدخول مكة","صفات أصحاب النبي ﷺ"],
+  vocab:[["السكينة","الطمأنينة والهدوء الذي ينزله الله في القلب"], ["الحمية","التعصب والغضب بلا حق"], ["شطأه","فراخ الزرع التي تخرج حول الساق"], ["ظن السوء","التفكير بالله بسوء"]],
+  benefits:["السكينة والطمأنينة من الله تزيد المؤمن إيماناً", "الوفاء بالعهد والبيعة عند الله عظيم", "المؤمنون رحماء فيما بينهم أقوياء على الباطل"]},
+{n:49,icon:"🤝",name:"الحجرات",verses:18,type:"مدنية",theme:"سورة الآداب: أدب مع النبي، وتثبت الأخبار، والصلح بين المؤمنين، وترك السخرية والغيبة والتفاضل بالتقوى",
+  ayahs:["يا أيها الذين آمنوا لا تتقدموا بين يدي الله ورسوله بقول أو فعل، واتقوا الله", "يا أيها الذين آمنوا لا ترفعوا أصواتكم فوق صوت النبي ولا تجهروا له بالقول كجهر بعضكم لبعض، لئلا تضيع أعمالكم وأنتم لا تشعرون", "إن الذين يخفضون أصواتهم عند رسول الله أولئك امتحن الله قلوبهم للتقوى، لهم مغفرة وأجر عظيم", "إن الذين ينادونك من وراء الحجرات أكثرهم لا يعقلون", "ولو أنهم صبروا حتى تخرج إليهم لكان خيراً لهم، والله غفور رحيم", "يا أيها الذين آمنوا إن جاءكم فاسق بخبر فتأكدوا منه، لئلا تؤذوا قوماً بجهل فتندموا", "واعلموا أن فيكم رسول الله، ولو أطاعكم في كثير من الأمر لوقعتم في مشقة، ولكن الله حبّب إليكم الإيمان وزيّنه في قلوبكم وكرّه إليكم الكفر والفسوق والعصيان، أولئك الراشدون", "فضلاً من الله ونعمة، والله عليم حكيم", "وإن طائفتان من المؤمنين تقاتلتا فأصلحوا بينهما، فإن اعتدت إحداهما فقاتلوا المعتدية حتى ترجع إلى أمر الله، فإذا رجعت فأصلحوا بينهما بالعدل وأقسطوا، إن الله يحب العادلين", "إنما المؤمنون إخوة فأصلحوا بين أخويكم واتقوا الله لعلكم تُرحمون", "يا أيها الذين آمنوا لا يسخر قوم من قوم عسى أن يكونوا خيراً منهم، ولا نساء من نساء عسى أن يكنّ خيراً منهن، ولا تعيبوا بعضكم، ولا تتنابزوا بالألقاب (لا تنادوا بأسماء سيئة)، بئس الاسم الفسوق بعد الإيمان، ومن لم يتب فأولئك هم الظالمون", "يا أيها الذين آمنوا اجتنبوا كثيراً من الظن إن بعض الظن إثم، ولا تتجسسوا ولا يغتب بعضكم بعضاً، أيحب أحدكم أن يأكل لحم أخيه ميتاً؟ فكرهتموه، واتقوا الله إن الله تواب رحيم", "يا أيها الناس إنا خلقناكم من ذكر وأنثى وجعلناكم شعوباً وقبائل لتتعارفوا، إن أكرمكم عند الله أتقاكم", "قالت الأعراب: آمنّا! قل: لم تؤمنوا ولكن قولوا أسلمنا، ولما يدخل الإيمان في قلوبكم، وإن تطيعوا الله ورسوله لا ينقصكم من أعمالكم شيئاً", "إنما المؤمنون الذين آمنوا بالله ورسوله ثم لم يشكّوا وجاهدوا بأموالهم وأنفسهم في سبيل الله، أولئك هم الصادقون", "قل: أتعلّمون الله بدينكم؟ والله يعلم كل ما في السماوات والأرض", "يمنّون عليك أن أسلموا! قل: لا تمنّوا عليّ إسلامكم، بل الله يمنّ عليكم أن هداكم للإيمان إن كنتم صادقين", "إن الله يعلم غيب السماوات والأرض، والله بصير بما تعملون"],
+  branches:["الأدب مع الله ورسوله","التأكد من الأخبار قبل نشرها","الإصلاح بين المتخاصمين","النهي عن السخرية والتنابز","النهي عن الغيبة والتجسس وسوء الظن","التفاضل بالتقوى لا بالنسب والقبيلة"],
+  vocab:[["تنابزوا بالألقاب","تنادوا بأسماء سيئة تؤذي الآخرين"], ["الغيبة","ذكر أخيك بما يكره في غيابه"], ["شعوباً وقبائل","الأمم والعائلات الكبيرة"], ["تجسسوا","تبحثوا عن عيوب الناس وأسرارهم"]],
+  benefits:["لا نسخر من أحد ولا نناديه بلقب يكرهه", "الأكرم عند الله هو الأتقى لا الأغنى ولا الأقوى", "نتثبّت من الخبر قبل أن ننقله"]},
+{n:50,icon:"🔤",name:"ق",verses:45,type:"مكية",theme:"إثبات البعث بعد الموت، وقدرة الله في الخلق، والملكان الكاتبان، ومشاهد يوم القيامة",
+  ayahs:["ق: حرف من الحروف المقطعة، والله أعلم بمعناه، وأقسم بالقرآن العظيم", "بل تعجّب الكفار أن جاءهم رسول منهم يُنذرهم، وقالوا: هذا أمر عجيب", "أإذا متنا وصرنا تراباً نُبعث؟ ذلك رجوع بعيد!", "قد علمنا ما تأكل الأرض من أجسادهم، وعندنا كتاب يحفظ كل شيء", "بل كذّبوا بالحق لما جاءهم فهم في أمر مضطرب", "أفلم ينظروا إلى السماء فوقهم كيف بنيناها وزيّنّاها وما لها من شقوق؟", "والأرض مددناها وجعلنا فيها جبالاً ثابتة وأنبتنا فيها من كل نبات جميل", "تبصرة وتذكيراً لكل عبد يرجع إلى الله", "وأنزلنا من السماء ماءً مباركاً فأنبتنا به جنات وحبّ الحصيد", "والنخل طويلات لها ثمر متراكب", "رزقاً للعباد، وأحيينا به أرضاً ميتة، كذلك الخروج من القبور", "كذّبت قبلهم قوم نوح وأصحاب الرسّ وثمود", "وعاد وفرعون وإخوان لوط", "وأصحاب الأيكة وقوم تبّع، كلٌّ كذّب الرسل فحقّ وعيدي", "أفعجزنا بالخلق الأول؟ بل هم في شك من خلق جديد", "ولقد خلقنا الإنسان ونعلم ما تحدّث به نفسه ونحن أقرب إليه من عرق رقبته", "إذ يتلقى الملكان عن اليمين وعن الشمال قاعد", "ما يلفظ من قول إلا لديه رقيب عتيد (ملك يكتب)", "وجاءت سكرة الموت بالحق، ذلك ما كنت منه تهرب", "ونُفخ في الصور، ذلك يوم الوعيد", "وجاءت كل نفس معها سائق وشهيد", "لقد كنت في غفلة من هذا فكشفنا عنك غطاءك فبصرك اليوم قوي", "وقال قرينه (الملك): هذا ما عندي حاضر", "ألقيا في جهنم كل كفّار عنيد", "مَنّاع للخير معتدٍ شاكّ", "الذي جعل مع الله إلهاً آخر فألقياه في العذاب الشديد", "قال قرينه الشيطان: ربنا ما أطغيته ولكن كان في ضلال بعيد", "قال الله: لا تختصموا لديّ وقد قدّمت إليكم بالوعيد", "ما يُبدّل القول لديّ وما أنا بظلّام للعبيد", "يوم نقول لجهنم: هل امتلأتِ؟ وتقول: هل من مزيد؟", "وأُدنيت الجنة للمتقين غير بعيدة", "هذا ما توعدون لكل أوّاب (راجع إلى الله) حفيظ", "من خشي الرحمن بالغيب وجاء بقلب منيب", "ادخلوها بسلام، ذلك يوم الخلود", "لهم ما يشاؤون فيها ولدينا مزيد", "وكم أهلكنا قبلهم من قرون هم أشد منهم قوة فبحثوا في البلاد هل من مهرب؟", "إن في ذلك لتذكرة لمن كان له قلب أو ألقى السمع وهو شهيد", "ولقد خلقنا السماوات والأرض في ستة أيام وما مسّنا من تعب", "فاصبر على ما يقولون وسبّح بحمد ربك قبل طلوع الشمس وقبل الغروب", "ومن الليل فسبّحه وأدبار السجود", "واستمع يوم ينادي المنادي من مكان قريب", "يوم يسمعون الصيحة بالحق، ذلك يوم الخروج من القبور", "إنا نحن نحيي ونميت وإلينا المصير", "يوم تشقق الأرض عنهم سراعاً، ذلك حشر علينا يسير", "نحن أعلم بما يقولون وما أنت عليهم بمسيطر، فذكّر بالقرآن من يخاف وعيدي"],
+  branches:["إنكار الكفار للبعث والرد عليهم","آيات الله في السماء والأرض والنبات","الله أقرب إلينا من عرق الرقبة","الملكان يكتبان كل كلمة","مشاهد يوم القيامة","الجنة للمتقين وجهنم للمكذبين"],
+  vocab:[["رقيب عتيد","ملك يسجّل الأعمال وهو حاضر دائماً"], ["سكرة الموت","شدة الموت وغيبوبته"], ["أوّاب","كثير الرجوع إلى الله بالتوبة"], ["أدبار السجود","التسبيح بعد انتهاء الصلاة"]],
+  benefits:["الله يعلم ما نفكر به ونحن أقرب إليه من أنفسنا", "كل كلمة نقولها يكتبها ملك، فلنحرص على قول الخير", "الذي خلق السماء قادر على إحياء الموتى"]},
+];
+
+const surahsJuz25 = [
+{n:41,icon:"📖",name:"فصلت",verses:54,type:"مكية",theme:"القرآن مفصّل الآيات، وشهادة الجوارح يوم القيامة، وفضل الدعوة إلى الله، والدفع بالتي هي أحسن",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "هذا القرآن تنزيل من الرحمن الرحيم", "كتاب بُيّنت آياته وفُصّلت، قرآناً عربياً لقوم يفهمون", "يبشّر المؤمنين وينذر المكذبين، فأعرض أكثرهم فهم لا يسمعون", "وقالوا: قلوبنا في أغطية عمّا تدعونا إليه، وفي آذاننا صمم، وبيننا وبينك حجاب، فاعمل على طريقتك ونحن على طريقتنا", "قل لهم: أنا بشر مثلكم يوحى إليّ أن إلهكم إله واحد، فاستقيموا إليه واطلبوا مغفرته، وهلاك للمشركين", "الذين لا يعطون الزكاة وهم لا يؤمنون بالآخرة", "إن الذين آمنوا وعملوا الصالحات لهم أجر دائم لا ينقطع", "قل: كيف تكفرون بالذي خلق الأرض في يومين وتجعلون له شركاء؟ ذلك رب العالمين", "وجعل في الأرض جبالاً ثابتة، وبارك فيها، وقدّر أرزاق أهلها في أربعة أيام كاملة", "ثم قصد إلى السماء وكانت دخاناً، فقال لها وللأرض: أطيعا أمري، قالتا: جئنا طائعتين", "فخلق السماوات سبعاً في يومين، وأعطى كل سماء أمرها، وزيّن السماء الدنيا بالنجوم وحفظها، ذلك تدبير العزيز العليم", "فإن أعرضوا عن الإيمان فقل: أحذركم عذاباً مثل صاعقة عاد وثمود", "حين جاءهم الرسل من كل جهة: لا تعبدوا إلا الله، فقالوا: لو شاء ربنا لأنزل ملائكة، فإنا كافرون بما أُرسلتم به", "فأما قوم عاد فتكبروا في الأرض وقالوا: من أقوى منا؟ ألم يعلموا أن الله أقوى منهم؟ وكانوا يرفضون آياتنا", "فأرسلنا عليهم ريحاً شديدة البرد والصوت في أيام نحسات، ليذوقوا عذاب الذل، وعذاب الآخرة أشد ذلاً ولا ينصرون", "وأما ثمود فبيّنّا لهم طريق الهدى فاختاروا العمى على الهدى، فأخذتهم صاعقة العذاب بما فعلوا", "ونجّينا الذين آمنوا وكانوا يتقون الله", "واذكر يوم يُجمع أعداء الله إلى النار ويُساقون إليها", "حتى إذا وصلوا إليها شهد عليهم سمعهم وأبصارهم وجلودهم بما كانوا يعملون", "وقالوا لجلودهم: لماذا شهدتم علينا؟ قالت: أنطقنا الله الذي أنطق كل شيء، وهو خلقكم أول مرة وإليه ترجعون", "وما كنتم تستخفون من أن يشهد عليكم سمعكم وأبصاركم وجلودكم، لكن ظننتم أن الله لا يعلم كثيراً من أعمالكم", "وذلك ظنّكم السيئ بربكم أهلككم فأصبحتم من الخاسرين", "فإن صبروا فالنار مقامهم، وإن طلبوا الرضا فلن يُقبل منهم", "وجعلنا لهم قرناء من الشياطين زيّنوا لهم أعمالهم، وحقّ عليهم العذاب مع الأمم التي سبقتهم، إنهم كانوا خاسرين", "وقال الكافرون: لا تسمعوا لهذا القرآن وأكثروا الضجيج أثناء قراءته لعلكم تغلبون", "فلنذيقنّ الكافرين عذاباً شديداً ولنجزينّهم أسوأ ما عملوا", "ذلك جزاء أعداء الله: النار، لهم فيها دار الخلود جزاء إنكارهم آياتنا", "وقال الكافرون يوم القيامة: ربنا أرنا الذين أضلّونا من الجن والإنس لنجعلهم تحت أقدامنا ليكونوا في أسفل النار", "إن الذين قالوا ربنا الله ثم استقاموا تنزل عليهم الملائكة: لا تخافوا ولا تحزنوا وأبشروا بالجنة التي وُعدتم بها", "نحن أصدقاؤكم في الدنيا والآخرة، ولكم في الجنة كل ما تشتهون وتطلبون", "ضيافة وكرم من الغفور الرحيم", "ومن أحسن كلاماً ممن دعا إلى الله وعمل صالحاً وقال: إنني من المسلمين؟", "ولا يستوي فعل الخير وفعل الشر، فاردد الإساءة بالتي هي أحسن، فإذا الذي بينك وبينه عداوة كأنه صديق قريب", "وما يوفَّق لهذا الخلق الكريم إلا الصابرون، وما يوفَّق له إلا صاحب نصيب عظيم", "وإذا وسوس لك الشيطان فاستعذ بالله إنه السميع العليم", "ومن علامات قدرة الله الليل والنهار والشمس والقمر، لا تسجدوا للشمس ولا للقمر واسجدوا لله الذي خلقهن إن كنتم تعبدونه وحده", "فإن تكبّروا فالملائكة عند ربك يسبّحون له ليلاً ونهاراً ولا يملّون", "ومن آياته أنك ترى الأرض يابسة ميتة، فإذا أنزلنا عليها المطر تحرّكت وانتفخت وأنبتت، فالذي أحياها قادر على إحياء الموتى", "إن الذين ينحرفون عن آياتنا لا يخفون علينا، فهل من يُلقى في النار خير أم من يأتي آمناً يوم القيامة؟ اعملوا ما شئتم فإنه بصير بأعمالكم", "إن الذين كفروا بالقرآن لما جاءهم سيُحاسبون، وإنه كتاب عزيز ممتنع", "لا يأتيه الباطل من أي جهة، فهو منزَّل من حكيم محمود", "ما يُقال لك من تكذيب إلا مثل ما قيل للرسل قبلك، إن ربك صاحب مغفرة وعقاب أليم", "ولو جعلنا القرآن بلغة غير العربية لقالوا: هلّا بُيّنت آياته! هو للمؤمنين هداية وشفاء، والذين لا يؤمنون كأن في آذانهم صمماً وعلى أعينهم عمى", "ولقد أعطينا موسى التوراة فاختلفوا فيها، ولولا حكم الله بتأخير الحساب لقُضي بينهم، وإنهم في شك منه مقلق", "من عمل صالحاً فثوابه لنفسه، ومن أساء فعلى نفسه، وما ربك بظالم لعباده", "إليه وحده يُرجع علم القيامة، وما تخرج ثمرة من غلافها ولا تحمل أنثى ولا تلد إلا بعلمه، ويوم يناديهم: أين شركائي؟ يقولون: ما منا من يشهد بذلك", "وغاب عنهم ما كانوا يعبدون من قبل، وأيقنوا أنه لا مهرب لهم", "لا يملّ الإنسان من طلب الخير، وإذا أصابه الشر يئس وانقطع أمله", "وإذا أعطيناه رحمة بعد شدة قال: هذا بجهدي وما أظن القيامة قائمة، وإن رُجعت إلى ربي فلي عنده الحسنى! فسنخبرهم بأعمالهم ونذيقهم عذاباً غليظاً", "وإذا أنعمنا على الإنسان أعرض وتكبّر، وإذا أصابه الشر أكثر من الدعاء", "قل: ماذا لو كان القرآن من عند الله ثم كفرتم به؟ من أضل ممن هو في خلاف بعيد؟", "سنريهم دلائلنا في آفاق الكون وفي أنفسهم حتى يتبين لهم أن القرآن حق، أولم يكف أن ربك شاهد على كل شيء؟", "ألا إنهم في شك من لقاء ربهم، ألا إنه محيط بكل شيء"],
+  branches:["القرآن العربي المفصّلة آياته","خلق الأرض والسماوات في أيام","قصة عاد وثمود","شهادة السمع والبصر والجلود","فضل الدعوة إلى الله والكلمة الطيبة","الدفع بالتي هي أحسن"],
+  vocab:[["فُصّلت","بُيّنت وفُرّقت آياتها بوضوح"], ["صاعقة","عذاب مهلك يأتي فجأة"], ["حميم","صديق قريب ومحب"], ["قيّضنا","هيّأنا وسلّطنا"]],
+  benefits:["الكلمة الطيبة والدعوة إلى الله من أحسن الأقوال", "نردّ الإساءة بالإحسان فيتحول العدو إلى صديق", "جوارحنا ستشهد علينا، فلنستخدمها في الخير"]},
+{n:42,icon:"🤲",name:"الشورى",verses:53,type:"مكية",theme:"وحدة الدين والرسالات، وصفات المؤمنين: الشورى والعفو والإنفاق، وأنواع وحي الله لعباده",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "عسق: حروف مقطعة الله أعلم بمعناها", "كما أوحى الله إليك أوحى إلى الأنبياء قبلك، وهو العزيز الحكيم", "له ما في السماوات وما في الأرض وهو العلي العظيم", "تكاد السماوات تتشقق من عظمته، والملائكة يسبّحون بحمد ربهم ويستغفرون لأهل الأرض، ألا إن الله هو الغفور الرحيم", "والذين عبدوا غيره الله يحفظ أعمالهم وليس عليك أن تُجبرهم على الإيمان", "وهكذا أوحينا إليك قرآناً عربياً لتنذر أهل مكة ومن حولها، وتنذر بيوم القيامة لا شك فيه، فريق في الجنة وفريق في النار", "ولو شاء الله لجعلهم جميعاً على دين واحد، لكنه يدخل في رحمته من يشاء، والظالمون لا ولي لهم ولا ناصر", "هل اتخذوا من دون الله أولياء؟ فالله هو الولي الحقيقي يحيي الموتى وهو على كل شيء قدير", "وأي شيء اختلفتم فيه فحكمه إلى الله، هذا هو ربي عليه توكلت وإليه أرجع", "خالق السماوات والأرض جعل لكم أزواجاً منكم ومن الأنعام، ليس كمثله شيء وهو السميع البصير", "بيده خزائن السماوات والأرض، يوسّع الرزق لمن يشاء ويضيّقه، إنه بكل شيء عليم", "شرع لكم من الدين ما أوصى به نوحاً وما أوحيناه إليك وما أوصينا به إبراهيم وموسى وعيسى: أقيموا الدين ولا تتفرقوا فيه، وشقّ على المشركين ما تدعوهم إليه، الله يختار من يشاء ويهدي من يرجع إليه", "وما اختلفوا إلا بعد أن جاءهم العلم، حسداً بينهم، ولولا حكم سابق بتأخير الحساب لقُضي بينهم، والذين ورثوا الكتاب بعدهم في شك منه", "فادعُ إلى الإسلام واستقم كما أُمرت، ولا تتبع أهواءهم، وقل: آمنت بكل كتاب أنزله الله وأُمرت أن أعدل بينكم، الله ربنا وربكم، لنا أعمالنا ولكم أعمالكم، الله يجمعنا وإليه المرجع", "والذين يجادلون في دين الله بعد أن استجاب الناس له، حجتهم باطلة وعليهم غضب وعذاب شديد", "الله الذي أنزل الكتاب بالحق والميزان (العدل)، وما يدريك لعل القيامة قريبة", "يستعجلها الذين لا يؤمنون بها، والمؤمنون خائفون منها يعلمون أنها حق، والذين يشكّون فيها في ضلال بعيد", "الله لطيف رحيم بعباده يرزق من يشاء وهو القوي العزيز", "من أراد ثواب الآخرة ضاعفناه له، ومن أراد الدنيا فقط أعطيناه منها وليس له في الآخرة نصيب", "أم لهم شركاء شرّعوا لهم ديناً لم يأذن به الله؟ ولولا حكم الفصل لقُضي بينهم، وللظالمين عذاب مؤلم", "ترى الظالمين خائفين مما فعلوا وهو نازل بهم، والمؤمنون في أجمل بساتين الجنة لهم ما يريدون، ذلك الفضل الكبير", "هذه بشرى الله لعباده المؤمنين، قل: لا أطلب منكم أجراً إلا أن تحبّوا قرابتي، ومن يفعل حسنة نزد له فيها خيراً إن الله غفور شكور", "أم يقولون افترى على الله كذباً؟ لو أراد الله لطبع على قلبك، والله يمحو الباطل ويثبّت الحق بكلماته إنه عليم بما في الصدور", "وهو الذي يقبل توبة عباده ويتجاوز عن السيئات ويعلم ما تفعلون", "ويستجيب للمؤمنين الصالحين ويزيدهم من فضله، وللكافرين عذاب شديد", "ولو وسّع الله الرزق لعباده لطغوا في الأرض، لكنه ينزل بمقدار ما يشاء إنه خبير بصير بعباده", "وهو الذي ينزل المطر بعدما يئسوا وينشر رحمته وهو الولي المحمود", "ومن دلائل قدرته خلق السماوات والأرض وما نشر فيهما من كائنات، وهو قادر على جمعهم متى شاء", "وما أصابكم من مصيبة فبسبب ذنوبكم ويتجاوز عن كثير منها", "ولن تفلتوا من قدرة الله في الأرض وليس لكم من دونه ولي ولا ناصر", "ومن آياته السفن الجارية في البحر كأنها جبال", "إن شاء أوقف الريح فتبقى ثابتة على سطح البحر، إن في ذلك دلائل لكل صبور شكور", "أو يُغرقهنّ بسبب ذنوب أصحابهنّ ويعفو عن كثير", "ويعلم الذين يجادلون في آياتنا أنه لا مهرب لهم", "فما أُعطيتم من شيء فهو متاع الدنيا الفاني، وما عند الله خير وأبقى للذين آمنوا وعلى ربهم يتوكلون", "والذين يبتعدون عن كبائر الذنوب والفواحش، وإذا غضبوا سامحوا", "والذين أجابوا ربهم وأقاموا الصلاة وأمورهم تُدار بالتشاور بينهم وينفقون مما رزقناهم", "والذين إذا ظُلموا دافعوا عن أنفسهم وانتصروا", "وجزاء السيئة سيئة مثلها بلا زيادة، فمن عفا وأصلح فأجره على الله، إنه لا يحب الظالمين", "ومن انتصر بعد ما ظُلم فليس عليه لوم", "إنما اللوم على الذين يظلمون الناس ويتعدّون في الأرض بغير حق، لهم عذاب مؤلم", "ومن صبر وسامح فإن هذا من الأمور العظيمة التي تحتاج إلى عزم وإرادة", "ومن يُضلّه الله فليس له ولي من بعده، وترى الظالمين حين يرون العذاب يقولون: هل من طريق للرجوع؟", "وترى الظالمين يُعرضون على النار ذليلين ينظرون بنظرة خفية من الخوف، ويقول المؤمنون: الخاسرون هم من خسروا أنفسهم وأهليهم يوم القيامة، ألا إن الظالمين في عذاب دائم", "وما كان لهم أولياء ينصرونهم من دون الله، ومن يُضلّه الله فليس له طريق", "استجيبوا لربكم من قبل أن يأتي يوم لا يُردّ من الله، فليس لكم يومئذ ملجأ ولا مجال للإنكار", "فإن أعرضوا فما أرسلناك عليهم حارساً، ما عليك إلا التبليغ، وإذا أعطينا الإنسان رحمة فرح بها، وإن أصابتهم مصيبة بذنوبهم فإن الإنسان جحود", "لله ملك السماوات والأرض يخلق ما يشاء، يعطي من يشاء بنات ويعطي من يشاء بنين", "أو يجمع لمن يشاء بنين وبنات، ويجعل من يشاء بلا ولد، إنه عليم قدير", "وما ينبغي لبشر أن يكلمه الله إلا بالوحي أو من وراء حجاب أو يرسل ملكاً فيوحي بإذنه ما يشاء، إنه علي حكيم", "وهكذا أوحينا إليك القرآن روحاً من أمرنا، ما كنت تعرف الكتاب ولا تفاصيل الإيمان، لكن جعلناه نوراً نهدي به من نشاء من عبادنا، وإنك لتهدي إلى طريق مستقيم", "طريق الله الذي له ما في السماوات وما في الأرض، ألا إلى الله تعود كل الأمور"],
+  branches:["وحي الله للأنبياء جميعاً","الدين واحد وعدم التفرق","عظمة الله وقدرته","صفات المؤمنين: الشورى والعفو","العدل في الجزاء ثم فضل العفو","أنواع الوحي الثلاثة"],
+  vocab:[["الشورى","التشاور وأخذ رأي الآخرين في الأمر"], ["الميزان","العدل والحق"], ["الأعلام","الجبال الشامخة، والمقصود السفن العظيمة"], ["عقيماً","من لا يُرزق بأولاد"]],
+  benefits:["الشورى والتشاور سبب للصواب وصفة للمؤمنين", "العفو والصبر على الأذى من الأمور العظيمة", "الله يعطي الرزق بقدر لحكمة، فلنرضَ ونشكر"]},
+{n:43,icon:"✨",name:"الزخرف",verses:89,type:"مكية",theme:"ذمّ التقليد الأعمى للآباء، وفتنة زينة الدنيا، وقصص إبراهيم وموسى وعيسى، ونعيم المتقين",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "أقسم بالقرآن الواضح", "إنا جعلناه قرآناً عربياً لعلكم تفهمون", "وهو في اللوح المحفوظ عندنا عالي القدر حكيم", "أفنترككم دون إرشاد لأنكم قوم مسرفون؟", "وكم أرسلنا من نبي في الأمم السابقة", "وما جاءهم نبي إلا سخروا منه", "فأهلكنا من هم أقوى منهم، وصار هلاكهم مثلاً للأولين", "ولئن سألتهم: من خلق السماوات والأرض؟ ليقولنّ: خلقهنّ العزيز العليم", "الذي جعل الأرض لكم فراشاً وجعل لكم فيها طرقاً لعلكم تهتدون", "والذي أنزل من السماء مطراً بمقدار فأحيا به أرضاً ميتة، وكذلك ستُخرجون من قبوركم", "والذي خلق الأصناف كلها وجعل لكم السفن والأنعام لتركبوها", "لتجلسوا على ظهورها ثم تذكروا نعمة ربكم وتقولوا: سبحان الذي ذلّل لنا هذا وما كنا قادرين عليه", "وإنا إلى ربنا لراجعون", "وجعلوا لله من عباده جزءاً (نسبوا له الأولاد)، إن الإنسان لجحود ظاهر", "أاتخذ الله من خلقه بنات وخصّكم بالبنين؟", "وإذا بُشّر أحدهم بالأنثى التي نسبها لله اسودّ وجهه من الحزن وامتلأ غمّاً", "أو ينسبون لله من تتربى في الزينة وهي عاجزة عن الحجة في الخصام؟", "وجعلوا الملائكة إناثاً، هل حضروا خلقهم؟ سيُكتب قولهم ويُسألون", "وقالوا: لو شاء الرحمن ما عبدناهم، ليس لهم علم بذلك، إنما يكذبون ويخمّنون", "أم أعطيناهم كتاباً قبل القرآن فهم متمسكون به؟", "بل قالوا: وجدنا آباءنا على طريقة ونحن نسير على آثارهم", "وهكذا ما أرسلنا قبلك من رسول إلا قال أغنياؤهم المترفون: وجدنا آباءنا على دين ونحن نقتدي بهم", "قال الرسول: أحتى لو جئتكم بما هو أهدى من دين آبائكم؟ قالوا: إنا كافرون بما أُرسلتم به", "فانتقمنا منهم، فانظر كيف كانت عاقبة المكذبين", "واذكر حين قال إبراهيم لأبيه وقومه: إنني بريء مما تعبدون", "إلا الذي خلقني فإنه سيهديني", "وجعل كلمة التوحيد باقية في ذريته لعلهم يرجعون", "بل أعطيت هؤلاء وآباءهم متاع الدنيا حتى جاءهم الحق ورسول واضح", "ولما جاءهم القرآن قالوا: هذا سحر وإنا به كافرون", "وقالوا: هلّا نزل هذا القرآن على رجل عظيم من مكة أو الطائف؟", "أهم يوزّعون رحمة ربك؟ نحن وزّعنا بينهم أرزاقهم في الدنيا ورفعنا بعضهم فوق بعض درجات ليخدم بعضهم بعضاً، ورحمة ربك خير مما يجمعون", "ولولا أن يصير الناس كلهم كفاراً لجعلنا لبيوت الكافرين سقوفاً من فضة ودرجاً يصعدون عليها", "وأبواباً وأسرّة من فضة يتكئون عليها", "وذهباً، وكل ذلك متاع الحياة الدنيا فقط، والآخرة عند ربك للمتقين", "ومن أعرض عن ذكر الرحمن سلّطنا عليه شيطاناً فهو صاحبه الملازم", "وإنهم ليصدّونهم عن الطريق الصحيح ويظنون أنهم مهتدون", "حتى إذا جاء إلينا يوم القيامة قال لقرينه: يا ليت بيني وبينك بعد المشرق والمغرب، فبئس الصاحب", "ولن ينفعكم اليوم اشتراككم في العذاب بعد ظلمكم", "أفأنت تُسمع الصمّ أو تهدي العمي ومن كان في ضلال واضح؟", "فإن توفّيناك فإنا سننتقم منهم", "أو نُرك العذاب الذي وعدناهم فإنا قادرون عليهم", "فتمسّك بالقرآن الذي أُوحي إليك فإنك على طريق مستقيم", "وإنه شرف لك ولقومك وسوف تُسألون عنه", "واسأل الرسل الذين أرسلنا قبلك: هل أمرناهم بعبادة آلهة غير الرحمن؟", "ولقد أرسلنا موسى بمعجزاتنا إلى فرعون وجماعته فقال: إني رسول رب العالمين", "فلما جاءهم بآياتنا إذا هم يسخرون منها", "وكل آية نريهم أعظم من التي قبلها، وأخذناهم بالعذاب لعلهم يرجعون", "وقالوا: يا أيها الساحر ادعُ لنا ربك بما عهد عندك، فإننا سنهتدي", "فلما رفعنا عنهم العذاب إذا هم ينقضون عهدهم", "ونادى فرعون في قومه: يا قوم ألست أملك مصر وهذه الأنهار تجري من تحتي؟ أفلا ترون؟", "بل أنا أفضل من هذا الضعيف الذي لا يكاد يُفصح بكلامه!", "فهلّا أُعطي أساور من ذهب أو جاء معه الملائكة؟", "فاستخفّ بعقول قومه فأطاعوه، إنهم كانوا قوماً فاسقين", "فلما أغضبونا انتقمنا منهم فأغرقناهم جميعاً", "وجعلناهم عبرة ومثلاً لمن بعدهم", "ولما ذُكر عيسى ابن مريم مثلاً إذا قومك يضجّون ويصدّون", "وقالوا: آلهتنا خير أم عيسى؟ ما قالوا ذلك إلا للجدال، بل هم قوم شديدو الخصومة", "ما عيسى إلا عبد أنعمنا عليه وجعلناه عبرة لبني إسرائيل", "ولو نشاء لجعلنا منكم ملائكة يخلفونكم في الأرض", "وإن عيسى لعلامة على قرب القيامة فلا تشكّوا فيها واتبعوني، هذا طريق مستقيم", "ولا يمنعنكم الشيطان إنه عدو واضح لكم", "ولما جاء عيسى بالمعجزات قال: جئتكم بالحكمة ولأوضح لكم بعض ما تختلفون فيه، فاتقوا الله وأطيعوني", "إن الله هو ربي وربكم فاعبدوه، هذا طريق مستقيم", "فاختلفت الفرق بينهم، فهلاك للظالمين من عذاب يوم مؤلم", "هل ينتظرون إلا القيامة أن تأتيهم فجأة وهم لا يشعرون؟", "الأصدقاء يومئذ يصبحون أعداء لبعضهم إلا المتقين", "يا عبادي لا خوف عليكم اليوم ولا تحزنون", "الذين آمنوا بآياتنا وكانوا مسلمين", "ادخلوا الجنة أنتم وزوجاتكم مسرورين", "يُطاف عليهم بأطباق وأكواب من ذهب، وفيها كل ما تشتهيه النفوس وتلذّ به العيون، وأنتم فيها خالدون", "وتلك الجنة التي أُعطيتموها بسبب أعمالكم", "لكم فيها فواكه كثيرة تأكلون منها", "إن المجرمين في عذاب جهنم دائمين", "لا يخفَّف عنهم وهم فيه آيسون من الفرج", "وما ظلمناهم ولكنهم ظلموا أنفسهم", "وينادون: يا مالك ليُنهِ علينا حياتنا! فيقول: إنكم باقون", "لقد جئناكم بالحق لكن أكثركم يكره الحق", "أم أحكموا أمراً بالكيد؟ فإنا محكمون تدبيرنا", "أم يظنون أنا لا نسمع سرّهم وحديثهم الخفي؟ بل نسمع، والملائكة عندهم يكتبون", "قل: لو كان للرحمن ولد فأنا أول من يعبده، لكن هذا باطل", "تنزّه رب السماوات والأرض رب العرش عما يصفون", "فاتركهم يخوضون ويلعبون حتى يلاقوا يومهم الذي وُعدوا به", "وهو الذي يُعبد في السماء وفي الأرض وهو الحكيم العليم", "وتبارك الذي له ملك السماوات والأرض وما بينهما وعنده علم الساعة وإليه ترجعون", "ولا يملك الذين يعبدونهم من دونه الشفاعة إلا من شهد بالحق عن علم", "ولئن سألتهم: من خلقهم؟ ليقولن: الله، فكيف يُصرفون عن عبادته؟", "ويقول النبي: يا رب إن هؤلاء قوم لا يؤمنون", "فاعفُ عنهم وقل: سلام، فسوف يعلمون عاقبة أمرهم"],
+  branches:["القرآن في اللوح المحفوظ","ذمّ التقليد الأعمى للآباء","قصة إبراهيم والتوحيد","غرور فرعون وزينة الدنيا","قصة عيسى عليه السلام","نعيم الجنة وعذاب جهنم"],
+  vocab:[["مترفوها","أغنياؤها المنعّمون المتكبرون"], ["زخرفاً","ذهباً وزينة"], ["مقرنين","قادرين ومطيقين"], ["مبلسون","يائسون حزينون"]],
+  benefits:["لا نقلّد الآباء في الخطأ، بل نتبع الحق والدليل", "زينة الدنيا زائلة والآخرة للمتقين", "نذكر الله بدعاء الركوب: سبحان الذي سخّر لنا هذا"]},
+{n:44,icon:"☁️",name:"الدخان",verses:59,type:"مكية",theme:"ليلة القدر، وهلاك فرعون وقومه عبرة، ويوم الفصل، وعذاب الأثيم ونعيم المتقين",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "أقسم بالقرآن الواضح", "إنا أنزلنا القرآن في ليلة مباركة (ليلة القدر) وكنا منذرين", "في هذه الليلة يُفصل ويُبيّن كل أمر محكم", "أمراً من عندنا إنا كنا مرسلين الرسل", "رحمة من ربك إنه هو السميع العليم", "رب السماوات والأرض وما بينهما إن كنتم موقنين", "لا إله إلا هو يحيي ويميت، ربكم ورب آبائكم الأولين", "بل هم في شك يلعبون", "فانتظر يوم تأتي السماء بدخان واضح", "يغطي الناس، هذا عذاب مؤلم", "يقولون: ربنا اكشف عنا العذاب إنا مؤمنون", "كيف تنفعهم الموعظة وقد جاءهم رسول واضح؟", "ثم أعرضوا عنه وقالوا: معلَّم مجنون", "إنا سنكشف العذاب قليلاً ولكنكم ستعودون للكفر", "يوم نبطش البطشة الكبرى إنا منتقمون", "ولقد اختبرنا قبلهم قوم فرعون وجاءهم رسول كريم (موسى)", "قال لهم: سلّموا إليّ عباد الله بني إسرائيل، إني رسول أمين لكم", "ولا تتكبروا على الله، إني آتيكم بدليل واضح", "وإني اعتصمت بربي وربكم أن تقتلوني بالحجارة", "وإن لم تصدّقوني فابتعدوا عني", "فدعا موسى ربه: إن هؤلاء قوم مجرمون", "فأمره الله: اخرج بعبادي ليلاً فإنكم مطاردون", "واترك البحر ساكناً بعد عبورك فإنهم جنود سيغرقون", "كم تركوا من بساتين وعيون ماء", "وزروع ومنازل حسنة", "ونعمة كانوا فيها متنعمين", "هكذا كان، وأعطيناها قوماً آخرين", "فما بكت عليهم السماء والأرض ولم يُمهَلوا", "ولقد أنقذنا بني إسرائيل من العذاب المهين", "من فرعون إنه كان متكبراً من المسرفين", "ولقد اخترناهم على علم منا على أهل زمانهم", "وأعطيناهم من المعجزات ما فيه اختبار واضح", "إن هؤلاء المشركين ليقولون", "ما هي إلا موتتنا الأولى وما نحن بمبعوثين", "فأحيوا آباءنا إن كنتم صادقين", "أهم أفضل أم قوم تبع (ملوك اليمن) والذين قبلهم؟ أهلكناهم لأنهم مجرمون", "وما خلقنا السماوات والأرض وما بينهما لعباً", "ما خلقناهما إلا بالحق ولكن أكثرهم لا يعلمون", "إن يوم الفصل (القضاء) هو موعدهم جميعاً", "يوم لا ينفع قريب قريبه شيئاً ولا ينصرون", "إلا من رحمه الله، إنه هو العزيز الرحيم", "إن شجرة الزقوم", "طعام الإنسان الآثم", "كالزيت المغلي يغلي في البطون", "كغليان الماء الحار", "يقال للملائكة: خذوه واسحبوه بقوة إلى وسط الجحيم", "ثم صبّوا فوق رأسه من الماء الحار", "ويقال له سخرية: ذق، فإنك كنت تظن نفسك العزيز الكريم", "إن هذا هو العذاب الذي كنتم تشكّون فيه", "إن المتقين في مكان آمن", "في بساتين وعيون", "يلبسون الحرير الرقيق والغليظ جالسين متقابلين", "هكذا، وزوّجناهم بحور عين", "يطلبون فيها كل فاكهة وهم آمنون", "لا يذوقون فيها موتاً إلا الموتة الأولى في الدنيا، ووقاهم عذاب الجحيم", "فضلاً من ربك، وذلك هو الفوز العظيم", "فإنما سهّلنا القرآن بلسانك لعلهم يتذكرون", "فانتظر إنهم منتظرون"],
+  branches:["القرآن في الليلة المباركة","تحذير المشركين من العذاب","قصة موسى وفرعون وإغراقه","يوم الفصل بين الخلق","شجرة الزقوم وعذاب الأثيم","نعيم المتقين في الجنة"],
+  vocab:[["الدخان","علامة قبل القيامة تغشى الناس"], ["رهواً","ساكناً مفتوحاً"], ["الزقوم","شجرة مرّة في جهنم يأكل منها الكافرون"], ["سندس","حرير رقيق ناعم"]],
+  benefits:["القرآن نزل في ليلة مباركة هي ليلة القدر", "الله ينصر المؤمنين ويهلك المتكبرين كفرعون", "التقوى طريق الأمان والجنة"]},
+{n:45,icon:"🧎",name:"الجاثية",verses:37,type:"مكية",theme:"آيات الله في الكون، وذمّ الاستكبار والهوى، والتسخير للإنسان، وجثو الأمم يوم القيامة",
+  ayahs:["حم: حروف مقطعة الله أعلم بمعناها", "هذا الكتاب منزَّل من الله العزيز الحكيم", "إن في السماوات والأرض لدلائل للمؤمنين", "وفي خلقكم وما ينتشر من الحيوانات دلائل لقوم يوقنون", "وفي تعاقب الليل والنهار، وما ينزل من السماء من المطر فتحيا به الأرض بعد موتها، وفي تحريك الرياح دلائل لقوم يعقلون", "تلك آيات الله نقرؤها عليك بالحق، فبأي كلام بعد الله وآياته يؤمنون؟", "هلاك لكل كذّاب كثير الذنوب", "يسمع القرآن يُقرأ عليه ثم يتكبر مصرّاً كأنه لم يسمعه، فبشّره بعذاب مؤلم", "وإذا علم شيئاً من آياتنا سخر منه، أولئك لهم عذاب يُهينهم", "من أمامهم جهنم، ولا ينفعهم ما كسبوا ولا الذين عبدوهم من دون الله، ولهم عذاب عظيم", "هذا القرآن هدى، والذين كفروا بآيات ربهم لهم عذاب شديد مؤلم", "الله الذي ذلّل لكم البحر لتجري السفن فيه بأمره ولتطلبوا من رزقه ولعلكم تشكرون", "وذلّل لكم ما في السماوات وما في الأرض جميعاً من فضله، إن في ذلك لدلائل لقوم يتفكرون", "قل للمؤمنين: سامحوا الذين لا يرجون أيام الله، ليجزي الله كل قوم بما عملوا", "من عمل صالحاً فلنفسه ومن أساء فعليها ثم إلى ربكم ترجعون", "ولقد أعطينا بني إسرائيل الكتاب والحكم والنبوة ورزقناهم الطيبات وفضلناهم على أهل زمانهم", "وأعطيناهم أدلة واضحة في الدين، فما اختلفوا إلا بعد أن جاءهم العلم حسداً بينهم، إن ربك سيقضي بينهم يوم القيامة", "ثم جعلناك يا محمد على طريقة واضحة من الدين فاتبعها ولا تتبع أهواء الجاهلين", "إنهم لن ينفعوك من الله شيئاً، والظالمون بعضهم أنصار بعض والله ناصر المتقين", "هذا القرآن بصائر للناس وهدى ورحمة لقوم يوقنون", "أم ظنّ الذين فعلوا السيئات أن نجعلهم مثل المؤمنين الصالحين في حياتهم ومماتهم؟ بئس ما يحكمون", "وخلق الله السماوات والأرض بالحق، ولتُجزى كل نفس بما عملت وهم لا يُظلمون", "أرأيت من جعل هواه إلهه، وأضلّه الله بعد علمه وختم على سمعه وقلبه وجعل على بصره غطاءً، فمن يهديه بعد الله؟ أفلا تتذكرون؟", "وقالوا: ما هي إلا حياتنا الدنيا نموت ونحيا وما يُهلكنا إلا مرور الزمن! وليس لهم علم بذلك، إنما هم يخمّنون", "وإذا قُرئت عليهم آياتنا الواضحة لم يكن جوابهم إلا أن قالوا: ائتوا بآبائنا الموتى إن كنتم صادقين", "قل: الله يحييكم ثم يميتكم ثم يجمعكم ليوم القيامة لا شك فيه، لكن أكثر الناس لا يعلمون", "ولله ملك السماوات والأرض، ويوم تقوم القيامة يخسر أهل الباطل", "وترى كل أمة جاثية على ركبها، كل أمة تُدعى إلى كتاب أعمالها: اليوم تُجزون بما كنتم تعملون", "هذا كتابنا يتكلم عليكم بالحق، إنا كنا نسجّل أعمالكم", "فأما الذين آمنوا وعملوا الصالحات فيدخلهم ربهم في رحمته، وذلك الفوز الواضح", "وأما الذين كفروا فيقال لهم: ألم تكن آياتي تُقرأ عليكم فتكبرتم وكنتم قوماً مجرمين؟", "وإذا قيل: وعد الله حق والقيامة لا شك فيها، قلتم: لا ندري ما القيامة، إن نحن إلا نظن ولسنا موقنين", "وظهرت لهم عقوبات أعمالهم السيئة ونزل بهم ما كانوا يسخرون منه", "وقيل لهم: اليوم نتركهم في العذاب كما نسيتم لقاء هذا اليوم، ومقامكم النار وليس لكم ناصر", "ذلك بسبب أنكم سخرتم من آيات الله وخدعتكم الحياة الدنيا، فاليوم لا يخرجون من النار ولا يُطلب منهم أن يرضوا الله", "فلله الحمد رب السماوات ورب الأرض رب العالمين", "وله العظمة في السماوات والأرض وهو العزيز الحكيم"],
+  branches:["آيات الله في الكون والخلق","ذمّ الكذّابين والمستكبرين","تسخير البحر وما في الكون للإنسان","من جعل هواه إلهه","شبهة إنكار البعث","الأمم جاثية على ركبها يوم القيامة"],
+  vocab:[["جاثية","جالسة على ركبتيها خوفاً"], ["أفّاك","كثير الكذب"], ["غشاوة","غطاء يمنع الرؤية"], ["نستنسخ","نسجّل ونكتب ما عملتم"]],
+  benefits:["نتأمل في الكون: الليل والنهار والمطر دلائل على الله", "لا نجعل هوى النفس معبودنا، بل نتبع الحق", "أعمالنا مسجلة وستُعرض علينا يوم القيامة"]},
+];
+
+const ALL_SURAHS = surahsAmma.concat(surahsTabarak).concat(surahsJuz28).concat(surahsJuz27).concat(surahsJuz26).concat(surahsJuz25);
 let surahs = surahsAmma;
 let activeJuz = "amma";
 
@@ -2094,23 +2379,18 @@ const CELEBRATION_PALETTES = [
   { pieces:['🕌','🌙','⭐','✨','📖','🌟'], colors:['#48d8c8','#ffc94c','#6ee7b7','#ffffff'] },
 ];
 const MEDAL_3D_ICONS = ['🏆','🥇','⭐','🎖️','👑'];
+let celebrating = false, celebCanvas = null, celebRAF = 0;
+const CELEB_STYLES = ['fireworks','confetti','stars','fountain','balloons','rainbow'];
+let lastCelebStyle = '';
 function celebrate(){
   playWinSound();
+  if(celebrating){ return; } // ignore rapid taps: never stack animations
+  celebrating = true;
+  let style; do{ style = pick(CELEB_STYLES); }while(style === lastCelebStyle);
+  lastCelebStyle = style;
   const palette = pick(CELEBRATION_PALETTES);
-  screenFlash();
-  spawnConfetti(palette.pieces);
-  spawnConfetti(palette.pieces); // double layer for a denser shower
-  spawnFireworks(palette.colors);
   spawn3DMedal();
-}
-
-function screenFlash(){
-  const flash = document.createElement('div');
-  flash.style.cssText = `position:fixed; inset:0; z-index:10001; pointer-events:none;
-    background:radial-gradient(circle, rgba(255,255,255,.55), rgba(255,201,76,.15) 40%, transparent 70%);
-    animation:flash-fade .5s ease-out forwards;`;
-  document.body.appendChild(flash);
-  setTimeout(()=>flash.remove(), 550);
+  runCanvasCelebration(style, palette);
 }
 
 function spawn3DMedal(){
@@ -2121,80 +2401,71 @@ function spawn3DMedal(){
   setTimeout(()=>medal.remove(), 2300);
 }
 
-function spawnConfetti(pieces){
-  const layer = document.createElement('div');
-  layer.style.cssText = 'position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden; perspective:600px;';
-  document.body.appendChild(layer);
-  const count = 40 + Math.floor(Math.random()*25);
-  for(let i=0;i<count;i++){
-    const piece = document.createElement('div');
-    piece.textContent = pick(pieces);
-    const left = Math.random()*100;
-    const size = 16 + Math.random()*24;
-    const duration = 1.6 + Math.random()*1.8;
-    const delay = Math.random()*0.7;
-    piece.style.cssText = `position:absolute; left:${left}%; top:-40px; font-size:${size}px;
-      transform-style:preserve-3d;
-      animation:confetti-fall-3d ${duration}s ease-in ${delay}s forwards;`;
-    layer.appendChild(piece);
+/* One lightweight canvas for the whole celebration (no hundreds of DOM nodes) */
+function runCanvasCelebration(style, palette){
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const W = window.innerWidth, H = window.innerHeight;
+  const cv = document.createElement('canvas');
+  cv.width = W*dpr; cv.height = H*dpr;
+  cv.style.cssText = 'position:fixed; inset:0; width:100%; height:100%; z-index:9999; pointer-events:none;';
+  document.body.appendChild(cv);
+  celebCanvas = cv;
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const colors = palette.colors, emojis = palette.pieces;
+  const rnd = (a,b)=>a+Math.random()*(b-a);
+  let parts = [];
+  const MAXP = 260;
+  const add = p=>{ if(parts.length < MAXP) parts.push(p); };
+  const DURATION = 4200;
+  const t0 = performance.now();
+  let last = t0, nextSpawn = 0;
+
+  function burst(x,y){
+    const col = pick(colors), n = 36;
+    for(let i=0;i<n;i++){
+      const ang = Math.PI*2*i/n, sp = rnd(2,6.5);
+      add({k:'dot', x, y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, g:.06, life:rnd(.9,1.4), age:0, r:rnd(2,3.6), c:col});
+    }
   }
-  setTimeout(()=>layer.remove(), 4200);
-}
-
-/* Animated fireworks: a rocket visibly launches upward with a glowing trail, then explodes into particles */
-function spawnFireworks(colors){
-  const bursts = 6 + Math.floor(Math.random()*4);
-  for(let b=0;b<bursts;b++){
-    const delay = b * (220 + Math.random()*140);
-    setTimeout(()=>launchRocket(colors), delay);
+  function spawnTick(now, dt){
+    if(now < nextSpawn) return;
+    const el = now - t0;
+    if(style==='fireworks'){ if(el<3000){ burst(rnd(W*.1,W*.9), rnd(H*.1,H*.5)); nextSpawn = now+rnd(260,420);} }
+    else if(style==='confetti'){ if(el<2600){ for(let i=0;i<7;i++) add({k:'rect', x:rnd(0,W), y:-12, vx:rnd(-.8,.8), vy:rnd(2,4.5), g:.01, life:3, age:0, w:rnd(6,11), h:rnd(9,16), rot:rnd(0,6), vr:rnd(-.2,.2), c:pick(colors)}); nextSpawn=now+60; } }
+    else if(style==='stars'){ if(el<2800){ for(let i=0;i<3;i++) add({k:'emoji', e:pick(emojis), x:rnd(0,W), y:-30, vx:rnd(-.6,.6), vy:rnd(2.5,5), g:.02, life:3, age:0, s:rnd(22,40), rot:0, vr:rnd(-.05,.05)}); nextSpawn=now+90; } }
+    else if(style==='fountain'){ if(el<2600){ for(let i=0;i<5;i++) add({k:'dot', x:W/2, y:H, vx:rnd(-4.2,4.2), vy:rnd(-15,-9), g:.28, life:2.4, age:0, r:rnd(3,6), c:pick(colors)}); nextSpawn=now+40; } }
+    else if(style==='balloons'){ if(el<2400){ add({k:'emoji', e:pick(['🎈','🎈','🎈','⭐','💛']), x:rnd(20,W-20), y:H+40, vx:rnd(-.4,.4), vy:rnd(-4.2,-2.6), g:0, life:3.6, age:0, s:rnd(40,64), rot:0, vr:0}); nextSpawn=now+110; } }
+    else if(style==='rainbow'){ if(el<2800){ const ang = el/260; for(let i=0;i<4;i++) add({k:'dot', x:W/2, y:H*.45, vx:Math.cos(ang+i*1.57)*rnd(3,5.5), vy:Math.sin(ang+i*1.57)*rnd(3,5.5), g:.03, life:1.8, age:0, r:rnd(3,5), c:`hsl(${(el/6+i*90)%360},90%,62%)`}); nextSpawn=now+30; } }
   }
-}
 
-function launchRocket(colors){
-  const originX = 10 + Math.random()*80; // vw %
-  const originY = 8 + Math.random()*52; // vh % (explosion height)
-  const color = pick(colors);
-  const launchDuration = 0.55 + Math.random()*0.3;
-
-  const rocket = document.createElement('div');
-  rocket.className = 'firework-rocket';
-  rocket.style.left = originX + 'vw';
-  rocket.style.top = '105vh';
-  rocket.style.background = color;
-  rocket.style.boxShadow = `0 14px 18px -3px ${color}, 0 0 8px 2px ${color}`;
-  document.body.appendChild(rocket);
-
-  requestAnimationFrame(()=>{
-    rocket.style.transition = `top ${launchDuration}s cubic-bezier(.25,.46,.45,.94), opacity .15s ease ${launchDuration - 0.1}s`;
-    rocket.style.top = originY + 'vh';
-    rocket.style.opacity = '0';
-  });
-
-  setTimeout(()=>{
-    rocket.remove();
-    explodeFirework(originX, originY, colors);
-  }, launchDuration*1000);
-}
-
-function explodeFirework(originX, originY, colors){
-  const particleCount = 22 + Math.floor(Math.random()*14);
-  for(let i=0;i<particleCount;i++){
-    const angle = (Math.PI*2 * i)/particleCount + Math.random()*0.3;
-    const distance = 60 + Math.random()*130;
-    const dx = Math.cos(angle)*distance;
-    const dy = Math.sin(angle)*distance;
-    const p = document.createElement('div');
-    p.className = 'firework-particle';
-    p.style.left = originX+'vw';
-    p.style.top = originY+'vh';
-    p.style.background = pick(colors);
-    p.style.width = p.style.height = (6+Math.random()*6)+'px';
-    p.style.setProperty('--dx', dx+'px');
-    p.style.setProperty('--dy', dy+'px');
-    p.style.animation = `firework-particle ${0.6+Math.random()*0.5}s ease-out forwards`;
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(), 1200);
+  function frame(now){
+    const dt = Math.min((now-last)/16.67, 3); last = now;
+    ctx.clearRect(0,0,W,H);
+    spawnTick(now, dt);
+    parts = parts.filter(p=>{
+      p.age += dt/60;
+      if(p.age > p.life || p.y > H+80 || p.y < -120) return false;
+      p.vy += p.g*dt; p.x += p.vx*dt; p.y += p.vy*dt;
+      const fade = p.k==='dot' && p.life<2 ? Math.max(0, 1-p.age/p.life) : 1;
+      ctx.globalAlpha = fade;
+      if(p.k==='dot'){ ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
+      else if(p.k==='rect'){ p.rot += p.vr*dt; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); }
+      else { p.rot += p.vr*dt; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.font = p.s+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(p.e,0,0); ctx.restore(); }
+      return true;
+    });
+    ctx.globalAlpha = 1;
+    if(now - t0 < DURATION && (parts.length || now - t0 < 2800)){
+      celebRAF = requestAnimationFrame(frame);
+    } else { stopCelebration(); }
   }
+  celebRAF = requestAnimationFrame(frame);
+  setTimeout(stopCelebration, DURATION + 1500); // safety net
+}
+function stopCelebration(){
+  cancelAnimationFrame(celebRAF);
+  if(celebCanvas){ celebCanvas.remove(); celebCanvas = null; }
+  celebrating = false;
 }
 
 document.getElementById('fireworksBtn').addEventListener('click', ()=>{
@@ -2203,6 +2474,356 @@ document.getElementById('fireworksBtn').addEventListener('click', ()=>{
 document.getElementById('celebrateInlineBtn').addEventListener('click', ()=>{
   celebrate();
 });
+
+
+/* =================================================================
+   رحلة البحث عن الكنز — 5 stages per surah, each unlocked a different way
+   ================================================================= */
+const TQ_STAGES = [
+  {icon:'🚪', title:'بوابة المعاني',   hint:'أجيبي عن 3 أسئلة عن كلمات السورة لتنفتح البوابة'},
+  {icon:'🌉', title:'جسر الصح والخطأ', hint:'اعبري الجسر: احكمي على 3 جمل هل هي صح أم خطأ'},
+  {icon:'🌳', title:'غابة الفروع',      hint:'اختاري فقط الفروع التي تنتمي لهذه السورة'},
+  {icon:'🧠', title:'كهف الذاكرة',      hint:'اقلبي البطاقات وطابقي كل كلمة مع معناها'},
+  {icon:'🔐', title:'قفل الصندوق',      hint:'رتّبي كلمات الجملة بالترتيب الصحيح لفتح القفل'},
+];
+const TQ_KEY = 'quranStars_treasure_v1';
+function tqLoadAll(){ try{ return JSON.parse(localStorage.getItem(TQ_KEY))||{}; }catch(e){ return {}; } }
+function tqProgress(n){ const k = tqLoadAll()[(playerName||'_')+'|'+n]; return k||0; }
+function tqSetProgress(n, v){
+  try{ const all = tqLoadAll(); const key=(playerName||'_')+'|'+n; if((all[key]||0) < v){ all[key]=v; localStorage.setItem(TQ_KEY, JSON.stringify(all)); } }catch(e){}
+}
+let tqMemo = {}; // in-session fallback if storage is blocked
+function tqGet(n){ return Math.max(tqProgress(n), tqMemo[n]||0); }
+function tqSet(n,v){ tqMemo[n] = Math.max(tqMemo[n]||0, v); tqSetProgress(n,v); }
+
+function tqArea(){ return document.getElementById('treasurePanel'); }
+function tqMsg(text, color){ const m = document.getElementById('tqMsg'); if(m){ m.textContent = text; m.style.color = color||'var(--ink)'; } }
+
+function tqRenderMap(cleared, activeIdx){
+  let h = '<div class="tq-map">';
+  for(let i=0;i<6;i++){
+    const isChest = i===5;
+    const icon = isChest ? (cleared>=5 ? '🧰' : '🔒') : TQ_STAGES[i].icon;
+    let cls = 'tq-node';
+    if(i < cleared) cls += ' done';
+    if(i === activeIdx) cls += ' current';
+    if(i > cleared) cls += ' locked';
+    h += `<div class="${cls}" data-i="${i}">${i<cleared && !isChest ? '✅' : icon}</div>`;
+    if(i<5) h += `<div class="tq-link ${i<cleared?'done':''}"></div>`;
+  }
+  return h + '</div>';
+}
+
+function tqShowStage(i){
+  const s = currentSurah, area = tqArea();
+  const cleared = tqGet(s.n);
+  if(i > cleared) i = cleared;
+  area.innerHTML = tqRenderMap(cleared, i) + '<div id="tqBody"></div><div class="tq-msg" id="tqMsg"></div>';
+  area.querySelectorAll('.tq-node').forEach(nd=>{
+    nd.addEventListener('click', ()=>{
+      const k = +nd.dataset.i;
+      if(k > tqGet(s.n)){ tqMsg('🔒 أكملي المرحلة السابقة أولاً', 'var(--gold)'); return; }
+      playClickTileSound(); tqShowStage(k);
+    });
+  });
+  if(i === 5){ tqChest(); return; }
+  const st = TQ_STAGES[i];
+  document.getElementById('tqBody').innerHTML = `<div class="tq-title">${st.icon} ${st.title}</div><div class="tq-hint">${st.hint}</div><div id="tqGame"></div>`;
+  [tqGate, tqBridge, tqForest, tqCave, tqLock][i](document.getElementById('tqGame'), i);
+}
+
+function tqPass(i){
+  const s = currentSurah;
+  playWinSound();
+  tqSet(s.n, i+1);
+  const g = document.getElementById('tqGame');
+  const last = i === 4;
+  if(g) g.innerHTML = `<div style="text-align:center; padding:10px 0;"><div style="font-size:70px;">${last?'🔓':'✨'}</div>
+    <div class="tq-title">${last?'انفتح القفل!':'أحسنتِ! عبرتِ المرحلة'}</div>
+    <button class="ghost-btn" id="tqNext" style="margin-top:12px; font-size:16px; padding:10px 22px;">${last?'🧰 إلى صندوق الكنز':'التالي ⬅'}</button></div>`;
+  celebrate();
+  const b = document.getElementById('tqNext'); if(b) b.addEventListener('click', ()=>{ playClickTileSound(); tqShowStage(i+1); });
+}
+
+/* Stage 1: word-meaning gate (retry until right) */
+function tqGate(box, stageIdx){
+  const s = currentSurah;
+  const words = shuffle(s.vocab); while(words.length<3) words.push(pick(s.vocab));
+  const qs = words.slice(0,3);
+  let r = 0;
+  function show(){
+    const [word, meaning] = qs[r];
+    const same = s.vocab.filter(v=>v[0]!==word && v[1]!==meaning).map(v=>v[1]);
+    const other = shuffle(surahs.filter(x=>x.n!==s.n).flatMap(x=>x.vocab.map(v=>v[1]))).filter(m=>m!==meaning);
+    const dis = shuffle(same).concat(other).slice(0,2);
+    const opts = shuffle([meaning, ...dis]);
+    box.innerHTML = `<div class="tq-dots">${[0,1,2].map(k=>k<r?'🔑':'⚪').join('')}</div>
+      <div class="tq-q">ما معنى كلمة <b>${word}</b> ؟</div><div class="tq-opts">${opts.map(o=>`<button class="tq-opt">${o}</button>`).join('')}</div>`;
+    box.querySelectorAll('.tq-opt').forEach(b=>b.addEventListener('click', ()=>{
+      if(b.textContent === meaning){
+        b.classList.add('ok'); playCorrectSound(); r++; tqMsg('✅ صحيح!', 'var(--mint)');
+        box.querySelectorAll('.tq-opt').forEach(x=>x.style.pointerEvents='none');
+        setTimeout(()=>{ if(r>=3) tqPass(stageIdx); else { tqMsg(''); show(); } }, 700);
+      } else { b.classList.add('bad'); b.style.pointerEvents='none'; playWrongSound(); tqMsg('💫 حاولي مرة أخرى', 'var(--gold)'); }
+    }));
+  }
+  show();
+}
+
+/* Stage 2: true/false bridge */
+function tqBridge(box, stageIdx){
+  const s = currentSurah;
+  const otherBen = surahs.filter(x=>x.n!==s.n).flatMap(x=>x.benefits);
+  const otherThemes = surahs.filter(x=>x.n!==s.n).map(x=>x.theme);
+  const b = shuffle(s.benefits);
+  const items = shuffle([
+    {t:`من فوائد سورة ${s.name}: ${b[0]}`, ok:true},
+    {t:`من فوائد سورة ${s.name}: ${pick(otherBen)}`, ok:false},
+    Math.random()<.5 ? {t:`موضوع سورة ${s.name}: ${s.theme}`, ok:true} : {t:`موضوع سورة ${s.name}: ${pick(otherThemes)}`, ok:false},
+  ]);
+  let r=0;
+  function show(){
+    box.innerHTML = `<div class="tq-dots">${[0,1,2].map(k=>k<r?'🪵':'⚪').join('')}</div>
+      <div class="tq-q">${items[r].t}</div>
+      <div class="tq-tf"><button class="tq-opt" data-v="1">✅ صح</button><button class="tq-opt" data-v="0">❌ خطأ</button></div>`;
+    box.querySelectorAll('.tq-opt').forEach(btn=>btn.addEventListener('click', ()=>{
+      const ans = btn.dataset.v==='1';
+      if(ans === items[r].ok){
+        btn.classList.add('ok'); playCorrectSound(); r++; tqMsg('✅ أحسنتِ!', 'var(--mint)');
+        box.querySelectorAll('.tq-opt').forEach(x=>x.style.pointerEvents='none');
+        setTimeout(()=>{ if(r>=3) tqPass(stageIdx); else { tqMsg(''); show(); } }, 700);
+      } else { btn.classList.add('bad'); btn.style.pointerEvents='none'; playWrongSound(); tqMsg('💫 فكّري مرة أخرى', 'var(--gold)'); }
+    }));
+  }
+  show();
+}
+
+/* Stage 3: forest — pick only the real branches (multi-select) */
+function tqForest(box, stageIdx){
+  const s = currentSurah;
+  const real = shuffle(s.branches).slice(0,4);
+  const pool = shuffle(surahs.filter(x=>x.n!==s.n).flatMap(x=>x.branches)).filter(x=>!s.branches.includes(x));
+  const fake = [...new Set(pool)].slice(0,4);
+  let chips = shuffle([...real.map(t=>({t,ok:true})), ...fake.map(t=>({t,ok:false}))]);
+  function render(){
+    box.innerHTML = `<div class="tq-hint" style="margin-top:-6px;">اختاري ${real.length} فروع صحيحة ثم اضغطي «تحقق»</div>
+      <div class="tq-chips">${chips.map((c,k)=>`<button class="tq-opt" data-k="${k}">${c.t}</button>`).join('')}</div>
+      <div style="text-align:center;"><button class="ghost-btn" id="tqCheck" style="font-size:16px; padding:10px 24px;">🔍 تحقق</button></div>`;
+    box.querySelectorAll('.tq-chips .tq-opt').forEach(b=>b.addEventListener('click', ()=>{ playClickTileSound(); b.classList.toggle('sel'); }));
+    document.getElementById('tqCheck').addEventListener('click', ()=>{
+      const sel = [...box.querySelectorAll('.tq-chips .tq-opt.sel')];
+      const wrong = sel.filter(b=>!chips[+b.dataset.k].ok);
+      const right = sel.filter(b=>chips[+b.dataset.k].ok);
+      if(wrong.length===0 && right.length===real.length){ sel.forEach(b=>b.classList.add('ok')); playCorrectSound(); setTimeout(()=>tqPass(stageIdx), 600); return; }
+      wrong.forEach(b=>{ b.classList.remove('sel'); b.classList.add('bad'); setTimeout(()=>b.classList.remove('bad'),700); });
+      playWrongSound();
+      tqMsg(wrong.length ? `💫 ${wrong.length} من اختياراتك ليست من السورة — جرّبي مجدداً` : `💫 ما زال هناك فروع ناقصة (${right.length} من ${real.length})`, 'var(--gold)');
+    });
+  }
+  render();
+}
+
+/* Stage 4: memory cave — match word with meaning */
+function tqCave(box, stageIdx){
+  const s = currentSurah;
+  const pairs = shuffle(s.vocab).slice(0,3);
+  while(pairs.length<3){ const extra = pick(surahs.filter(x=>x.n!==s.n).flatMap(x=>x.vocab)); if(!pairs.some(p=>p[0]===extra[0])) pairs.push(extra); }
+  const cards = shuffle(pairs.flatMap((p,k)=>[{k,t:p[0],kind:'word'},{k,t:p[1],kind:'mean'}]));
+  let first = null, lock = false, matched = 0, tries = 0;
+  box.innerHTML = `<div class="tq-mem">${cards.map((c,i)=>`<button class="tq-card down" data-i="${i}">❓</button>`).join('')}</div>`;
+  const els = [...box.querySelectorAll('.tq-card')];
+  els.forEach((el,i)=>el.addEventListener('click', ()=>{
+    if(lock || el.classList.contains('up')) return;
+    const c = cards[i];
+    el.classList.remove('down'); el.classList.add('up', c.kind); el.textContent = c.t; playClickTileSound();
+    if(first===null){ first = i; return; }
+    const a = cards[first];
+    if(a.k === c.k && a.kind !== c.kind){
+      els[first].classList.add('matched'); el.classList.add('matched'); matched++; first = null; playCorrectSound(); tqMsg('✨ زوج صحيح!', 'var(--mint)');
+      if(matched===3) setTimeout(()=>tqPass(stageIdx), 700);
+    } else {
+      lock = true; tries++; const f = first; first = null; playWrongSound(); tqMsg('💫 ليسا زوجاً، تذكّري أماكنهما', 'var(--gold)');
+      setTimeout(()=>{ [els[f], el].forEach(x=>{ x.classList.remove('up','word','mean'); x.classList.add('down'); x.textContent='❓'; }); lock=false; tqMsg(''); }, 1100);
+    }
+  }));
+}
+
+/* Stage 5: lock — rebuild a sentence word by word */
+function tqLock(box, stageIdx){
+  const s = currentSurah;
+  const clean = t=>t.replace(/\s+/g,' ').trim();
+  let cands = s.ayahs.map(clean).filter(t=>!/[()«»:؟?،,]/.test(t) && t.split(' ').length>=3 && t.split(' ').length<=7);
+  if(!cands.length) cands = s.benefits.map(clean).filter(t=>t.split(' ').length>=3 && t.split(' ').length<=8);
+  if(!cands.length) cands = [clean(s.theme)];
+  const target = pick(cands), words = target.split(' ');
+  let order, placed = [];
+  do{ order = shuffle(words.map((w,i)=>({w,i}))); }while(words.length>1 && order.every((o,k)=>o.w===words[k]));
+  function render(){
+    const rest = order.filter(o=>!placed.includes(o));
+    box.innerHTML = `<div class="tq-answer" id="tqAns">${placed.map((o,k)=>`<button class="tq-opt sel" data-p="${k}">${o.w}</button>`).join('')}</div>
+      <div class="tq-chips">${rest.map(o=>`<button class="tq-opt" data-w="${order.indexOf(o)}">${o.w}</button>`).join('')}</div>
+      <div style="text-align:center;"><button class="ghost-btn" id="tqReset">🔁 من جديد</button></div>`;
+    box.querySelectorAll('.tq-chips .tq-opt').forEach(b=>b.addEventListener('click', ()=>{
+      placed.push(order[+b.dataset.w]); playClickTileSound();
+      if(placed.length === words.length){
+        if(placed.map(o=>o.w).join(' ') === words.join(' ')){ render(); box.querySelectorAll('.tq-answer .tq-opt').forEach(x=>{x.classList.remove('sel'); x.classList.add('ok');}); playCorrectSound(); setTimeout(()=>tqPass(stageIdx), 700); return; }
+        playWrongSound(); tqMsg('💫 الترتيب غير صحيح، جرّبي من جديد', 'var(--gold)');
+        render(); box.querySelectorAll('.tq-answer .tq-opt').forEach(x=>x.classList.add('bad'));
+        setTimeout(()=>{ placed = []; render(); }, 900); return;
+      }
+      render();
+    }));
+    box.querySelectorAll('.tq-answer .tq-opt').forEach(b=>b.addEventListener('click', ()=>{ placed.splice(+b.dataset.p,1); render(); }));
+    document.getElementById('tqReset').addEventListener('click', ()=>{ placed=[]; tqMsg(''); render(); });
+  }
+  render();
+}
+
+/* Final: the treasure chest */
+function tqChest(){
+  const s = currentSurah;
+  const body = document.getElementById('tqBody');
+  body.innerHTML = `<div class="tq-title">🧰 صندوق كنز سورة ${s.name}</div><div class="tq-hint">اضغطي على الصندوق لتفتحيه!</div><div class="tq-chest" id="tqChestEl">🧰</div>`;
+  const el = document.getElementById('tqChestEl');
+  el.addEventListener('click', ()=>{
+    if(el.classList.contains('open')) return;
+    el.classList.add('open'); el.textContent = '🎁';
+    const loot = shuffle(['💎','👑','🏅','🌟','📿','🪙','🏆']).slice(0,3);
+    const earned = !certificates[s.n];
+    starCount += 3; updateProgress(); try{ jyOnTreasureDone(); }catch(e){}
+    certificates[s.n] = certificates[s.n] || { name: greetName(), date: new Date().toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'}) };
+    try{ renderCertGallery(); }catch(e){}
+    setTimeout(()=>{
+      body.innerHTML = `<div style="text-align:center;"><div class="tq-loot">${loot.join(' ')}</div>
+        <div class="tq-title" style="margin-top:8px;">مبروك يا ${greetName()}! وجدتِ الكنز 🎉</div>
+        <div class="tq-hint">ربحتِ 3 نجوم ⭐⭐⭐ وشهادة كنز سورة ${s.name}</div>
+        <div class="result-btns" style="justify-content:center; flex-wrap:wrap;">
+          <button class="ghost-btn cert-btn" id="tqCert">🎓 شهادتي</button>
+          <button class="ghost-btn" id="tqAgain">🗺️ ارجعي للخريطة</button></div></div>`;
+      document.getElementById('tqCert').addEventListener('click', ()=>showCertificate(s.n));
+      document.getElementById('tqAgain').addEventListener('click', ()=>tqShowStage(0));
+      celebrate();
+    }, 700);
+    playWinSound();
+  });
+}
+
+document.getElementById('treasureBtn').addEventListener('click', ()=>{
+  const panel = tqArea();
+  const opening = !panel.classList.contains('open');
+  panel.classList.toggle('open');
+  if(opening){
+    document.getElementById('tafsirPanel').classList.remove('open');
+    document.getElementById('surahGamesPanel').classList.remove('open');
+    document.getElementById('surahGamesPlay').innerHTML = '';
+    playOpenSound();
+    const c = tqGet(currentSurah.n);
+    tqShowStage(Math.min(c,5));
+  }
+});
+
+
+/* =================================================================
+   خريطة الرحلة: 5 محطات، يظهر محتوى كل محطة مباشرة بدون أي زر للبدء
+   ================================================================= */
+const JY_KEY = 'quranStars_journey_v2';
+const JY_STATIONS = [
+  {icon:'📜', short:'السورة'},
+  {icon:'📖', short:'التفسير'},
+  {icon:'🗺️', short:'الكنز'},
+  {icon:'🎮', short:'العب'},
+  {icon:'⭐', short:'اختبر'},
+];
+let jyMemo = {};
+function jyAll(){ try{ return JSON.parse(localStorage.getItem(JY_KEY))||{}; }catch(e){ return {}; } }
+function jyKey(n){ return (playerName||'_')+'|'+n; }
+function jyData(n){ const m = jyMemo[jyKey(n)]; if(m) return m; return jyAll()[jyKey(n)] || {s:[false,false,false,false,false], g:false}; }
+function jySave(n, d){ jyMemo[jyKey(n)] = d; try{ const all=jyAll(); all[jyKey(n)] = d; localStorage.setItem(JY_KEY, JSON.stringify(all)); }catch(e){} }
+function jyGold(n){ return !!jyData(n).g; }
+function jyMark(i){
+  if(!currentSurah) return;
+  const d = jyData(currentSurah.n); if(d.s[i]) return;
+  const nd = {s:d.s.slice(), g:d.g}; nd.s[i] = true; jySave(currentSurah.n, nd); jyPaintPath();
+}
+let jyView = 0;
+function jyPaintPath(){
+  const d = jyData(currentSurah.n), path = document.getElementById('jyPath'); if(!path) return;
+  path.innerHTML = JY_STATIONS.map((st,i)=>{
+    const cls = (d.s[i] ? 'done ' : '') + (i===jyView ? 'cur' : '');
+    return `<div class="jy-st ${cls}" data-i="${i}"><div class="jy-dot">${d.s[i] ? (i===4&&d.g?'🌟':'✅') : st.icon}</div><small>${i+1}. ${st.short}</small></div>` + (i<4 ? `<div class="jy-line ${d.s[i]?'done':''}"></div>` : '');
+  }).join('');
+  path.querySelectorAll('.jy-st').forEach(el=>el.addEventListener('click', ()=>{ playClickTileSound(); jyShow(+el.dataset.i); }));
+}
+function jyRender(){
+  const s = currentSurah;
+  document.getElementById('journeyPanel').innerHTML = `<button class="jy-back" id="jyBack">⬅ العودة إلى السورة</button><div class="jy-title">🧭 رحلة سورة ${s.name}</div>
+    <div class="jy-sub">محطة واحدة في كل مرة: اضغطي «التالية» لتنتقلي للمحطة الجديدة 🌟</div>
+    <div class="jy-path" id="jyPath"></div><div class="jy-nav" id="jyNavTop"></div><div class="jy-sec-h" id="jyH1">📜 المحطة 1: السورة مكتوبة</div><div class="jy-body" id="jyBody"></div>`;
+  jyView = 0; jyPaintPath();
+  document.getElementById('jyBack').addEventListener('click', ()=>{ playClickTileSound(); jyExit(); });
+  document.getElementById('overlay').scrollTop = 0;
+  jyShow(0);
+  jyLoadAll();
+}
+async function jyLoadAll(){
+  const s = currentSurah, body = document.getElementById('jyBody');
+  // stations 2-5 are laid out directly on the page
+  document.getElementById('tafsirPanel').classList.add('open'); renderTafsir(); jyMark(1);
+  document.getElementById('treasurePanel').classList.add('open'); tqShowStage(Math.min(tqGet(s.n),5));
+  if(tqGet(s.n)>=5) jyMark(2);
+  document.getElementById('surahGamesPanel').classList.add('open');
+  document.getElementById('playBtn').click();
+  // station 1: the written surah
+  body.innerHTML = '<p class="tafsir-loading">⏳ جاري تحميل نص السورة...</p>';
+  let texts=null; try{ texts = await fetchAyahText(s.n); }catch(e){ texts=null; }
+  if(currentSurah!==s) return;
+  const b1 = document.getElementById('jyBody'); if(!b1) return;
+  if(texts){
+    b1.innerHTML = `<div class="jy-h">سورة ${s.name}</div><div class="jy-body-written">${texts.map((t,k)=>`${t}<span class="an">﴿${k+1}﴾</span>`).join(' ')}</div>`;
+    jyMark(0);
+  } else {
+    b1.innerHTML = `<div class="jy-h">سورة ${s.name}</div><p class="jy-p">يحتاج عرض نص السورة إلى اتصال بالإنترنت 📶 تأكدي من الاتصال ثم افتحي السورة من جديد.</p>`;
+  }
+}
+function jyPaintNav(){
+  ['jyNavTop','jyNavBottom'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.innerHTML = `<button class="sec" data-d="-1" ${jyView===0?'disabled':''}>➡ السابقة</button><button data-d="1" ${jyView===4?'disabled':''}>التالية ⬅</button>`;
+    el.querySelectorAll('button').forEach(b=>b.addEventListener('click', ()=>{ playClickTileSound(); jyShow(jyView + (+b.dataset.d)); }));
+  });
+}
+function jyShow(i){
+  i = Math.max(0, Math.min(4, i)); jyView = i;
+  const pn = document.getElementById('panel');
+  for(let k=1;k<=5;k++) pn.classList.remove('jy-s'+k);
+  pn.classList.add('jy-s'+(i+1));
+  jyPaintPath(); jyPaintNav();
+  const top = document.getElementById('journeyPanel'); if(top) top.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function jyStart(){
+  playOpenSound();
+  document.getElementById('panel').classList.add('jy-mode');
+  jyRender();
+}
+function jyExit(){
+  resetQuizUI();
+  document.getElementById('overlay').scrollTop = 0;
+}
+document.getElementById('journeyStartBtn').addEventListener('click', jyStart);
+function jyOnGameDone(){ if(currentSurah) jyMark(3); }
+function jyOnTreasureDone(){ if(currentSurah) jyMark(2); }
+function jyOnQuizResult(score,total){
+  const s=currentSurah, d=jyData(s.n);
+  if(score >= total*0.7){
+    if(!d.g){
+      const nd={s:d.s.slice(), g:true}; nd.s[4]=true; jySave(s.n, nd); renderGrid(); jyPaintPath();
+    }
+    const m = document.getElementById('resultSub'); if(m) m.textContent += ' — 🌟 ربحتِ النجمة الذهبية!';
+  } else {
+    const m = document.getElementById('resultSub'); if(m) m.textContent += ' — قاربتِ! أعيدي المحاولة لتفتحي النجمة الذهبية 🌟';
+  }
+}
 
 /* ---------------- Ayah-by-ayah: real verse text + simplified tafsir for kids ---------------- */
 const ayahTextCache = {}; // {surahNum: [verse text,...]}
@@ -2232,35 +2853,33 @@ async function renderTafsir(){
     list.innerHTML = '<p class="tafsir-loading">📖 التفسير المبسط لهذه السورة قيد الإعداد حالياً — تابعينا قريباً! يمكنك تجربة ألعاب "رتب كلمات الآية" و"أكمل الآية" فهي تعمل بالفعل لهذه السورة 🌙</p>';
     return;
   }
-  list.innerHTML = '<p class="tafsir-loading">⏳ جاري تحميل نص الآيات...</p>';
-
-  let verseTexts = null;
-  try{
-    verseTexts = await fetchAyahText(s.n);
-  } catch(e){
-    verseTexts = null;
-  }
-
-  if(document.getElementById('pName').textContent !== s.name) return; // surah changed while loading
-
+  // 1) show the child tafsir + audio buttons immediately (no waiting for the network)
   list.innerHTML = '';
-  if(!verseTexts){
-    const warn = document.createElement('p');
-    warn.className = 'tafsir-loading';
-    warn.textContent = 'تعذّر تحميل نص الآيات من الإنترنت الآن، إليك التفسير المبسط فقط:';
-    list.appendChild(warn);
-  }
+  const note = document.createElement('p');
+  note.className = 'tafsir-loading'; note.id = 'tafsirLoadNote';
+  note.textContent = '⏳ جاري تحميل نص الآيات... (التفسير المبسط جاهز أدناه)';
+  list.appendChild(note);
   s.ayahs.forEach((text, i)=>{
     const item = document.createElement('div');
     item.className = 'tafsir-item';
-    const arabicText = verseTexts ? (verseTexts[i] || '') : '';
-    const arabic = verseTexts ? `<div class="ayah-text">${arabicText}</div>` : '';
     const speakBtn = `<button class="ayah-speak-btn" data-surah="${s.n}" data-ayah="${i+1}" title="استمع بصوت الشيخ العجمي">🔊</button>`;
-    item.innerHTML = `<span class="vnum">${i+1}</span><div>${arabic}<div class="ayah-audio-row">${speakBtn}</div><div class="ayah-explain">${text}</div></div>`;
+    item.innerHTML = `<span class="vnum">${i+1}</span><div><div class="ayah-text-slot"></div><div class="ayah-audio-row">${speakBtn}</div><div class="ayah-explain">${text}</div></div>`;
     list.appendChild(item);
   });
   list.querySelectorAll('.ayah-speak-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>playReciterAyah(btn.dataset.surah, btn.dataset.ayah, btn));
+  });
+
+  // 2) fill in the Quranic text when it arrives
+  let verseTexts = null;
+  try{ verseTexts = await fetchAyahText(s.n); } catch(e){ verseTexts = null; }
+  if(currentSurah !== s) return; // surah changed while loading
+  const n2 = document.getElementById('tafsirLoadNote');
+  if(!verseTexts){ if(n2) n2.textContent = 'تعذّر تحميل نص الآيات من الإنترنت الآن، إليك التفسير المبسط فقط:'; return; }
+  if(n2) n2.remove();
+  list.querySelectorAll('.tafsir-item').forEach((item,i)=>{
+    const slot = item.querySelector('.ayah-text-slot');
+    if(slot) slot.innerHTML = `<div class="ayah-text">${verseTexts[i] || ''}</div>`;
   });
 }
 
@@ -2305,6 +2924,7 @@ document.getElementById('tafsirBtn').addEventListener('click', ()=>{
   const isOpening = !panel.classList.contains('open');
   panel.classList.toggle('open');
   if(isOpening){
+    document.getElementById('treasurePanel').classList.remove('open');
     document.getElementById('surahGamesPanel').classList.remove('open');
     document.getElementById('surahGamesPlay').innerHTML = '';
     document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
@@ -2318,6 +2938,7 @@ document.getElementById('surahGamesBtn').addEventListener('click', ()=>{
   const isOpening = !panel.classList.contains('open');
   panel.classList.toggle('open');
   if(isOpening){
+    document.getElementById('treasurePanel').classList.remove('open');
     document.getElementById('tafsirPanel').classList.remove('open');
     document.getElementById('surahGamesPlay').innerHTML = '';
     document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
@@ -2398,6 +3019,7 @@ function sgShowSessionComplete(area){
     </div>
   `;
   celebrate();
+  try{ jyOnGameDone(); }catch(e){}
   if(earnedCert){
     document.getElementById('sgCertBtn').addEventListener('click', ()=>showCertificate(s.n));
   }
@@ -2923,6 +3545,7 @@ function renderGrid(){
     card.style.setProperty('--c', cardColors[i % cardColors.length]);
     card.innerHTML = `
       <span class="done">✅</span>
+      ${(typeof jyGold==='function' && jyGold(s.n)) ? '<span class="gold-star-badge">🌟</span>' : ''}
       <span class="num">سورة ${s.n}</span>
       <span class="star-icon">${s.icon}</span>
       <h3>${s.name}</h3>
@@ -2946,10 +3569,10 @@ setInterval(()=>{
 
 function switchJuz(which){
   activeJuz = which;
-  surahs = which === 'tabarak' ? surahsTabarak : which === 'juz28' ? surahsJuz28 : which === 'juz27' ? surahsJuz27 : surahsAmma;
+  surahs = {amma:surahsAmma, tabarak:surahsTabarak, juz28:surahsJuz28, juz27:surahsJuz27, juz26:surahsJuz26, juz25:surahsJuz25}[which] || surahsAmma;
   document.querySelectorAll('.juz-choice').forEach(b=>b.classList.remove('active'));
   document.getElementById('juzChoice-'+which).classList.add('active');
-  const titles = { amma:'🌌 سور جزء عمّ', tabarak:'📖 سور جزء تبارك', juz28:'🗣️ سور جزء قد سمع', juz27:'⚡ سور جزء إن الله يأمر' };
+  const titles = { amma:'🌌 سور جزء عمّ', tabarak:'📖 سور جزء تبارك', juz28:'🗣️ سور جزء قد سمع', juz27:'⚡ سور جزء قال فما خطبكم', juz26:'🏜️ سور جزء حم', juz25:'📖 سور جزء إليه يُردّ علم الساعة' };
   document.getElementById('gridSectionTitle').textContent = titles[which];
   playOpenSound();
   renderGrid();
@@ -2958,6 +3581,8 @@ document.getElementById('juzChoice-amma').addEventListener('click', ()=>switchJu
 document.getElementById('juzChoice-tabarak').addEventListener('click', ()=>switchJuz('tabarak'));
 document.getElementById('juzChoice-juz28').addEventListener('click', ()=>switchJuz('juz28'));
 document.getElementById('juzChoice-juz27').addEventListener('click', ()=>switchJuz('juz27'));
+document.getElementById('juzChoice-juz26').addEventListener('click', ()=>switchJuz('juz26'));
+document.getElementById('juzChoice-juz25').addEventListener('click', ()=>switchJuz('juz25'));
 
 /* modal logic */
 const overlay = document.getElementById('overlay');
@@ -3022,6 +3647,10 @@ function resetQuizUI(){
   document.getElementById('surahGamesPanel').classList.remove('open');
   document.getElementById('surahGamesPlay').innerHTML = '';
   document.querySelectorAll('.sg-choice').forEach(b=>b.classList.remove('active'));
+  const tqp = document.getElementById('treasurePanel'); if(tqp){ tqp.classList.remove('open'); tqp.innerHTML=''; }
+  const fa = document.getElementById('freeActs'); if(fa) fa.classList.remove('open');
+  const pn = document.getElementById('panel'); if(pn) pn.classList.remove('jy-mode');
+  const jp = document.getElementById('journeyPanel'); if(jp) jp.innerHTML='';
 }
 
 function buildQuestions(s){
@@ -3202,6 +3831,7 @@ function showResult(){
     certBtn.style.display = 'none';
   }
 
+  try{ jyOnQuizResult(score,total); }catch(e){}
   if(score>0 && !completed[currentSurah.n]){
     completed[currentSurah.n] = true;
     const card = document.getElementById('card-'+currentSurah.n);
@@ -3228,67 +3858,107 @@ function updateProgress(){
 }
 
 /* =================================================================
-   STANDALONE GAME 1: Spot the Difference
+   STANDALONE GAME 1: Spot the Difference — original illustrated night scene
    ================================================================= */
-const DIFF_ROWS = 5, DIFF_COLS = 6, DIFF_COUNT = 4;
-const DIFF_ICON_POOL = ['🌙','⭐','🌟','🕌','📖','🌸','🕋','✨','🌿','🪐'];
+const DIFF_SPOTS = [
+  { id:'star', x:70, y:70, r:32 },
+  { id:'minaretCap', x:278, y:245, r:24 },
+  { id:'bird', x:150, y:95, r:34 },
+  { id:'window', x:200, y:420, r:34 },
+  { id:'frond', x:35, y:370, r:34 },
+];
 let diffState = null;
 
+function buildDiffSceneSVG(variant){
+  const minaretCapColor = variant === 'a' ? '#ffc94c' : '#ff6fa5';
+  const windowFill = variant === 'a' ? '#161a4a' : '#ffe9a8';
+  const windowGlow = variant === 'a' ? '' : `<circle cx="200" cy="420" r="34" fill="#ffe9a8" opacity="0.22"/>`;
+  const extraStar = variant === 'a' ? '' : `<path d="M70 50 L74.5 63 L88 64 L77 72 L81 85 L70 77 L59 85 L63 72 L52 64 L65.5 63 Z" fill="#ffe9a8"/>`;
+  const bird = variant === 'a' ? '' : `<path d="M118 100 Q134 84 150 100 Q134 92 118 108 Z" fill="#48d8c8"/><path d="M150 100 Q166 84 182 100 Q166 92 150 108 Z" fill="#48d8c8"/>`;
+  const extraFrond = variant === 'a' ? '' : `<path d="M55 372 Q26 356 8 366" stroke="#12503c" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+
+  return `<svg viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="diffsky${variant}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a0e3d"/>
+        <stop offset="100%" stop-color="#2d1b4e"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="400" height="520" fill="url(#diffsky${variant})"/>
+    <rect x="0" y="470" width="400" height="50" fill="#141238"/>
+    <circle cx="320" cy="90" r="40" fill="#ffc94c"/>
+    <circle cx="335" cy="78" r="34" fill="#0a0e3d"/>
+    <circle cx="40" cy="140" r="3" fill="#fff"/>
+    <circle cx="100" cy="200" r="2.5" fill="#fff"/>
+    <circle cx="250" cy="50" r="2" fill="#fff"/>
+    <circle cx="370" cy="180" r="3" fill="#fff"/>
+    <circle cx="30" cy="250" r="2" fill="#fff"/>
+    <circle cx="180" cy="30" r="2.5" fill="#fff"/>
+    ${extraStar}
+    ${bird}
+    <path d="M55 470 Q60 400 55 360" stroke="#3a2a1a" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M55 360 Q20 340 5 350" stroke="#12503c" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M55 360 Q90 335 105 345" stroke="#12503c" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M55 360 Q45 320 55 305" stroke="#12503c" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M55 360 Q70 325 90 315" stroke="#12503c" stroke-width="7" fill="none" stroke-linecap="round"/>
+    ${extraFrond}
+    <rect x="140" y="330" width="120" height="140" fill="#2d2f6b"/>
+    <path d="M140 330 Q200 270 260 330 Z" fill="#3a3d85"/>
+    <rect x="270" y="250" width="16" height="90" fill="#2d2f6b"/>
+    <circle cx="278" cy="245" r="12" fill="${minaretCapColor}"/>
+    <rect x="185" y="395" width="30" height="55" rx="15" fill="#141238"/>
+    <rect x="192" y="400" width="16" height="45" rx="8" fill="${windowFill}"/>
+    ${windowGlow}
+    <rect x="145" y="460" width="20" height="10" fill="#141238"/>
+    <rect x="235" y="460" width="20" height="10" fill="#141238"/>
+  </svg>`;
+}
+
 function newDiffGame(){
-  const baseIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)];
-  let altIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)];
-  while(altIcon === baseIcon){ altIcon = DIFF_ICON_POOL[Math.floor(Math.random()*DIFF_ICON_POOL.length)]; }
-
-  const total = DIFF_ROWS * DIFF_COLS;
-  const diffIndices = new Set();
-  while(diffIndices.size < DIFF_COUNT){
-    diffIndices.add(Math.floor(Math.random()*total));
-  }
-  diffState = { baseIcon, altIcon, diffIndices, found:new Set(), total };
-
-  document.getElementById('diffTotal').textContent = DIFF_COUNT;
+  diffState = { found: new Set() };
+  document.getElementById('diffTotal').textContent = DIFF_SPOTS.length;
   document.getElementById('diffFound').textContent = 0;
   document.getElementById('diffWin').classList.remove('show');
-  renderDiffBoards();
+  document.getElementById('diffSceneLeftWrap').innerHTML = buildDiffSceneSVG('a');
+  const rightWrap = document.getElementById('diffSceneRightWrap');
+  rightWrap.innerHTML = buildDiffSceneSVG('b');
+  rightWrap.onclick = (e)=>handleDiffSceneClick(e, rightWrap);
 }
 
-function renderDiffBoards(){
-  const left = document.getElementById('diffBoardLeft');
-  const right = document.getElementById('diffBoardRight');
-  left.innerHTML = ''; right.innerHTML = '';
-  for(let i=0;i<diffState.total;i++){
-    const leftCell = document.createElement('div');
-    leftCell.className = 'diff-cell';
-    leftCell.textContent = diffState.baseIcon;
-    left.appendChild(leftCell);
+function handleDiffSceneClick(e, wrap){
+  const svg = wrap.querySelector('svg');
+  const rect = svg.getBoundingClientRect();
+  const clickX = (e.clientX - rect.left) * (400 / rect.width);
+  const clickY = (e.clientY - rect.top) * (520 / rect.height);
 
-    const rightCell = document.createElement('div');
-    rightCell.className = 'diff-cell';
-    const isDiff = diffState.diffIndices.has(i);
-    rightCell.textContent = isDiff ? diffState.altIcon : diffState.baseIcon;
-    if(diffState.found.has(i)) rightCell.classList.add('found');
-    rightCell.addEventListener('click', ()=>handleDiffClick(i, rightCell));
-    right.appendChild(rightCell);
+  let hit = null;
+  for(const spot of DIFF_SPOTS){
+    if(diffState.found.has(spot.id)) continue;
+    const dx = clickX - spot.x, dy = clickY - spot.y;
+    if(Math.sqrt(dx*dx+dy*dy) <= spot.r){ hit = spot; break; }
   }
-}
 
-function handleDiffClick(i, cell){
-  if(diffState.found.has(i)) return;
-  if(diffState.diffIndices.has(i)){
-    diffState.found.add(i);
-    cell.classList.add('found');
+  if(hit){
+    diffState.found.add(hit.id);
     playCorrectSound();
+    const marker = document.createElement('div');
+    marker.className = 'diff-hit-marker';
+    marker.style.left = (hit.x / 400 * 100) + '%';
+    marker.style.top = (hit.y / 520 * 100) + '%';
+    wrap.appendChild(marker);
     document.getElementById('diffFound').textContent = diffState.found.size;
-    if(diffState.found.size === DIFF_COUNT){
+    if(diffState.found.size === DIFF_SPOTS.length){
       setTimeout(()=>{
         document.getElementById('diffWin').classList.add('show');
         celebrate();
       }, 200);
     }
   } else {
-    cell.classList.add('wrong');
     playWrongSound();
-    setTimeout(()=>cell.classList.remove('wrong'), 300);
+    const flash = document.createElement('div');
+    flash.className = 'diff-wrong-flash';
+    wrap.appendChild(flash);
+    setTimeout(()=>flash.remove(), 300);
   }
 }
 
@@ -3309,6 +3979,7 @@ document.getElementById('diffOverlay').addEventListener('click', (e)=>{
 });
 document.getElementById('diffNewBtn').addEventListener('click', ()=>{ newDiffGame(); });
 document.getElementById('diffPlayAgainBtn').addEventListener('click', ()=>{ newDiffGame(); });
+
 
 /* =================================================================
    STANDALONE GAME 2: Maze (recursive-backtracker generated)
